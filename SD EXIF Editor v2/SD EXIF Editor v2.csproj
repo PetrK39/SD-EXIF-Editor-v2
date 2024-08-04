@@ -9,4 +9,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ExifLibNet" Version="2.1.4" />
+  </ItemGroup>
+
 </Project>
