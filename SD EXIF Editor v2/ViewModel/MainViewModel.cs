@@ -10,11 +10,12 @@ namespace SD_EXIF_Editor_v2.ViewModel
     public class MainViewModel : PropertyChangedBase
     {
         private bool image_retrieved;
-        private BitmapImage bitmapImage;
+        private BitmapImage? bitmapImage;
 
-        public string InputMetadata { get; set; }
+        public string RawMetadata { get; set; }
+        public SDMetadata Metadata { get; set; }
         public string FilePath => image.FilePath;
-        public BitmapImage BitmapImage
+        public BitmapImage? BitmapImage
         {
             get
             {
@@ -29,14 +30,14 @@ namespace SD_EXIF_Editor_v2.ViewModel
             bitmapImage = await CreateImageAsync(FilePath).ConfigureAwait(true);
             RaisePropertyChanged(nameof(BitmapImage));
         }
-        private async Task<BitmapImage> CreateImageAsync(string filename)
+        private async Task<BitmapImage?> CreateImageAsync(string filename)
         {
             if (!string.IsNullOrEmpty(filename) && File.Exists(filename))
             {
                 try
                 {
                     byte[] buffer = await ReadAllFileAsync(filename).ConfigureAwait(false);
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream(buffer);
+                    MemoryStream ms = new MemoryStream(buffer);
                     BitmapImage image = new BitmapImage();
                     image.BeginInit();
                     image.CacheOption = BitmapCacheOption.OnLoad;
@@ -74,7 +75,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public MainViewModel(Image image)
         {
             this.image = image;
-            InputMetadata = image.SDMetadata;
+            RawMetadata = image.SDMetadata;
+            Metadata = new SDMetadata(RawMetadata);
 
             ApplicationCommands.Close.InputGestures.Add(new KeyGesture(Key.Escape));
         }
@@ -82,7 +84,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         #region Commands
         public void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            image.SDMetadata = InputMetadata;
+            image.SDMetadata = RawMetadata;
             image.SaveChanges();
 
             ApplicationCommands.Close.Execute(null, null);
@@ -90,10 +92,10 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         public void CopyCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var cleared = InputMetadata;
+            var cleared = RawMetadata;
 
-            var embedIndex = InputMetadata.IndexOf("\nUsed embeddings: ");
-            if (embedIndex < 0) embedIndex = InputMetadata.IndexOf("\nUsed embeddings: ");
+            var embedIndex = RawMetadata.IndexOf("\nUsed embeddings: ");
+            if (embedIndex < 0) embedIndex = RawMetadata.IndexOf("\nUsed embeddings: ");
 
             if (embedIndex <= 0) { } // looks good
             else cleared = cleared.Substring(0, embedIndex - 1);
@@ -103,7 +105,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         public void DeleteCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            InputMetadata = "";
+            RawMetadata = "";
             SaveCommandExecuted(this, null);
         }
         #endregion

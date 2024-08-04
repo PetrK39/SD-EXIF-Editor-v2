@@ -65,7 +65,7 @@
                        ToolTip="{Binding FilePath}"
                        Margin="10"
                        Grid.Column="1" />
-            <TextBox Text="{Binding InputMetadata, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="WrapWithOverflow"
                      AcceptsReturn="True"
                      Name="TextBox"
