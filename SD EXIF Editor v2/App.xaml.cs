@@ -1,4 +1,7 @@
-﻿using SD_EXIF_Editor_v2.Model;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.View;
 using SD_EXIF_Editor_v2.ViewModel;
 using System.Configuration;
@@ -14,27 +17,42 @@ namespace SD_EXIF_Editor_v2
     /// </summary>
     public partial class App : Application
     {
+        private readonly IHost host;
+        public App()
+        {
+            host = Host.CreateDefaultBuilder()
+            .ConfigureServices((services) =>
+            {
+                services.AddTransient<MessageService>();
+                services.AddTransient<ArgsParserService>();
+                services.AddTransient<MetadataParserService>();
+
+                services.AddSingleton<Image>();
+
+                services.AddSingleton<MainViewModel>();
+
+                services.AddSingleton<MainView>();
+            })
+            .Build();
+        }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 0 || e.Args.Length > 1) ExitWithMessage($"Usage: {Process.GetCurrentProcess().MainModule.ModuleName} %path_to_png_file");
+            var file = host.Services.GetRequiredService<ArgsParserService>().ParseArgs(e);
 
-            var file = new FileInfo(e.Args[0]);
+            host.Services.GetRequiredService<Image>().LoadFromFilePath(file.FullName);
 
-            if (!file.Exists) ExitWithMessage($"File not exists \"{file.FullName}\"");
-            if (file.Extension != ".png") ExitWithMessage("Only .png images are supported");
-
-            var im = new Image(file.FullName);
-            var mvm = new MainViewModel(im);
-            var mv = new MainWindow(mvm);
+            var mv = host.Services.GetRequiredService<MainView>();
 
             mv.ShowDialog();
 
             Shutdown();
         }
-        private void ExitWithMessage(string message)
+        protected override void OnExit(ExitEventArgs e)
         {
-            MessageBox.Show(message, "SD EXIF Editor", MessageBoxButton.OK);
-            Environment.Exit(0);
+            host.StopAsync();
+            host.Dispose();
+
+            base.OnExit(e);
         }
     }
 

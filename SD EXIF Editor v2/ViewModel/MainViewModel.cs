@@ -1,4 +1,5 @@
 ﻿using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.Utils;
 using System.IO;
 using System.Windows;
@@ -9,6 +10,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
 {
     public class MainViewModel : PropertyChangedBase
     {
+        private readonly MetadataParserService _metadataParserService;
+
         private bool image_retrieved;
         private BitmapImage? bitmapImage;
 
@@ -72,11 +75,13 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         private readonly Image image;
 
-        public MainViewModel(Image image)
+        public MainViewModel(Image image, MetadataParserService metadataParserService)
         {
+            _metadataParserService = metadataParserService;
+
             this.image = image;
             RawMetadata = image.SDMetadata;
-            Metadata = new SDMetadata(RawMetadata);
+            Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
 
             ApplicationCommands.Close.InputGestures.Add(new KeyGesture(Key.Escape));
         }

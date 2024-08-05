@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace SD_EXIF_Editor_v2.View
 {
-    public partial class MainWindow : Window
+    public partial class MainView : Window
     {
-        public MainWindow(MainViewModel mvm)
+        public MainView(MainViewModel mvm)
         {
             InitializeComponent();
             DataContext = mvm;

@@ -4,7 +4,7 @@ namespace SD_EXIF_Editor_v2.Model
 {
     public class Image
     {
-        public string FilePath { get; }
+        public string FilePath { get; private set; }
         public string SDMetadata
         {
             get => GetMetadataProperty().Value;
@@ -12,10 +12,10 @@ namespace SD_EXIF_Editor_v2.Model
         }
 
         private const string MetadataFieldName = "parameters";
-        private readonly ImageFile imageFile;
+        private ImageFile imageFile;
 
 
-        public Image(string filePath)
+        public void LoadFromFilePath(string filePath)
         {
             FilePath = filePath;
             imageFile = ImageFile.FromFile(filePath);

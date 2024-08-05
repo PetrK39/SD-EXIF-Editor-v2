@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="ExifLibNet" Version="2.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
