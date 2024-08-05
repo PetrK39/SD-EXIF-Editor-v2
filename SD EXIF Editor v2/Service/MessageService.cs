@@ -17,7 +17,7 @@ namespace SD_EXIF_Editor_v2.Service
         public void ShowInfoMessage(string message)
         {
             MessageBox.Show(message,
-                "SD EXIF Editor Critical Error",
+                "SD EXIF Editor Info",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
