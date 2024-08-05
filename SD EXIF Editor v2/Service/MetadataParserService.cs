@@ -34,7 +34,7 @@ namespace SD_EXIF_Editor_v2.Service
 
             var matchesGeneralSplit = Regex.Matches(rawMetadata, patternGeneralSplit);
 
-            if (matchesGeneralSplit == null || matchesGeneralSplit.Count == 0)
+            if (matchesGeneralSplit.Count == 0)
                 errorCodes.Add(1); // If we can't regex raw metadata correctly
             else
             {
