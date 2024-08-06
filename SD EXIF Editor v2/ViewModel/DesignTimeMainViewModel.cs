@@ -1,26 +1,24 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SD_EXIF_Editor_v2.Model;
+﻿using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.Utils;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Windows;
-using System.Windows.Input;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace SD_EXIF_Editor_v2.ViewModel
 {
-    public partial class MainViewModel : ObservableObject
+    class DesignTimeMainViewModel : PropertyChangedBase
     {
-        private readonly MetadataParserService _metadataParserService;
-
         private bool image_retrieved;
         private BitmapImage? bitmapImage;
 
-        public string RawMetadata { get => image.RawMetadata!; set => image.RawMetadata = value; }
+        public string RawMetadata { get; set; }
         public SDMetadata Metadata { get; set; }
-        public string FilePath => image.FilePath!;
+        public string FilePath => image.FilePath;
         public BitmapImage? BitmapImage
         {
             get
@@ -34,7 +32,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         {
             image_retrieved = true;
             bitmapImage = await CreateImageAsync(FilePath).ConfigureAwait(true);
-            OnPropertyChanged(nameof(bitmapImage));
+            RaisePropertyChanged(nameof(BitmapImage));
         }
         private async Task<BitmapImage?> CreateImageAsync(string filename)
         {
@@ -78,34 +76,13 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         private readonly Image image;
 
-        public MainViewModel(Image image, MetadataParserService metadataParserService)
+        public DesignTimeMainViewModel()
         {
-            _metadataParserService = metadataParserService;
+            image = new Image();
+            image.LoadFromFilePath(@"C:\sdwebui\webui\outputs\txt2img-images\2024-08-02\00009-2710025737.png");
 
-            this.image = image;
-            Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
+            RawMetadata = image.RawMetadata;
+            Metadata = new MetadataParserService(null).ParseFromRawMetadata(RawMetadata);
         }
-
-        #region Commands
-        [RelayCommand]
-        public void Save()
-        {
-            image.SaveChanges();
-
-            ApplicationCommands.Close.Execute(null, null);
-        }
-        [RelayCommand]
-        public void Copy(string parameter)
-        {
-            Debug.WriteLine($"Copied: {parameter}");
-            Clipboard.SetDataObject(parameter);
-        }
-        [RelayCommand]
-        public void Delete()
-        {
-            RawMetadata = "";
-            Save();
-        }
-        #endregion
     }
 }

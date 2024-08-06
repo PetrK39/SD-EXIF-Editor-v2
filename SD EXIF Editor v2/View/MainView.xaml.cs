@@ -12,19 +12,8 @@ namespace SD_EXIF_Editor_v2.View
             InitializeComponent();
             DataContext = mvm;
 
+            ApplicationCommands.Close.InputGestures.Add(new KeyGesture(Key.Escape));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, CloseCommandExecuted));
-            CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, mvm.SaveCommandExecuted));
-            CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, mvm.CopyCommandExecuted));
-            CommandBindings.Add(new CommandBinding(ApplicationCommands.Delete, mvm.DeleteCommandExecuted));
-
-            TextBox.TextChanged += TextBox_TextChanged;
-            TextBox.Focus();
-        }
-
-        private void TextBox_TextChanged(object sender, RoutedEventArgs e)
-        {
-            TextBox.TextChanged -= TextBox_TextChanged;
-            TextBox.CaretIndex = TextBox.Text.Length;
         }
 
         private void CloseCommandExecuted(object sender, ExecutedRoutedEventArgs e)

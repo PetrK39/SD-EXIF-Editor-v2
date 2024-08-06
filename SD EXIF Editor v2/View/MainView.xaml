@@ -6,17 +6,32 @@
         xmlns:local="clr-namespace:SD_EXIF_Editor_v2"
         xmlns:vm="clr-namespace:SD_EXIF_Editor_v2.ViewModel"
         xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type={x:Type vm:MainViewModel}}"
+        d:DataContext="{d:DesignInstance Type={x:Type vm:DesignTimeMainViewModel}, IsDesignTimeCreatable=True}"
         Title="SD EXIF Editor"
-        Height="200"
-        Width="800"
-        SizeToContent="Height">
+        Height="500"
+        Width="1000"
+        Style="{DynamicResource CustomWindowStyle}">
     <Window.Resources>
         <utils:CommandToTextConverter x:Key="CommandToTextConverter" />
+        <utils:SubtractionConverter x:Key="SubtractionConverter" />
+        <utils:SizeConverter x:Key="SizeConverter" />
+        <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
+        <Style TargetType="TextBlock">
+            <Setter Property="Padding"
+                    Value="6" />
+        </Style>
+        <Style x:Key="Opacity"
+               TargetType="TextBlock">
+            <Setter Property="Opacity"
+                    Value="0.7" />
+            <Setter Property="Padding"
+                    Value="6" />
+        </Style>
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <UniformGrid DockPanel.Dock="Bottom"
+        <!--<UniformGrid DockPanel.Dock="Bottom"
                      Rows="1">
             <Button Command="Copy"
                     Content="{Binding RelativeSource={RelativeSource Self}, Path=Command, Converter={StaticResource CommandToTextConverter}}" />
@@ -35,11 +50,12 @@
                             Value="6" />
                 </Style>
             </UniformGrid.Resources>
-        </UniformGrid>
+        </UniformGrid>-->
         <Grid Grid.IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"
+                                  MaxWidth="500" />
                 <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -65,13 +81,273 @@
                        ToolTip="{Binding FilePath}"
                        Margin="10"
                        Grid.Column="1" />
-            <TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="WrapWithOverflow"
-                     AcceptsReturn="True"
-                     Name="TextBox"
-                     Margin="6"
-                     Grid.Column="1"
-                     Grid.Row="1" />
+            <TabControl Grid.Column="1"
+                        Grid.Row="1">
+                <TabItem Header="View">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical"
+                                    HorizontalAlignment="Stretch">
+                            <GroupBox BorderThickness="0"
+                                      Name="groupbox">
+                                <GroupBox.Header>
+                                    <Grid Width="{Binding ActualWidth, ElementName=groupbox,Converter={StaticResource SubtractionConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconBootstrapIcons Kind="InputCursorText"
+                                                                              VerticalAlignment="Center"
+                                                                              Foreground="White" />
+                                            <TextBlock Text="Generation data"
+                                                       FontSize="20"
+                                                       Grid.Column="1" />
+                                        </StackPanel>
+                                        <Button Grid.Column="1"
+                                                Margin="0,0,6,0"
+                                                BorderThickness="0"
+                                                Command="{Binding CopyCommand}"
+                                                CommandParameter="{Binding RawMetadata}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconBootstrapIcons Kind="Copy"
+                                                                                  VerticalAlignment="Center"
+                                                                                  Foreground="LightSkyBlue" />
+                                                <TextBlock Text="COPY ALL"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Right"
+                                                           Foreground="LightSkyBlue"
+                                                           Grid.Column="2" />
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </GroupBox.Header>
+                                <StackPanel>
+                                    <!--Resources used-->
+                                    <GroupBox BorderThickness="0">
+                                        <GroupBox.Header>
+                                            <TextBlock Text="Resources used"
+                                                       FontSize="16" />
+                                        </GroupBox.Header>
+
+                                    </GroupBox>
+                                    <Separator />
+                                    <!--Prompt-->
+                                    <GroupBox BorderThickness="0">
+                                        <GroupBox.Style>
+                                            <Style TargetType="GroupBox">
+                                                <Setter Property="Visibility">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource EmptyToVisibilityConverter}">
+                                                            <MultiBinding.Bindings>
+                                                                <Binding Path="Metadata.Prompt" />
+                                                            </MultiBinding.Bindings>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </GroupBox.Style>
+                                        <GroupBox.Header>
+                                            <Grid Width="{Binding ActualWidth, ElementName=groupbox,Converter={StaticResource SubtractionConverter}}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Prompt"
+                                                           FontSize="16" />
+
+                                                <Button Grid.Column="1"
+                                                        Margin="0,0,16,0"
+                                                        Padding="6,0,6,0"
+                                                        BorderThickness="0"
+                                                        Command="{Binding CopyCommand}"
+                                                        CommandParameter="{Binding Metadata.Prompt}">
+                                                    <iconPacks:PackIconBootstrapIcons Kind="Copy"
+                                                                                      VerticalAlignment="Center" />
+                                                </Button>
+                                            </Grid>
+
+                                        </GroupBox.Header>
+                                        <!--
+                                        For some reason those textblocks are cropped behind scrollbar
+                                        Maybe it's a theme bug
+                                        -->
+                                        <TextBlock Text="{Binding Metadata.Prompt}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   Style="{StaticResource Opacity}"
+                                                   Padding="10,0,22,0"/>
+
+                                    </GroupBox>
+                                    <!--Negative prompt-->
+                                    <GroupBox BorderThickness="0">
+                                        <GroupBox.Style>
+                                            <Style TargetType="GroupBox">
+                                                <Setter Property="Visibility">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource EmptyToVisibilityConverter}">
+                                                            <MultiBinding.Bindings>
+                                                                <Binding Path="Metadata.NegativePrompt" />
+                                                            </MultiBinding.Bindings>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </GroupBox.Style>
+                                        <GroupBox.Header>
+                                            <Grid Width="{Binding ActualWidth, ElementName=groupbox,Converter={StaticResource SubtractionConverter}}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Negative prompt"
+                                                           FontSize="16" />
+
+                                                <Button Grid.Column="1"
+                                                        Margin="0,0,16,0"
+                                                        Padding="6,0,6,0"
+                                                        BorderThickness="0"
+                                                        Command="{Binding CopyCommand}"
+                                                        CommandParameter="{Binding Metadata.NegativePrompt}">
+                                                    <iconPacks:PackIconBootstrapIcons Kind="Copy"
+                                                                                      VerticalAlignment="Center" />
+                                                </Button>
+                                            </Grid>
+                                        </GroupBox.Header>
+                                        <!--
+                                        For some reason those textblocks are cropped behind scrollbar
+                                        Maybe it's a theme bug
+                                        -->
+                                        <TextBlock Text="{Binding Metadata.NegativePrompt}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   Style="{StaticResource Opacity}"
+                                                   Padding="10,0,22,0" />
+                                    </GroupBox>
+                                    <Separator>
+                                        <Separator.Style>
+                                            <Style TargetType="Separator">
+                                                <Setter Property="Visibility">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource EmptyToVisibilityConverter}">
+                                                            <MultiBinding.Bindings>
+                                                                <Binding Path="Metadata.Prompt" />
+                                                            </MultiBinding.Bindings>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Separator.Style>
+                                    </Separator>
+                                    <!--Other metadata-->
+                                    <GroupBox BorderThickness="0"
+                                              Header="Other metadata">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Text="Steps"
+                                                       Grid.Row="0"
+                                                       Style="{StaticResource Opacity}" />
+                                            <TextBlock Text="Sampler"
+                                                       Grid.Row="1"
+                                                       Style="{StaticResource Opacity}" />
+                                            <TextBlock Text="Schedule type"
+                                                       Grid.Row="2"
+                                                       Style="{StaticResource Opacity}" />
+                                            <TextBlock Text="Guidance"
+                                                       Grid.Row="3"
+                                                       Style="{StaticResource Opacity}" />
+                                            <TextBlock Text="Seed"
+                                                       Grid.Row="4"
+                                                       Style="{StaticResource Opacity}" />
+                                            <TextBlock Text="Size"
+                                                       Grid.Row="5"
+                                                       Style="{StaticResource Opacity}" />
+                                            <TextBlock Text="WebUI version"
+                                                       Grid.Row="6"
+                                                       Style="{StaticResource Opacity}" />
+
+                                            <!--
+                                            For some reason those textblocks are cropped behind scrollbar
+                                            Maybe it's a theme bug
+                                            -->
+                                            <TextBlock Text="{Binding Metadata.Steps}"
+                                                       Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="{Binding Metadata.Sampler}"
+                                                       Grid.Row="1"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="{Binding Metadata.ScheduleType}"
+                                                       Grid.Row="2"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="{Binding Metadata.CFGScale}"
+                                                       Grid.Row="3"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="{Binding Metadata.Seed}"
+                                                       Grid.Row="4"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="{Binding Metadata.Size, Converter={StaticResource SizeConverter}}"
+                                                       Grid.Row="5"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="{Binding Metadata.Version}"
+                                                       Grid.Row="6"
+                                                       Grid.Column="1"
+                                                       Padding="0,0,22,0"
+                                                       HorizontalAlignment="Right" />
+                                        </Grid>
+                                    </GroupBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Edit">
+                    <DockPanel LastChildFill="True">
+                        <UniformGrid Columns="2"
+                                     DockPanel.Dock="Bottom">
+                            <Button Command="{Binding DeleteCommand}"
+                                    Content="Delete"
+                                    BorderBrush="Red" 
+                                    Padding="8"
+                                    Margin="8"/>
+                            <Button Command="{Binding SaveCommand}"
+                                    Content="Save"
+                                    Padding="8"
+                                    Margin="8"/>
+                        </UniformGrid>
+                    <TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="WrapWithOverflow"
+                             AcceptsReturn="True"
+                             Name="TextBox"
+                             Padding="8"/>
+                    </DockPanel>
+                </TabItem>
+            </TabControl>
         </Grid>
     </DockPanel>
 </Window>

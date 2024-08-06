@@ -5,7 +5,7 @@ namespace SD_EXIF_Editor_v2.Model
     public class Image
     {
         public string FilePath { get; private set; }
-        public string SDMetadata
+        public string RawMetadata
         {
             get => GetMetadataProperty().Value;
             set => GetMetadataProperty().Value = value;
