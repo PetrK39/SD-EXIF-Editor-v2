@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SD_EXIF_Editor_v2"
         xmlns:vm="clr-namespace:SD_EXIF_Editor_v2.ViewModel"
         xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
+        xmlns:m="clr-namespace:SD_EXIF_Editor_v2.Model"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type vm:DesignTimeMainViewModel}, IsDesignTimeCreatable=True}"
@@ -18,6 +19,8 @@
         <utils:SubtractionConverter x:Key="SubtractionConverter" />
         <utils:SizeConverter x:Key="SizeConverter" />
         <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
+        <utils:WidthConverter x:Key="WidthConverter" />
+
         <Style TargetType="TextBlock">
             <Setter Property="Padding"
                     Value="6" />
@@ -27,31 +30,222 @@
             <Setter Property="Opacity"
                     Value="0.7" />
             <Setter Property="Padding"
-                    Value="6" />
+                    Value="2" />
         </Style>
+
+        <DataTemplate x:Key="CivitItemWithStrengthTemplate"
+                      DataType="{x:Type m:CivitItem}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding OriginalName}"
+                           FontSize="16"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding PromptName}"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding OriginalVersion}"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="2"
+                           TextTrimming="CharacterEllipsis" />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,28,0">
+                    <Border Background="#233549"
+                            Padding="6,4,6,4"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Type}"
+                                   Foreground="DeepSkyBlue" />
+                    </Border>
+                    <Separator Background="Transparent"
+                               Margin="4" />
+                    <Border Background="#343a40"
+                            Padding="6,4,6,4"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Strength}"
+                                   Foreground="White" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="CivitItemNoStrengthTemplate"
+                      DataType="{x:Type m:CivitItem}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding OriginalName}"
+                           FontSize="16"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding PromptName}"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding OriginalVersion}"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="2"
+                           TextTrimming="CharacterEllipsis" />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,28,0">
+                    <Border Background="#233549"
+                            Padding="6,4,6,4"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Type}"
+                                   Foreground="DeepSkyBlue" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="UnknownItemWithStrengthTemplate"
+                      DataType="{x:Type m:CivitItem}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding PromptName}"
+                           FontSize="16"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="???"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="???"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="2"
+                           TextTrimming="CharacterEllipsis" />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,28,0">
+                    <Border Background="#233549"
+                            Padding="6,4,6,4"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="???"
+                                   Foreground="DeepSkyBlue" />
+                    </Border>
+                    <Separator Background="Transparent"
+                               Margin="4" />
+                    <Border Background="#343a40"
+                            Padding="6,4,6,4"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Strength}"
+                                   Foreground="White" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="UnknownItemNoStrengthTemplate"
+                      DataType="{x:Type m:CivitItem}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding OriginalName}"
+                           FontSize="16"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="???"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="???"
+                           Style="{StaticResource Opacity}"
+                           Grid.Column="0"
+                           Grid.Row="2"
+                           TextTrimming="CharacterEllipsis" />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,28,0">
+                    <Border Background="#233549"
+                            Padding="6,4,6,4"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="???"
+                                   Foreground="DeepSkyBlue" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <utils:CivitItemTemplateSelector x:Key="CivitItemTemplateSelector"
+                                         CivitItemWithStrength="{StaticResource CivitItemWithStrengthTemplate}"
+                                         CivitItemNoStrength="{StaticResource CivitItemNoStrengthTemplate}"
+                                         UnknownItemWithStrength="{StaticResource UnknownItemWithStrengthTemplate}"
+                                         UnknownItemNoStrength="{StaticResource UnknownItemNoStrengthTemplate}" />
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <!--<UniformGrid DockPanel.Dock="Bottom"
-                     Rows="1">
-            <Button Command="Copy"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command, Converter={StaticResource CommandToTextConverter}}" />
-            <Button Command="Delete"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command, Converter={StaticResource CommandToTextConverter}}"
-                    BorderBrush="Red" />
-            <Button Command="Save"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command, Converter={StaticResource CommandToTextConverter}}" />
-            <Button Command="Close"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command, Converter={StaticResource CommandToTextConverter}}" />
-            <UniformGrid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Margin"
-                            Value="12" />
-                    <Setter Property="Padding"
-                            Value="6" />
-                </Style>
-            </UniformGrid.Resources>
-        </UniformGrid>-->
-        <Grid Grid.IsSharedSizeScope="True">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"
                                   MaxWidth="500" />
@@ -66,32 +260,27 @@
                    UseLayoutRounding="True"
                    RenderOptions.BitmapScalingMode="HighQuality"
                    Grid.Column="0"
-                   Grid.RowSpan="2">
-                <Image.ToolTip>
-                    <ToolTip Background="Transparent"
-                             BorderBrush="Transparent">
-                        <Image Source="{Binding BitmapImage}" />
-                    </ToolTip>
-                </Image.ToolTip>
-            </Image>
+                   Grid.RowSpan="2" />
 
-            <TextBlock Text="{Binding FilePath, StringFormat='WebUI Metadata for file: {0}'}"
+            <TextBlock Text="{Binding FilePath, StringFormat='File: {0}'}"
                        TextWrapping="NoWrap"
                        TextTrimming="CharacterEllipsis"
                        ToolTip="{Binding FilePath}"
-                       Margin="10"
+                       Margin="4"
                        Grid.Column="1" />
+
             <TabControl Grid.Column="1"
                         Grid.Row="1">
                 <TabItem Header="View">
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                                  VerticalScrollBarVisibility="Auto">
+                                  VerticalScrollBarVisibility="Auto"
+                                  CanContentScroll="False"
+                                  Padding="0,0,0,12">
                         <StackPanel Orientation="Vertical"
                                     HorizontalAlignment="Stretch">
-                            <GroupBox BorderThickness="0"
-                                      Name="groupbox">
+                            <GroupBox BorderThickness="0">
                                 <GroupBox.Header>
-                                    <Grid Width="{Binding ActualWidth, ElementName=groupbox,Converter={StaticResource SubtractionConverter}}">
+                                    <Grid Width="{Binding ActualWidth, Converter={StaticResource SubtractionConverter}, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="auto" />
@@ -102,11 +291,10 @@
                                                                               VerticalAlignment="Center"
                                                                               Foreground="White" />
                                             <TextBlock Text="Generation data"
-                                                       FontSize="20"
-                                                       Grid.Column="1" />
+                                                       FontSize="20" />
                                         </StackPanel>
                                         <Button Grid.Column="1"
-                                                Margin="0,0,6,0"
+                                                Margin="0,0,18,0"
                                                 BorderThickness="0"
                                                 Command="{Binding CopyCommand}"
                                                 CommandParameter="{Binding RawMetadata}">
@@ -130,7 +318,15 @@
                                             <TextBlock Text="Resources used"
                                                        FontSize="16" />
                                         </GroupBox.Header>
-
+                                        <StackPanel>
+                                            <ProgressBar IsIndeterminate="True" 
+                                                         Height="12"
+                                                         Visibility="{Binding IsCivitBusy, Converter={StaticResource B2VConverter}}"/>
+                                            <ItemsControl ItemsSource="{Binding CivitItems}"
+                                                          ItemTemplateSelector="{StaticResource CivitItemTemplateSelector}"
+                                                          Padding="16,16,0,16">
+                                            </ItemsControl>
+                                        </StackPanel>
                                     </GroupBox>
                                     <Separator />
                                     <!--Prompt-->
@@ -149,7 +345,7 @@
                                             </Style>
                                         </GroupBox.Style>
                                         <GroupBox.Header>
-                                            <Grid Width="{Binding ActualWidth, ElementName=groupbox,Converter={StaticResource SubtractionConverter}}">
+                                            <Grid Width="{Binding ActualWidth, Converter={StaticResource SubtractionConverter}, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="auto" />
@@ -159,7 +355,7 @@
                                                            FontSize="16" />
 
                                                 <Button Grid.Column="1"
-                                                        Margin="0,0,16,0"
+                                                        Margin="0,0,36,0"
                                                         Padding="6,0,6,0"
                                                         BorderThickness="0"
                                                         Command="{Binding CopyCommand}"
@@ -177,7 +373,7 @@
                                         <TextBlock Text="{Binding Metadata.Prompt}"
                                                    TextWrapping="WrapWithOverflow"
                                                    Style="{StaticResource Opacity}"
-                                                   Padding="10,0,22,0"/>
+                                                   Padding="10,0,22,0" />
 
                                     </GroupBox>
                                     <!--Negative prompt-->
@@ -196,7 +392,7 @@
                                             </Style>
                                         </GroupBox.Style>
                                         <GroupBox.Header>
-                                            <Grid Width="{Binding ActualWidth, ElementName=groupbox,Converter={StaticResource SubtractionConverter}}">
+                                            <Grid Width="{Binding ActualWidth,Converter={StaticResource SubtractionConverter}, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="auto" />
@@ -206,7 +402,7 @@
                                                            FontSize="16" />
 
                                                 <Button Grid.Column="1"
-                                                        Margin="0,0,16,0"
+                                                        Margin="0,0,36,0"
                                                         Padding="6,0,6,0"
                                                         BorderThickness="0"
                                                         Command="{Binding CopyCommand}"
@@ -332,19 +528,19 @@
                                      DockPanel.Dock="Bottom">
                             <Button Command="{Binding DeleteCommand}"
                                     Content="Delete"
-                                    BorderBrush="Red" 
+                                    BorderBrush="Red"
                                     Padding="8"
-                                    Margin="8"/>
+                                    Margin="8" />
                             <Button Command="{Binding SaveCommand}"
                                     Content="Save"
                                     Padding="8"
-                                    Margin="8"/>
+                                    Margin="8" />
                         </UniformGrid>
-                    <TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=PropertyChanged}"
-                             TextWrapping="WrapWithOverflow"
-                             AcceptsReturn="True"
-                             Name="TextBox"
-                             Padding="8"/>
+                        <TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=PropertyChanged}"
+                                 TextWrapping="WrapWithOverflow"
+                                 AcceptsReturn="True"
+                                 Name="TextBox"
+                                 Padding="8" />
                     </DockPanel>
                 </TabItem>
             </TabControl>

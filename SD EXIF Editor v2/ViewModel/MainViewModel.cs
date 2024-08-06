@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.Utils;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -14,13 +15,18 @@ namespace SD_EXIF_Editor_v2.ViewModel
     public partial class MainViewModel : ObservableObject
     {
         private readonly MetadataParserService _metadataParserService;
+        private readonly CivitService _civitService;
 
         private bool image_retrieved;
         private BitmapImage? bitmapImage;
 
+        [ObservableProperty]
+        private bool isCivitBusy = false;
+
+        public string FilePath => image.FilePath!;
         public string RawMetadata { get => image.RawMetadata!; set => image.RawMetadata = value; }
         public SDMetadata Metadata { get; set; }
-        public string FilePath => image.FilePath!;
+        public ObservableCollection<CivitItem> CivitItems { get; set; }
         public BitmapImage? BitmapImage
         {
             get
@@ -78,14 +84,29 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         private readonly Image image;
 
-        public MainViewModel(Image image, MetadataParserService metadataParserService)
+        public MainViewModel(Image image, MetadataParserService metadataParserService, CivitService civitAiService)
         {
             _metadataParserService = metadataParserService;
+            _civitService = civitAiService;
 
             this.image = image;
             Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
-        }
 
+            CivitItems = [];
+
+            LoadCivitItems();
+        }
+        private async Task LoadCivitItems()
+        {
+            IsCivitBusy = true;
+
+            CivitItems.Add(await _civitService.GetItemFromHash(Metadata.Model!.Name, Metadata.Model.Hash, null));
+
+            foreach (var lora in Metadata.Loras)
+                CivitItems.Add(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
+
+            IsCivitBusy = false;
+        }
         #region Commands
         [RelayCommand]
         public void Save()
@@ -103,6 +124,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         [RelayCommand]
         public void Delete()
         {
+            // TODO: Confirmation dialog
             RawMetadata = "";
             Save();
         }
