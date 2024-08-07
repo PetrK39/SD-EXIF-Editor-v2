@@ -21,5 +21,13 @@ namespace SD_EXIF_Editor_v2.Service
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+
+        public bool ShowConfirmationMessage(string message)
+        {
+            return MessageBox.Show(message,
+                "SD EXIF Editor Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.None) == MessageBoxResult.Yes;
+        }
     }
 }

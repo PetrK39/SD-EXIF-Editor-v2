@@ -14,6 +14,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
     {
         private readonly MetadataParserService _metadataParserService;
         private readonly CivitService _civitService;
+        private readonly MessageService _messageService;
 
         private readonly Image image;
         private bool image_retrieved;
@@ -36,10 +37,11 @@ namespace SD_EXIF_Editor_v2.ViewModel
         }
 
 
-        public MainViewModel(Image image, MetadataParserService metadataParserService, CivitService civitAiService)
+        public MainViewModel(Image image, MetadataParserService metadataParserService, CivitService civitAiService, MessageService messageService)
         {
             _metadataParserService = metadataParserService;
             _civitService = civitAiService;
+            _messageService = messageService;
 
             this.image = image;
             Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
@@ -123,9 +125,11 @@ namespace SD_EXIF_Editor_v2.ViewModel
         [RelayCommand]
         public void Delete()
         {
-            // TODO: Confirmation dialog
-            RawMetadata = "";
-            Save();
+            if (_messageService.ShowConfirmationMessage("Are you sure you want to remove the generation metadata from this file?"))
+            {
+                RawMetadata = "";
+                Save();
+            }
         }
         #endregion
     }
