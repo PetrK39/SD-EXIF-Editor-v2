@@ -4,6 +4,12 @@ Tiny tool for viewing and editing image metadata associated with [AUTOMATIC1111/
 
 New version with greatly improved visuals and functionality
 
+# Warning
+
+No NSFW filters for model cards yet.
+It's shouldn't be a problem if your image already nsfw along with it's loras
+But apparently checkpoints pages doesn't care about it
+
 # Demo
 
 <img src="https://github.com/PetrK39/SD-EXIF-Editor-v2/blob/master/Documentation/demo.gif" width="700" />
