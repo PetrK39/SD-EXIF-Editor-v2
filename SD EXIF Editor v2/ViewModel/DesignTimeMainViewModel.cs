@@ -1,17 +1,13 @@
-﻿using SD_EXIF_Editor_v2.Model;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
-using SD_EXIF_Editor_v2.Utils;
-using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace SD_EXIF_Editor_v2.ViewModel
 {
-    class DesignTimeMainViewModel : PropertyChangedBase
+    class DesignTimeMainViewModel : ObservableObject
     {
         private bool image_retrieved;
         private BitmapImage? bitmapImage;
@@ -19,6 +15,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public string RawMetadata { get; set; }
         public SDMetadata Metadata { get; set; }
         public string FilePath => image.FilePath;
+        public ObservableCollection<CivitItem> CivitItems { get; set; }
+        public bool IsCivitBusy { get; set; }
         public BitmapImage? BitmapImage
         {
             get
@@ -32,7 +30,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         {
             image_retrieved = true;
             bitmapImage = await CreateImageAsync(FilePath).ConfigureAwait(true);
-            RaisePropertyChanged(nameof(BitmapImage));
+            OnPropertyChanged(nameof(BitmapImage));
         }
         private async Task<BitmapImage?> CreateImageAsync(string filename)
         {
@@ -83,6 +81,23 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
             RawMetadata = image.RawMetadata;
             Metadata = new MetadataParserService(null).ParseFromRawMetadata(RawMetadata);
+
+            CivitItems = [];
+
+            LoadCivitItems();
+        }
+        private async Task LoadCivitItems()
+        {
+            IsCivitBusy = true;
+
+            var civitService = new CivitService();
+
+            CivitItems.Add(await civitService.GetItemFromHash(Metadata.Model!.Name, Metadata.Model.Hash, null));
+
+            foreach (var lora in Metadata.Loras)
+                CivitItems.Add(await civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
+
+            IsCivitBusy = false;
         }
     }
 }

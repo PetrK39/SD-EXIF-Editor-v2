@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace SD_EXIF_Editor_v2.Utils
 {
-    class EmptyToVisibilityConverter : IMultiValueConverter
+    class EmptyToVisibilityConverter : IValueConverter
     {
-
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var param = values.FirstOrDefault();
-
-            if (param is string str)
-                return str == "" ? Visibility.Collapsed : Visibility.Visible;
-            else if (param is IList<object> list)
-                return list.Any() ? Visibility.Visible : Visibility.Collapsed;
-            else
-                return param is null ? Visibility.Collapsed : Visibility.Visible;
+            switch (value)
+            {
+                case string str:
+                    return str == "" ? Visibility.Collapsed : Visibility.Visible;
+                case IList<object> list:
+                    return list.Any() ? Visibility.Visible : Visibility.Collapsed;
+                default:
+                    return value is null ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

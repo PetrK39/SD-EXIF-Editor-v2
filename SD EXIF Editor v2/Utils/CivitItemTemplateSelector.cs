@@ -6,29 +6,19 @@ namespace SD_EXIF_Editor_v2.Utils
 {
     class CivitItemTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate CivitItemWithStrength { get; set; }
-        public DataTemplate CivitItemNoStrength { get; set; }
-        public DataTemplate UnknownItemWithStrength { get; set; }
-        public DataTemplate UnknownItemNoStrength { get; set; }
+        public DataTemplate CivitItemTemplate { get; set; }
+        public DataTemplate UnknownItemTemplate { get; set; }
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is CivitItem civitItem)
+            switch (item)
             {
-                switch (civitItem)
-                {
-                    case CivitItem i when !i.IsUnknown && i.Strength is not null:
-                        return CivitItemWithStrength;
-                    case CivitItem i when !i.IsUnknown && i.Strength is null:
-                        return CivitItemNoStrength;
-                    case CivitItem i when i.IsUnknown && i.Strength is not null:
-                        return UnknownItemWithStrength;
-                    case CivitItem i when i.IsUnknown && i.Strength is null:
-                        return UnknownItemNoStrength;
-                    default:
-                        return null;
-                }
+                case CivitItem i when !i.IsUnknown:
+                    return CivitItemTemplate;
+                case CivitItem i when i.IsUnknown:
+                    return UnknownItemTemplate;
+                default:
+                    return null;
             }
-            else return null;
         }
     }
 }

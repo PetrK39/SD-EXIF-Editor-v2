@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="SD_EXIF_Editor_v2.Control.OtherMetadataControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
+             xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Styles.xaml" />
+                <ResourceDictionary>
+                    <utils:SizeConverter x:Key="SizeConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <GroupBox BorderThickness="0">
+        <GroupBox.Header>
+            <TextBlock Text="Other metadata"
+                       Style="{StaticResource TextBlockMedium}" />
+        </GroupBox.Header>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Margin="10,0,0,0">
+                <TextBlock Text="Steps"
+                           Style="{StaticResource Opacity}" />
+                <TextBlock Text="Sampler"
+                           Style="{StaticResource Opacity}" />
+                <TextBlock Text="Schedule type"
+                           Style="{StaticResource Opacity}" />
+                <TextBlock Text="Guidance"
+                           Style="{StaticResource Opacity}" />
+                <TextBlock Text="Seed"
+                           Style="{StaticResource Opacity}" />
+                <TextBlock Text="Size"
+                           Style="{StaticResource Opacity}" />
+                <TextBlock Text="WebUI version"
+                           Style="{StaticResource Opacity}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Margin="0,0,24,0">
+                <TextBlock Text="{Binding Metadata.Steps}"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding Metadata.Sampler}"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding Metadata.ScheduleType}"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding Metadata.CFGScale}"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding Metadata.Seed}"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding Metadata.Size, Converter={StaticResource SizeConverter}}"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding Metadata.Version}"
+                           HorizontalAlignment="Right" />
+            </StackPanel>
+        </Grid>
+    </GroupBox>
+</UserControl>

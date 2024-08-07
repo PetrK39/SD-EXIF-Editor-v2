@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="SD_EXIF_Editor_v2.Control.CivitItemsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
+             xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
+             xmlns:m="clr-namespace:SD_EXIF_Editor_v2.Model"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Styles.xaml" />
+                <ResourceDictionary>
+                    <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
+                    <DataTemplate x:Key="CivitItemTemplate"
+                                  DataType="{x:Type m:CivitItem}">
+                        <Grid Margin="8,6,26,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{Binding OriginalName}"
+                                       Style="{StaticResource TextBlockMedium}"
+                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding PromptName}"
+                                       Style="{StaticResource Opacity}"
+                                       Grid.Column="0"
+                                       Grid.Row="1"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding OriginalVersion}"
+                                       Style="{StaticResource Opacity}"
+                                       Grid.Column="0"
+                                       Grid.Row="2"
+                                       TextTrimming="CharacterEllipsis" />
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        HorizontalAlignment="Right">
+                                <Border Background="#233549"
+                                        Padding="6,4,6,4"
+                                        CornerRadius="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Type}"
+                                               Foreground="DeepSkyBlue" />
+                                </Border>
+                                <Separator Background="Transparent"
+                                           Margin="4"
+                                           Visibility="{Binding Strength, Converter={StaticResource EmptyToVisibilityConverter}}" />
+                                <Border Background="#343a40"
+                                        Padding="6,4,6,4"
+                                        CornerRadius="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Visibility="{Binding Strength, Converter={StaticResource EmptyToVisibilityConverter}}">
+                                    <TextBlock Text="{Binding Strength}"
+                                               Foreground="White" />
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="UnknownItemTemplate"
+                                  DataType="{x:Type m:CivitItem}">
+                        <Grid Margin="8,6,26,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{Binding PromptName}"
+                                       Style="{StaticResource TextBlockMedium}"
+                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       TextTrimming="CharacterEllipsis" />
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        HorizontalAlignment="Right">
+                                <Border Background="#233549"
+                                        Padding="6,4,6,4"
+                                        CornerRadius="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="???"
+                                               Foreground="DeepSkyBlue" />
+                                </Border>
+                                <Separator Background="Transparent"
+                                           Margin="4" />
+                                <Border Background="#343a40"
+                                        Padding="6,4,6,4"
+                                        CornerRadius="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Strength}"
+                                               Foreground="White" />
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+
+                    <utils:CivitItemTemplateSelector x:Key="CivitItemTemplateSelector"
+                                                     CivitItemTemplate="{StaticResource CivitItemTemplate}"
+                                                     UnknownItemTemplate="{StaticResource UnknownItemTemplate}" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <GroupBox BorderThickness="0">
+        <GroupBox.Header>
+            <TextBlock Text="Resources used"
+                       Style="{StaticResource TextBlockMedium}" />
+        </GroupBox.Header>
+        <StackPanel>
+            <ProgressBar IsIndeterminate="True"
+                         Height="12"
+                         Visibility="{Binding IsCivitBusy, Converter={StaticResource B2VConverter}}" />
+            <ItemsControl ItemsSource="{Binding CivitItems}"
+                          ItemTemplateSelector="{StaticResource CivitItemTemplateSelector}">
+            </ItemsControl>
+        </StackPanel>
+    </GroupBox>
+</UserControl>

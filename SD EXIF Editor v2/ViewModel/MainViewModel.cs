@@ -2,9 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
-using SD_EXIF_Editor_v2.Utils;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +15,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         private readonly MetadataParserService _metadataParserService;
         private readonly CivitService _civitService;
 
+        private readonly Image image;
         private bool image_retrieved;
         private BitmapImage? bitmapImage;
 
@@ -36,6 +35,32 @@ namespace SD_EXIF_Editor_v2.ViewModel
             }
         }
 
+
+        public MainViewModel(Image image, MetadataParserService metadataParserService, CivitService civitAiService)
+        {
+            _metadataParserService = metadataParserService;
+            _civitService = civitAiService;
+
+            this.image = image;
+            Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
+
+            CivitItems = [];
+
+            LoadCivitItems();
+        }
+        private async Task LoadCivitItems()
+        {
+            IsCivitBusy = true;
+
+            if (Metadata.Model != null)
+                CivitItems.Add(await _civitService.GetItemFromHash(Metadata.Model.Name, Metadata.Model.Hash, null));
+
+            foreach (var lora in Metadata.Loras)
+                CivitItems.Add(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
+
+            IsCivitBusy = false;
+        }
+        #region Image Loading
         private async Task getImageAsync()
         {
             image_retrieved = true;
@@ -81,32 +106,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 return null;
             }
         }
-
-        private readonly Image image;
-
-        public MainViewModel(Image image, MetadataParserService metadataParserService, CivitService civitAiService)
-        {
-            _metadataParserService = metadataParserService;
-            _civitService = civitAiService;
-
-            this.image = image;
-            Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
-
-            CivitItems = [];
-
-            LoadCivitItems();
-        }
-        private async Task LoadCivitItems()
-        {
-            IsCivitBusy = true;
-
-            CivitItems.Add(await _civitService.GetItemFromHash(Metadata.Model!.Name, Metadata.Model.Hash, null));
-
-            foreach (var lora in Metadata.Loras)
-                CivitItems.Add(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
-
-            IsCivitBusy = false;
-        }
+        #endregion
         #region Commands
         [RelayCommand]
         public void Save()
@@ -118,7 +118,6 @@ namespace SD_EXIF_Editor_v2.ViewModel
         [RelayCommand]
         public void Copy(string parameter)
         {
-            Debug.WriteLine($"Copied: {parameter}");
             Clipboard.SetDataObject(parameter);
         }
         [RelayCommand]
