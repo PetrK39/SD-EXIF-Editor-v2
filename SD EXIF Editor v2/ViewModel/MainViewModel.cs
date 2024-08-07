@@ -131,6 +131,15 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 Save();
             }
         }
+        [RelayCommand]
+        public void OpenUri(string uri)
+        {
+            var sInfo = new System.Diagnostics.ProcessStartInfo(uri)
+            {
+                UseShellExecute = true,
+            };
+            System.Diagnostics.Process.Start(sInfo);
+        }
         #endregion
     }
 }

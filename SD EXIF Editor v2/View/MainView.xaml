@@ -99,7 +99,7 @@
                             </GroupBox.Header>
                             <StackPanel>
                                 <!--Resources used-->
-                                <c:CivitItemsControl />
+                                <c:CivitItemsControl OpenUriCommand="{Binding OpenUriCommand}"/>
                                 <Separator />
                                 <!--Prompt-->
                                 <c:PromptControl Title="Prompt"

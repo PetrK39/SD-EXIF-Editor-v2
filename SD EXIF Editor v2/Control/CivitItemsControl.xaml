@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
              xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
              xmlns:m="clr-namespace:SD_EXIF_Editor_v2.Model"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"
+             Name="cic"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
@@ -15,6 +17,11 @@
                 <ResourceDictionary Source="../Resources/Styles.xaml" />
                 <ResourceDictionary>
                     <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
+                    <utils:KilobytesToHumanConverter x:Key="KilobytesToHumanConverter" />
+
+                    <utils:BindingProxy x:Key="OpenUriCommandProxy"
+                                        Data="{Binding ElementName=cic, Path=OpenUriCommand}" />
+
                     <DataTemplate x:Key="CivitItemTemplate"
                                   DataType="{x:Type m:CivitItem}">
                         <Grid Margin="8,6,26,6">
@@ -29,11 +36,15 @@
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="{Binding OriginalName}"
-                                       Style="{StaticResource TextBlockMedium}"
-                                       Grid.Column="0"
-                                       Grid.Row="0"
-                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock>
+                                <Hyperlink Click="Hyperlink_Click">
+                                    <TextBlock Text="{Binding OriginalName}"
+                                               Style="{StaticResource TextBlockMedium}"
+                                               Grid.Column="0"
+                                               Grid.Row="0"
+                                               TextTrimming="CharacterEllipsis" />
+                                </Hyperlink>
+                            </TextBlock>
                             <TextBlock Text="{Binding PromptName}"
                                        Style="{StaticResource Opacity}"
                                        Grid.Column="0"
@@ -115,6 +126,47 @@
                     <utils:CivitItemTemplateSelector x:Key="CivitItemTemplateSelector"
                                                      CivitItemTemplate="{StaticResource CivitItemTemplate}"
                                                      UnknownItemTemplate="{StaticResource UnknownItemTemplate}" />
+
+                    <Popup x:Key="PopupTemplate"
+                           StaysOpen="False">
+                        <Border CornerRadius="8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Image Source="{Binding ImageUri}"
+                                       MaxHeight="400"
+                                       MaxWidth="200"
+                                       Grid.ColumnSpan="2"
+                                       Grid.RowSpan="2" />
+
+                                <Button Command="{Binding Data,Source={StaticResource OpenUriCommandProxy}}"
+                                        CommandParameter="{Binding SiteUri}"
+                                        Padding="8"
+                                        Opacity="0.9">
+                                    <iconPacks:BootstrapIcons Kind="BoxArrowUpRight" />
+                                </Button>
+                                <Button Command="{Binding Data,Source={StaticResource OpenUriCommandProxy}}"
+                                        CommandParameter="{Binding DownloadUri}"
+                                        Padding="8"
+                                        Opacity="0.9"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding SizeKB, Converter={StaticResource KilobytesToHumanConverter}}" />
+                                        <Separator Margin="4" />
+                                        <iconPacks:BootstrapIcons Kind="Download" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </Popup>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

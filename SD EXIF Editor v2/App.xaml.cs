@@ -4,10 +4,6 @@ using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.View;
 using SD_EXIF_Editor_v2.ViewModel;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Windows;
 
 namespace SD_EXIF_Editor_v2
