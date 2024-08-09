@@ -41,3 +41,4 @@ I also need a help with making programm cross-platform. Let me know if you can c
 - `System.Windows.MessageBox` replacement in `Service.MessageService`
 - `System.Windows.Clipboard` replacement in `ViewModel.MainViewModel.Copy()`
 - `System.Diagnostics.Process.Start` replacement in `ViewModel.MainViewModel.OpenUri()`
+- Moving entire UI to `avalonia`
