@@ -4,12 +4,6 @@ Tiny tool for viewing and editing image metadata associated with [AUTOMATIC1111/
 
 New version with greatly improved visuals and functionality
 
-# Warning
-
-No NSFW filters for model cards yet.
-It's shouldn't be a problem if your image already nsfw along with it's loras
-But apparently checkpoints pages doesn't care about it
-
 # Demo
 
 <img src="https://github.com/PetrK39/SD-EXIF-Editor-v2/blob/master/Documentation/demo.gif" width="700" />
@@ -20,6 +14,7 @@ But apparently checkpoints pages doesn't care about it
 - Delete metadata from your image
 - [civit.ai](https://civit.ai/)-like UI
 - Quickly open or download models from the image by clicking on it
+- Basic NSFW filter for model's images
 
 # Usage
 
