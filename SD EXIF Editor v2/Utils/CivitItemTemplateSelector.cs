@@ -1,4 +1,4 @@
-﻿using SD_EXIF_Editor_v2.Model;
+﻿using SD_EXIF_Editor_v2.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,9 +12,9 @@ namespace SD_EXIF_Editor_v2.Utils
         {
             switch (item)
             {
-                case CivitItem i when !i.IsUnknown:
+                case CivitItemViewModel i when !i.IsUnknown:
                     return CivitItemTemplate;
-                case CivitItem i when i.IsUnknown:
+                case CivitItemViewModel i when i.IsUnknown:
                     return UnknownItemTemplate;
                 default:
                     return null;

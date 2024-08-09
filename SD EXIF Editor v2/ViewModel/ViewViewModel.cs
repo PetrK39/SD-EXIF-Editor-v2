@@ -13,38 +13,41 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         private readonly MetadataParserService _metadataParserService;
         private readonly CivitService _civitService;
+        private readonly SettingsService _settingsService;
 
-        private bool isCivitBusy = false;
+        private bool isCivitBusy = true;
 
         public string RawMetadata => _image.RawMetadata;
         public SDMetadata Metadata { get; set; }
         public bool IsCivitBusy { get => isCivitBusy; set => SetProperty(ref isCivitBusy, value); }
-        public ObservableCollection<CivitItem> CivitItems { get; set; }
+        public ObservableCollection<CivitItemViewModel> CivitItemViewModels { get; set; }
 
         public ViewViewModel(Image image,
             MetadataParserService metadataParserService,
-            CivitService civitServide)
+            CivitService civitServide,
+            SettingsService settingsService)
         {
             _image = image;
 
             _metadataParserService = metadataParserService;
             _civitService = civitServide;
+            _settingsService = settingsService;
 
             Metadata = _metadataParserService.ParseFromRawMetadata(image.RawMetadata);
 
-            CivitItems = [];
+            CivitItemViewModels = [];
 
-            LoadCivitItems();
+            LoadItemsCivitItemViewModels();
         }
-        private async Task LoadCivitItems()
+        private async void LoadItemsCivitItemViewModels()
         {
             IsCivitBusy = true;
 
-            if (Metadata.Model != null)
-                CivitItems.Add(await _civitService.GetItemFromHash(Metadata.Model.Name, Metadata.Model.Hash, null));
+            if (Metadata.Model is SDModel model)
+                CivitItemViewModels.Add(new CivitItemViewModel(await _civitService.GetItemFromHash(model.Name, model.Hash, null), _settingsService));
 
             foreach (var lora in Metadata.Loras)
-                CivitItems.Add(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
+                CivitItemViewModels.Add(new CivitItemViewModel(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength), _settingsService));
 
             IsCivitBusy = false;
         }
@@ -53,15 +56,6 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public void Copy(string parameter)
         {
             Clipboard.SetDataObject(parameter);
-        }
-        [RelayCommand]
-        public void OpenUri(string uri)
-        {
-            var sInfo = new System.Diagnostics.ProcessStartInfo(uri)
-            {
-                UseShellExecute = true,
-            };
-            System.Diagnostics.Process.Start(sInfo);
         }
     }
 }

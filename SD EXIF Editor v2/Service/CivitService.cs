@@ -45,7 +45,8 @@ namespace SD_EXIF_Editor_v2.Service
 
                     SizeKB = data.files[0].sizeKB,
 
-                    ImageUri = data.images[0].url,
+                    Images = data.images.Select(i => new CivitItemImage { NSFWLevel = i.nsfwLevel, Uri = i.url}).ToList(),
+
                     DownloadUri = data.downloadUrl,
                     SiteUri = $"https://civitai.com/models/{data.modelId}?modelVersionId={data.id}"
                 };
@@ -59,6 +60,7 @@ namespace SD_EXIF_Editor_v2.Service
         public class Image
         {
             public string url { get; set; }
+            public NSFWLevels nsfwLevel { get; set; }
         }
         public class Model
         {

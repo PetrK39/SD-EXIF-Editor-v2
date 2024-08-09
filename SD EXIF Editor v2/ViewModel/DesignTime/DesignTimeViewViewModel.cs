@@ -7,9 +7,10 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
 {
     public partial class DesignTimeViewViewModel : ObservableObject, IViewViewModel
     {
+        public string RawMetadata { get; }
         public SDMetadata Metadata { get; }
         public bool IsCivitBusy { get; }
-        public ObservableCollection<CivitItem> CivitItems { get; }
+        public ObservableCollection<CivitItemViewModel> CivitItemViewModels { get; }
 
         public DesignTimeViewViewModel()
         {
@@ -28,40 +29,10 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
 
             IsCivitBusy = true;
 
-            CivitItems = new ObservableCollection<CivitItem>
-            {
-                new CivitItem
-                {
-                    OriginalName = "Test Original Name 1",
-                    PromptName = "Test Prompt Name 1",
-                    OriginalVersion = "v0.1",
-                    Strength = null,
-                    Type = "TEST TYPE 1"
-                },
-                new CivitItem
-                {
-                    OriginalName = "Test Original Name 2",
-                    PromptName = "Test Prompt Name 2",
-                    OriginalVersion = "v0.2",
-                    Strength = 1.23f,
-                    Type = "TEST TYPE 2"
-                },
-                new CivitItem
-                {
-                    IsUnknown = true,
-                    PromptName = "Test Prompt Name 3",
-                    Strength = -4.56f
-                }
-            };
         }
 
         [RelayCommand]
         public void Copy(string parameter)
-        {
-            throw new NotImplementedException();
-        }
-        [RelayCommand]
-        public void OpenUri(string uri)
         {
             throw new NotImplementedException();
         }

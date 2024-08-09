@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_EXIF_Editor_v2.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,13 @@ namespace SD_EXIF_Editor_v2.Model
 
         public double SizeKB { get; set; }
 
-        public string ImageUri { get; set; }
+        public List<CivitItemImage> Images { get; set; }
         public string DownloadUri { get; set; }
         public string SiteUri { get; set; }
-
+    }
+    public class CivitItemImage
+    {
+        public string Uri { get; set; }
+        public NSFWLevels NSFWLevel { get; set; }
     }
 }

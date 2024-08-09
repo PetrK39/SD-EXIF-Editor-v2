@@ -23,7 +23,8 @@ namespace SD_EXIF_Editor_v2
                 services.AddTransient<ArgsParserService>();
                 services.AddTransient<MetadataParserService>();
                 services.AddTransient<CivitService>();
-                services.AddTransient<SettingsService>();
+
+                services.AddSingleton<SettingsService>();
 
                 services.AddSingleton<Image>();
 

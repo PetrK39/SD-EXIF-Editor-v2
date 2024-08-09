@@ -21,16 +21,6 @@ namespace SD_EXIF_Editor_v2.Control
     /// </summary>
     public partial class CivitItemsControl : UserControl
     {
-        public ICommand OpenUriCommand
-        {
-            get { return (ICommand)GetValue(OpenUriCommandProperty); }
-            set { SetValue(OpenUriCommandProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for OpenUriCommand.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty OpenUriCommandProperty =
-            DependencyProperty.Register("OpenUriCommand", typeof(ICommand), typeof(CivitItemsControl), new PropertyMetadata(null));
-
         public CivitItemsControl()
         {
             InitializeComponent();
