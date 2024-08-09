@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="SD_EXIF_Editor_v2.Control.ViewTabControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:c="clr-namespace:SD_EXIF_Editor_v2.Control"
+             xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
+             xmlns:dt="clr-namespace:SD_EXIF_Editor_v2.ViewModel.DesignTime"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type dt:DesignTimeViewViewModel}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="500" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Styles.xaml" />
+                <ResourceDictionary>
+                    <utils:SubtractionConverter x:Key="SubtractionConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto"
+                  CanContentScroll="False"
+                  Padding="0,0,0,12">
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Stretch">
+            <GroupBox BorderThickness="0">
+                <GroupBox.Header>
+                    <Grid Width="{Binding ActualWidth, Converter={StaticResource SubtractionConverter}, RelativeSource={RelativeSource AncestorType=GroupBox}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconBootstrapIcons Kind="InputCursorText"
+                                                              VerticalAlignment="Center"
+                                                              Foreground="White" />
+                            <Separator Margin="4" />
+                            <TextBlock Text="Generation data"
+                                       FontSize="20" />
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Margin="0,0,18,0"
+                                BorderThickness="0"
+                                Command="{Binding CopyCommand}"
+                                CommandParameter="{Binding RawMetadata}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconBootstrapIcons Kind="Copy"
+                                                                  VerticalAlignment="Center"
+                                                                  Foreground="LightSkyBlue" />
+                                <Separator Margin="4" />
+                                <TextBlock Text="COPY ALL"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"
+                                           Foreground="LightSkyBlue"
+                                           Grid.Column="2" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </GroupBox.Header>
+                <StackPanel>
+                    <!--Resources used-->
+                    <c:CivitItemsControl OpenUriCommand="{Binding OpenUriCommand}" />
+                    <Separator />
+                    <!--Prompt-->
+                    <c:PromptControl Title="Prompt"
+                                     Prompt="{Binding Metadata.Prompt}"
+                                     CopyCommand="{Binding CopyCommand}"
+                                     Style="{StaticResource HideIfEmptyPrompt}" />
+                    <!--Negative prompt-->
+                    <c:PromptControl Title="Negative Prompt"
+                                     Prompt="{Binding Metadata.NegativePrompt}"
+                                     CopyCommand="{Binding CopyCommand}"
+                                     Style="{StaticResource HideIfEmptyNegativePrompt}" />
+                    <Separator Style="{StaticResource HideIfEmptyAllPrompts}" />
+                    <!--Other metadata-->
+                    <c:OtherMetadataControl />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,32 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace SD_EXIF_Editor_v2.ViewModel
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainViewModel : ObservableObject, IMainViewModel
     {
-        private readonly MetadataParserService _metadataParserService;
-        private readonly CivitService _civitService;
-        private readonly MessageService _messageService;
+        private readonly IViewViewModel _viewViewModel;
+        private readonly IEditViewModel _editViewModel;
+        private readonly ISettingsViewModel _settingsViewModel;
 
-        private readonly Image image;
+        private readonly Image _image;
+
         private bool image_retrieved;
         private BitmapImage? bitmapImage;
 
-        [ObservableProperty]
-        private bool isCivitBusy = false;
-
-        public string FilePath => image.FilePath!;
-        public string RawMetadata { get => image.RawMetadata!; set => image.RawMetadata = value; }
-        public SDMetadata Metadata { get; set; }
-        public ObservableCollection<CivitItem> CivitItems { get; set; }
+        public string FilePath => _image.FilePath!;
         public BitmapImage? BitmapImage
         {
             get
@@ -36,34 +27,25 @@ namespace SD_EXIF_Editor_v2.ViewModel
             }
         }
 
+        public IViewViewModel ViewViewModel => _viewViewModel;
+        public IEditViewModel EditViewModel => _editViewModel;
+        public ISettingsViewModel SettingsViewModel => _settingsViewModel;
 
-        public MainViewModel(Image image, MetadataParserService metadataParserService, CivitService civitAiService, MessageService messageService)
+
+        public MainViewModel(Image image,
+            ViewViewModel viewViewModel,
+            EditViewModel editViewModel,
+            SettingsViewModel settingsViewModel)
         {
-            _metadataParserService = metadataParserService;
-            _civitService = civitAiService;
-            _messageService = messageService;
+            _image = image;
 
-            this.image = image;
-            Metadata = _metadataParserService.ParseFromRawMetadata(RawMetadata);
-
-            CivitItems = [];
-
-            LoadCivitItems();
+            _viewViewModel = viewViewModel;
+            _editViewModel = editViewModel;
+            _settingsViewModel = settingsViewModel;
         }
-        private async Task LoadCivitItems()
-        {
-            IsCivitBusy = true;
 
-            if (Metadata.Model != null)
-                CivitItems.Add(await _civitService.GetItemFromHash(Metadata.Model.Name, Metadata.Model.Hash, null));
-
-            foreach (var lora in Metadata.Loras)
-                CivitItems.Add(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
-
-            IsCivitBusy = false;
-        }
         #region Image Loading
-        private async Task getImageAsync()
+        private async void getImageAsync()
         {
             image_retrieved = true;
             bitmapImage = await CreateImageAsync(FilePath).ConfigureAwait(true);
@@ -107,38 +89,6 @@ namespace SD_EXIF_Editor_v2.ViewModel
             {
                 return null;
             }
-        }
-        #endregion
-        #region Commands
-        [RelayCommand]
-        public void Save()
-        {
-            image.SaveChanges();
-
-            ApplicationCommands.Close.Execute(null, null);
-        }
-        [RelayCommand]
-        public void Copy(string parameter)
-        {
-            Clipboard.SetDataObject(parameter);
-        }
-        [RelayCommand]
-        public void Delete()
-        {
-            if (_messageService.ShowConfirmationMessage("Are you sure you want to remove the generation metadata from this file?"))
-            {
-                RawMetadata = "";
-                Save();
-            }
-        }
-        [RelayCommand]
-        public void OpenUri(string uri)
-        {
-            var sInfo = new System.Diagnostics.ProcessStartInfo(uri)
-            {
-                UseShellExecute = true,
-            };
-            System.Diagnostics.Process.Start(sInfo);
         }
         #endregion
     }
