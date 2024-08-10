@@ -4,16 +4,15 @@ namespace SD_EXIF_Editor_v2.Model
 {
     public class Image
     {
+        private const string MetadataFieldName = "parameters";
+        private ImageFile imageFile;
+
         public string FilePath { get; private set; }
         public string RawMetadata
         {
             get => GetMetadataProperty().Value;
             set => GetMetadataProperty().Value = value;
         }
-
-        private const string MetadataFieldName = "parameters";
-        private ImageFile imageFile;
-
 
         public void LoadFromFilePath(string filePath)
         {

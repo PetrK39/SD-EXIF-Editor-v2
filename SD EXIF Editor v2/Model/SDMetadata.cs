@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace SD_EXIF_Editor_v2.Model
 {
@@ -14,7 +13,7 @@ namespace SD_EXIF_Editor_v2.Model
         public long? Seed { get; set; }
         public Size? Size { get; set; }
         public SDModel? Model { get; set; }
-        public ObservableCollection<SDLora> Loras { get; set; }
+        public List<SDLora> Loras { get; set; }
         public string? Version { get; set; }
         public SDMetadata()
         {
