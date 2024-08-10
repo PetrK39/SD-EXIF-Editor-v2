@@ -1,39 +1,49 @@
 # SD EXIF Editor v2
 
-Tiny tool for viewing and editing image metadata associated with [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) generation parameters
-
-New version with greatly improved visuals and functionality
+A lightweight tool designed to view and edit image metadata associated with [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) generation parameters. This new version boasts significantly enhanced visuals and functionality.
 
 # Demo
+
+Experience the tool in action with my demo:  
 
 <img src="https://github.com/PetrK39/SD-EXIF-Editor-v2/blob/master/Documentation/demo.gif" width="700" />
 
 # Features
 
-- Edit raw metadata of your image
-- Delete metadata from your image
-- [civit.ai](https://civit.ai/)-like UI
-- Quickly open or download models from the image by clicking on it
-- Basic NSFW filter for model's images
+**Metadata Management:** Easily edit or delete raw metadata from your images.
+
+**Intuitive UI:** Enjoy a user interface inspired by civit.ai, ensuring a familiar and user-friendly experience.
+
+**Quick Access:** Instantly open or download models directly from the image by a simple click.
+
+**NSFW Filter:** Basic content filtering to ensure a safe browsing experience for model images.
 
 # Usage
 
-Open the .png file through this application in a convenient way
-- Use command line
-- Drop the file on `SD EXIF Editor.exe` or on link to it
-- (Recommened) Use FastStone ImageViewer and add `SD EXIF Editor.exe` as External Program. Then use `E` shortcut
+Engage with your .png files effortlessly through this application:
 
-# In case of errors
+- **Command Line:** Utilize the command line for direct access.
 
-I'm 100% sure that I'm missing some rare cases and unusual metadata properties from the webui
-In case you can't see some properties or program says about error, please create an issue with error codes and your raw metadata.
-I'll try my best to fix it.
+- **Drag and Drop:** Simply drop the file onto SD EXIF Editor.exe or a link to it.
 
-# In case of you want to help
+- **Recommended Method:** Integrate with `FastStone ImageViewer` by adding `SD EXIF Editor.exe` as an External Program. Then, use the `E` shortcut for quick access.
 
-Feel free to create pull request if you can introduce useful features
-I also need a help with making programm cross-platform. Let me know if you can code and test cross-platform approaches for following modules:
-- `System.Windows.MessageBox` replacement in `Service.MessageService`
-- `System.Windows.Clipboard` replacement in `ViewModel.MainViewModel.Copy()`
-- `System.Diagnostics.Process.Start` replacement in `ViewModel.MainViewModel.OpenUri()`
-- Moving entire UI to `avalonia`
+# Troubleshooting
+
+I strive for perfection, but I acknowledge that some rare cases or unusual metadata properties from the webui might be overlooked. If you encounter issues such as missing properties or errors, please:
+
+1. Create an issue detailing the error codes.
+
+2. Provide your raw metadata for analysis.
+
+I'm committed to resolving any issues promptly.
+
+# Contributing
+
+Your contributions are invaluable! Here are some areas where you can help:
+
+- **Feature Enhancements:** Feel free to submit pull requests for any useful features you'd like to add.
+
+- **Cross-Platform Development:** Assist in making the program cross-platform by transitioning the entire UI to [avalonia](https://avaloniaui.net/).
+
+Let's collaborate to make SD EXIF Editor v2 the best tool it can be!
