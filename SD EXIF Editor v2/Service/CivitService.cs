@@ -13,18 +13,17 @@ namespace SD_EXIF_Editor_v2.Service
             _messageService = messageService;
 
             client = new HttpClient();
-            client.BaseAddress = new Uri("https://civitai.com/api/v1");
         }
         public async Task<CivitItem> GetItemFromHash(string origName, string origHash, float? strength = null)
         {
-            var requestUri = $"model-versions/by-hash/{origHash}";
+            var requestUri = $"https://civitai.com/api/v1/model-versions/by-hash/{origHash}";
 
 
             try
             {
                 var response = await client.GetAsync(requestUri);
-
-                var data = JsonConvert.DeserializeObject<Root>(await response.Content.ReadAsStringAsync());
+                var content = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Root>(content);
 
                 if (data is null || data.id == 0)
                     return BuildDefaultCivitItem(origName, strength);
@@ -50,16 +49,16 @@ namespace SD_EXIF_Editor_v2.Service
             }
             catch (HttpRequestException ex)
             {
-                _messageService.ShowInfoMessage($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
+                _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
                 return BuildDefaultCivitItem(origName, strength);
             }
             catch (JsonException ex)
             {
-                _messageService.ShowInfoMessage($"\"Failed to deserialize the API response\r\n{ex.Message}");
+                _messageService.ShowErrorMessage($"\"Failed to deserialize the API response\r\n{ex.Message}");
                 return BuildDefaultCivitItem(origName, strength);
             }
         }
-        private CivitItem BuildDefaultCivitItem(string name, float? strength) => new() { PromptName = name, Strength = strength };
+        private CivitItem BuildDefaultCivitItem(string name, float? strength) => new() { IsUnknown = true, PromptName = name, Strength = strength };
 
         public record Root(int id, int modelId, string name, Model model, List<File> files, List<Image> images, string downloadUrl);
         public record Model(string name, string type);
