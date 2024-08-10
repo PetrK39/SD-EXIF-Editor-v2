@@ -1,6 +1,6 @@
 # SD EXIF Editor v2
 
-A lightweight tool designed to view and edit image metadata associated with AUTOMATIC1111/stable-diffusion-webui generation parameters. This new version boasts significantly enhanced visuals and functionality.
+A lightweight tool designed to view and edit image metadata associated with [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) generation parameters. This new version boasts significantly enhanced visuals and functionality.
 
 # Demo
 
