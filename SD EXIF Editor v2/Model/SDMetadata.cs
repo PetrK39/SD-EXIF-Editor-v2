@@ -4,17 +4,17 @@ namespace SD_EXIF_Editor_v2.Model
 {
     public class SDMetadata
     {
-        public string? Prompt { get; set; }
-        public string? NegativePrompt { get; set; }
-        public int? Steps { get; set; }
-        public string? Sampler { get; set; }
-        public string? ScheduleType { get; set; }
-        public float? CFGScale { get; set; }
-        public long? Seed { get; set; }
-        public Size? Size { get; set; }
-        public SDModel? Model { get; set; }
-        public List<SDLora> Loras { get; set; }
-        public string? Version { get; set; }
+        public string? Prompt { get; init; }
+        public string? NegativePrompt { get; init; }
+        public int? Steps { get; init; }
+        public string? Sampler { get; init; }
+        public string? ScheduleType { get; init; }
+        public float? CFGScale { get; init; }
+        public long? Seed { get; init; }
+        public Size? Size { get; init; }
+        public SDModel? Model { get; init; }
+        public List<SDLora> Loras { get; init; }
+        public string? Version { get; init; }
         public SDMetadata()
         {
             Loras = [];
@@ -22,8 +22,8 @@ namespace SD_EXIF_Editor_v2.Model
     }
     public class SDModel
     {
-        public string Name { get; set; }
-        public string Hash { get; set; }
+        public string Name { get; init; }
+        public string Hash { get; init; }
 
         public SDModel(string name, string hash)
         {
@@ -34,9 +34,9 @@ namespace SD_EXIF_Editor_v2.Model
     }
     public class SDLora
     {
-        public string Name { get; set; }
-        public string Hash { get; set; }
-        public float Strength { get; set; }
+        public string Name { get; init; }
+        public string Hash { get; init; }
+        public float Strength { get; init; }
 
         public SDLora(string name, string hash, float strength)
         {

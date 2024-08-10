@@ -30,7 +30,6 @@ namespace SD_EXIF_Editor_v2.Service
 
         public SDMetadata ParseFromRawMetadata(string rawMetadata)
         {
-            var sdMetadata = new SDMetadata();
             List<ErrorCodes> errorCodes = [];
 
             if (rawMetadata == "")
@@ -38,7 +37,7 @@ namespace SD_EXIF_Editor_v2.Service
                 errorCodes.Add(ErrorCodes.MetadataEmpty);
 
                 DisplayErrorMessage(errorCodes);
-                return sdMetadata;
+                return new SDMetadata();
             }
 
             var matchesGeneralSplit = GeneralSplitRegex().Matches(rawMetadata);
@@ -48,13 +47,13 @@ namespace SD_EXIF_Editor_v2.Service
                 errorCodes.Add(ErrorCodes.GeneralRegexFail); // If we can't regex raw metadata correctly
 
                 DisplayErrorMessage(errorCodes);
-                return sdMetadata;
+                return new SDMetadata();
             }
 
             var matchGeneralSplit = matchesGeneralSplit[0];
 
-            sdMetadata.Prompt = matchGeneralSplit.Groups["prompt"].Value;
-            sdMetadata.NegativePrompt = matchGeneralSplit.Groups["negative"].Value;
+            var sdPrompt = matchGeneralSplit.Groups["prompt"].Value;
+            var sdNegativePrompt = matchGeneralSplit.Groups["negative"].Value;
 
             var metadata = matchGeneralSplit.Groups["metadata"].Value;
 
@@ -62,7 +61,7 @@ namespace SD_EXIF_Editor_v2.Service
             {
                 errorCodes.Add(ErrorCodes.MetadataEmpty); // If metadata is empty
                 DisplayErrorMessage(errorCodes);
-                return sdMetadata;
+                return new SDMetadata{Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
             }
 
             var matchesMetadata = MetadataRegex().Matches(metadata);
@@ -71,23 +70,40 @@ namespace SD_EXIF_Editor_v2.Service
             {
                 errorCodes.Add(ErrorCodes.MetadataRegexFail); // If we can't regex metadata correctly
                 DisplayErrorMessage(errorCodes);
-                return sdMetadata;
+                return new SDMetadata { Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
             }
 
             var matchMetadata = matchesMetadata[0];
 
-            sdMetadata.Steps = int.Parse(matchMetadata.Groups["steps"].Value);
-            sdMetadata.Sampler = matchMetadata.Groups["sampler"].Value;
-            sdMetadata.ScheduleType = matchMetadata.Groups["schedule"].Value;
-            sdMetadata.CFGScale = float.Parse(matchMetadata.Groups["cfg"].Value, CultureInfo.InvariantCulture);
-            sdMetadata.Seed = long.Parse(matchMetadata.Groups["seed"].Value);
+            var sdSteps = int.Parse(matchMetadata.Groups["steps"].Value);
+            var sdSampler = matchMetadata.Groups["sampler"].Value;
+            var sdScheduleType = matchMetadata.Groups["schedule"].Value;
+            var sdCFGScale = float.Parse(matchMetadata.Groups["cfg"].Value, CultureInfo.InvariantCulture);
+            var sdSeed = long.Parse(matchMetadata.Groups["seed"].Value);
 
             var sizeParts = matchMetadata.Groups["size"].Value.Split('x');
-            sdMetadata.Size = new Size(int.Parse(sizeParts[0]), int.Parse(sizeParts[1]));
+            var sdSize = new Size(int.Parse(sizeParts[0]), int.Parse(sizeParts[1]));
 
-            sdMetadata.Model = new SDModel(matchMetadata.Groups["modelname"].Value, matchMetadata.Groups["modelhash"].Value);
+            var sdModel = new SDModel(matchMetadata.Groups["modelname"].Value, matchMetadata.Groups["modelhash"].Value);
 
             var loras = matchMetadata.Groups["loras"].Value;
+
+            var sdVersion = matchMetadata.Groups["version"].Value;
+
+
+            var sdMetadata = new SDMetadata
+            {
+                Prompt = sdPrompt,
+                NegativePrompt = sdNegativePrompt,
+                Steps = sdSteps,
+                Sampler = sdSampler,
+                ScheduleType = sdScheduleType,
+                CFGScale = sdCFGScale,
+                Seed = sdSeed,
+                Size = sdSize,
+                Model = sdModel,
+                Version = sdVersion,
+            };
 
             if (loras != "")
             {
@@ -100,8 +116,6 @@ namespace SD_EXIF_Editor_v2.Service
                     sdMetadata.Loras.Add(new SDLora(loraPartNameHash[0], loraPartNameHash[1], float.Parse(loraStrength, CultureInfo.InvariantCulture)));
                 }
             }
-
-            sdMetadata.Version = matchMetadata.Groups["version"].Value;
 
             DisplayErrorMessage(errorCodes);
 

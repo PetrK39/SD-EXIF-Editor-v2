@@ -1,34 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SD_EXIF_Editor_v2.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.Model
 {
     public class CivitItem
     {
-        public bool IsUnknown { get; set; }
+        public bool IsUnknown { get; init; }
 
-        public string PromptName { get; set; }
-        public float? Strength { get; set; }
+        public string PromptName { get; init; }
+        public float? Strength { get; init; }
 
-        public string OriginalName { get; set; }
-        public string OriginalVersion { get; set; }
-        public string Type { get; set; }
+        public string OriginalName { get; init; }
+        public string OriginalVersion { get; init; }
+        public string Type { get; init; }
 
-        public double SizeKB { get; set; }
+        public double SizeKB { get; init; }
 
-        public List<CivitItemImage> Images { get; set; }
-        public string DownloadUri { get; set; }
-        public string SiteUri { get; set; }
+        public List<CivitItemImage> Images { get; init; }
+        public string DownloadUri { get; init; }
+        public string SiteUri { get; init; }
     }
     public partial class CivitItemImage : ObservableObject
     {
-        public string Uri { get; set; }
-        public NSFWLevels NSFWLevel { get; set; }
+        public string Uri { get; init; }
+        public NSFWLevels NSFWLevel { get; init; }
         [ObservableProperty]
         public bool isCurrent = false;
     }

@@ -19,7 +19,6 @@
                     <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
                     <utils:NotEmptyToVisibilityConverter x:Key="NotEmptyToVisibilityConverter" />
                     <utils:KilobytesToHumanConverter x:Key="KilobytesToHumanConverter" />
-                    <utils:EqualityMultiConverter x:Key="EqualityMultiConverter" />
 
                     <DataTemplate x:Key="CivitItemTemplate"
                                   DataType="{x:Type vm:CivitItemViewModel}">
