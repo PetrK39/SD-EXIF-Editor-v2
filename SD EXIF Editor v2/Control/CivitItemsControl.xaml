@@ -16,8 +16,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Resources/Styles.xaml" />
                 <ResourceDictionary>
-                    <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
-                    <utils:NotEmptyToVisibilityConverter x:Key="NotEmptyToVisibilityConverter" />
                     <utils:KilobytesToHumanConverter x:Key="KilobytesToHumanConverter" />
 
                     <DataTemplate x:Key="CivitItemTemplate"
@@ -68,13 +66,13 @@
                                 </Border>
                                 <Separator Background="Transparent"
                                            Margin="4"
-                                           Visibility="{Binding Strength, Converter={StaticResource EmptyToVisibilityConverter}}" />
+                                           Visibility="{Binding IsHaveStrength, Converter={StaticResource B2VConverter}}" />
                                 <Border Background="#343a40"
                                         Padding="6,4,6,4"
                                         CornerRadius="4"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Visibility="{Binding Strength, Converter={StaticResource EmptyToVisibilityConverter}}">
+                                        Visibility="{Binding IsHaveStrength, Converter={StaticResource B2VConverter}}">
                                     <TextBlock Text="{Binding Strength}"
                                                Foreground="White" />
                                 </Border>
@@ -148,7 +146,7 @@
                                                TextWrapping="WrapWithOverflow"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"
-                                               Visibility="{Binding FilteredImages, Converter={StaticResource NotEmptyToVisibilityConverter}}" />
+                                               Visibility="{Binding FilteredImages.IsEmpty, Converter={StaticResource B2VConverter}}" />
                                 </Border>
 
                                 <DockPanel Grid.Row="0"

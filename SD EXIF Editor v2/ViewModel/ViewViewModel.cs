@@ -22,6 +22,12 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public bool IsCivitBusy { get => isCivitBusy; set => SetProperty(ref isCivitBusy, value); }
         public ObservableCollection<CivitItemViewModel> CivitItemViewModels { get; set; }
 
+        public bool ShouldDisplayPromptHeader => !string.IsNullOrWhiteSpace(Metadata.Prompt) || _settingsService.DisplayPlaceholders;
+        public bool ShouldDisplayNegativePromptHeader => !string.IsNullOrWhiteSpace(Metadata.NegativePrompt) || _settingsService.DisplayPlaceholders;
+        public bool ShouldDisplaySeparator => !string.IsNullOrWhiteSpace(Metadata.Prompt) || !string.IsNullOrWhiteSpace(Metadata.NegativePrompt) || _settingsService.DisplayPlaceholders;
+        public bool ShouldDisplayPlaceholder => string.IsNullOrWhiteSpace(Metadata.Prompt) && _settingsService.DisplayPlaceholders;
+        public bool ShouldDisplayNegativePlaceholder => string.IsNullOrWhiteSpace(Metadata.NegativePrompt) && _settingsService.DisplayPlaceholders;
+
         public ViewViewModel(Image image,
             MetadataParserService metadataParserService,
             CivitService civitServide,
@@ -38,7 +44,21 @@ namespace SD_EXIF_Editor_v2.ViewModel
             CivitItemViewModels = [];
 
             LoadItemsCivitItemViewModels();
+
+            _settingsService.PropertyChanged += settingsService_PropertyChanged;
         }
+
+        private void settingsService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_settingsService.DisplayPlaceholders))
+            {
+                OnPropertyChanged(nameof(ShouldDisplayPromptHeader));
+                OnPropertyChanged(nameof(ShouldDisplayNegativePromptHeader));
+                OnPropertyChanged(nameof(ShouldDisplaySeparator));
+                OnPropertyChanged(nameof(ShouldDisplayPlaceholder));
+            }
+        }
+
         private async void LoadItemsCivitItemViewModels()
         {
             IsCivitBusy = true;

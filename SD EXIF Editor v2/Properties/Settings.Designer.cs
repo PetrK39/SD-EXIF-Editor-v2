@@ -34,5 +34,17 @@ namespace SD_EXIF_Editor_v2.Properties {
                 this["NSFWLevel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisplayPlaceholders {
+            get {
+                return ((bool)(this["DisplayPlaceholders"]));
+            }
+            set {
+                this["DisplayPlaceholders"] = value;
+            }
+        }
     }
 }

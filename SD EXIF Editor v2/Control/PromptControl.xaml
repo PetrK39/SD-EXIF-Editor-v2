@@ -20,7 +20,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <GroupBox BorderThickness="0">
+    <GroupBox BorderThickness="0"
+              Visibility="{Binding ElementName=uc, Path=ShouldDisplayHeader, Converter={StaticResource B2VConverter}}">
         <GroupBox.Header>
             <Grid Width="{Binding ActualWidth, Converter={StaticResource SubtractionConverter}, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <Grid.ColumnDefinitions>
@@ -42,11 +43,18 @@
                 </Button>
             </Grid>
         </GroupBox.Header>
-        
-        <TextBlock Text="{Binding Prompt, ElementName=uc}"
-                   TextWrapping="WrapWithOverflow"
-                   Style="{StaticResource Opacity}"
-                   Margin="10,0,30,0"/>
+
+        <StackPanel>
+            <TextBlock Text="{Binding Prompt, ElementName=uc}"
+                       TextWrapping="WrapWithOverflow"
+                       Style="{StaticResource Opacity}"
+                       Margin="10,0,30,0" />
+            <TextBlock Text="No prompt available"
+                       FontStyle="Italic"
+                       Style="{StaticResource Opacity}"
+                       Visibility="{Binding ElementName=uc, Path=ShouldDisplayPlaceholder, Converter={StaticResource B2VConverter}}"
+                       Margin="10,0,30,0" />
+        </StackPanel>
 
     </GroupBox>
 </UserControl>

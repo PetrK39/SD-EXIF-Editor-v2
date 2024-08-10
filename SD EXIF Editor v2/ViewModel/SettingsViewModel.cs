@@ -10,8 +10,20 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public NSFWLevels NSFWLevel
         {
             get => _settingsService.NSFWLevel;
-            set {
+            set
+            {
                 _settingsService.NSFWLevel = value;
+                OnPropertyChanged();
+                _settingsService.Save();
+            }
+        }
+
+        public bool DisplayPlaceholders
+        {
+            get => _settingsService.DisplayPlaceholders;
+            set
+            {
+                _settingsService.DisplayPlaceholders = value;
                 OnPropertyChanged();
                 _settingsService.Save();
             }

@@ -38,6 +38,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
             }
         }
 
+        public bool IsHaveStrength => Strength is not null;
+
         public CivitItemViewModel(CivitItem civitItem, SettingsService settingsService)
         {
             _civitItem = civitItem;

@@ -27,7 +27,15 @@ namespace SD_EXIF_Editor_v2.Service
                 OnPropertyChanged();
             }
         }
-
+        public bool DisplayPlaceholders
+        {
+            get => Settings.Default.DisplayPlaceholders;
+            set
+            {
+                Settings.Default.DisplayPlaceholders = value;
+                OnPropertyChanged();
+            }
+        }
         public void Save()
         {
             Settings.Default.Save();

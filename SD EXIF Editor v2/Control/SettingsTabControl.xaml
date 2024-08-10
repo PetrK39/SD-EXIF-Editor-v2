@@ -30,17 +30,29 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="24" />
+            <ColumnDefinition Width="auto"
+                              MinWidth="100"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         
-        <TextBlock Text="NSFW Level" />
+        <TextBlock Text="NSFW Level" 
+                   Padding="0,0,0,12"/>
         <ComboBox ItemsSource="{Binding Source={StaticResource NSFWLevels}}"
                   SelectedItem="{Binding NSFWLevel}"
+                  Grid.Column="2"/>
+
+        <TextBlock Text="Display placeholders"
+                   Padding="0,0,0,12"
+                   Grid.Row="1" />
+        <CheckBox Content=""
+                  IsChecked="{Binding DisplayPlaceholders}"
+                  Grid.Row="1"
                   Grid.Column="2"/>
     </Grid>
 </UserControl>

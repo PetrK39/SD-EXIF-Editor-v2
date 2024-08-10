@@ -10,6 +10,12 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public bool IsCivitBusy { get; }
         public ObservableCollection<CivitItemViewModel> CivitItemViewModels { get; }
 
+        public bool ShouldDisplayPromptHeader { get; }
+        public bool ShouldDisplayNegativePromptHeader { get; }
+        public bool ShouldDisplaySeparator { get; }
+        public bool ShouldDisplayPlaceholder { get; }
+        public bool ShouldDisplayNegativePlaceholder { get; }
+
         public void Copy(string parameter);
     }
 }

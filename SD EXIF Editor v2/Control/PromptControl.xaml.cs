@@ -42,6 +42,30 @@ namespace SD_EXIF_Editor_v2.Control
 
 
 
+        public bool ShouldDisplayHeader
+        {
+            get { return (bool)GetValue(ShouldDisplayHeaderProperty); }
+            set { SetValue(ShouldDisplayHeaderProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShouldDisplayHeader.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShouldDisplayHeaderProperty =
+            DependencyProperty.Register("ShouldDisplayHeader", typeof(bool), typeof(PromptControl), new PropertyMetadata(false));
+
+
+        public bool ShouldDisplayPlaceholder
+        {
+            get { return (bool)GetValue(ShouldDisplayPlaceholderProperty); }
+            set { SetValue(ShouldDisplayPlaceholderProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShouldDisplayPlaceholder.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShouldDisplayPlaceholderProperty =
+            DependencyProperty.Register("ShouldDisplayPlaceholder", typeof(bool), typeof(PromptControl), new PropertyMetadata(false));
+
+
+
+
         public ICommand CopyCommand
         {
             get { return (ICommand)GetValue(CopyCommandProperty); }
