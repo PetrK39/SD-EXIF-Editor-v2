@@ -19,6 +19,7 @@
                     <utils:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter" />
                     <utils:NotEmptyToVisibilityConverter x:Key="NotEmptyToVisibilityConverter" />
                     <utils:KilobytesToHumanConverter x:Key="KilobytesToHumanConverter" />
+                    <utils:EqualityMultiConverter x:Key="EqualityMultiConverter" />
 
                     <DataTemplate x:Key="CivitItemTemplate"
                                   DataType="{x:Type vm:CivitItemViewModel}">
@@ -145,10 +146,10 @@
                                         Height="100"
                                         Grid.Row="1">
                                     <TextBlock Text="Images hidden due to mature content settings"
-                                               TextWrapping="WrapWithOverflow" 
+                                               TextWrapping="WrapWithOverflow"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"
-                                               Visibility="{Binding FilteredImages, Converter={StaticResource NotEmptyToVisibilityConverter}}"/>
+                                               Visibility="{Binding FilteredImages, Converter={StaticResource NotEmptyToVisibilityConverter}}" />
                                 </Border>
 
                                 <DockPanel Grid.Row="0"
@@ -194,6 +195,43 @@
                                         <iconPacks:BootstrapIcons Kind="ArrowRight" />
                                     </Button>
                                 </DockPanel>
+
+                                <ItemsControl Grid.Row="2"
+                                              HorizontalAlignment="Center"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              ItemsSource="{Binding FilteredImages}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Ellipse Width="10"
+                                                     Height="10"
+                                                     Stroke="white"
+                                                     StrokeThickness="2"
+                                                     Margin="2">
+                                                <Ellipse.Effect>
+                                                    <DropShadowEffect BlurRadius="4"
+                                                                      ShadowDepth="4"/>
+                                                </Ellipse.Effect>
+                                                <Ellipse.Style>
+                                                    <Style TargetType="Ellipse">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsCurrent}"
+                                                                         Value="True">
+                                                                <Setter Property="Fill"
+                                                                        Value="White" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Ellipse.Style>
+                                            </Ellipse>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </Grid>
                         </Border>
                     </Popup>

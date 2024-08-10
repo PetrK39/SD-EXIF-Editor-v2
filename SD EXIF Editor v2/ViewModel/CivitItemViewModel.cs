@@ -47,11 +47,22 @@ namespace SD_EXIF_Editor_v2.ViewModel
             {
                 Images = new ObservableCollection<CivitItemImage>(_civitItem.Images);
                 FilteredImages.MoveCurrentToFirst();
+                FilteredImages.CurrentChanged += FilteredImages_CurrentChanged;
             }
             else
                 Images = [];
 
             _settingsService.PropertyChanged += _settingsService_PropertyChanged;
+        }
+
+        private void FilteredImages_CurrentChanged(object? sender, EventArgs e)
+        {
+            if (FilteredImages.CurrentItem is CivitItemImage civitItemImage)
+            {
+                foreach (CivitItemImage image in FilteredImages)
+                    image.IsCurrent = false;
+                civitItemImage.IsCurrent = true;
+            }
         }
 
         private void _settingsService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -75,7 +86,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         }
         [RelayCommand]
         public void NextImage()
-        
+
         {
             if (!FilteredImages.MoveCurrentToNext())
                 FilteredImages.MoveCurrentToFirst();

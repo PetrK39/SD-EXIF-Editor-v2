@@ -1,4 +1,5 @@
-﻿using SD_EXIF_Editor_v2.Service;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SD_EXIF_Editor_v2.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,11 @@ namespace SD_EXIF_Editor_v2.Model
         public string DownloadUri { get; set; }
         public string SiteUri { get; set; }
     }
-    public class CivitItemImage
+    public partial class CivitItemImage : ObservableObject
     {
         public string Uri { get; set; }
         public NSFWLevels NSFWLevel { get; set; }
+        [ObservableProperty]
+        public bool isCurrent = false;
     }
 }
