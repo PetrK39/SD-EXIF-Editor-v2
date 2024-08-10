@@ -19,6 +19,42 @@ namespace SD_EXIF_Editor_v2.Model
         public List<CivitItemImage> Images { get; init; }
         public string DownloadUri { get; init; }
         public string SiteUri { get; init; }
+
+        public CivitItem(string promptName, 
+            float? strength, 
+            string originalName, 
+            string originalVersion, 
+            string type, 
+            double sizeKB, 
+            List<CivitItemImage> images, 
+            string downloadUri, 
+            string siteUri)
+        {
+            IsUnknown = false;
+            PromptName = promptName;
+            Strength = strength;
+            OriginalName = originalName;
+            OriginalVersion = originalVersion;
+            Type = type;
+            SizeKB = sizeKB;
+            Images = images;
+            DownloadUri = downloadUri;
+            SiteUri = siteUri;
+        }
+        public CivitItem(string promptName, float? strength)
+        {
+            IsUnknown = true;
+            PromptName = promptName;
+            Strength = strength;
+
+            OriginalName = "";
+            OriginalVersion = "";
+            Type = "";
+            SizeKB = 0d;
+            Images = [];
+            DownloadUri = "";
+            SiteUri = "";
+        }
     }
     public partial class CivitItemImage : ObservableObject
     {
@@ -26,5 +62,11 @@ namespace SD_EXIF_Editor_v2.Model
         public NSFWLevels NSFWLevel { get; init; }
         [ObservableProperty]
         public bool isCurrent = false;
+
+        public CivitItemImage(string uri, NSFWLevels nSFWLevel)
+        {
+            Uri = uri;
+            NSFWLevel = nSFWLevel;
+        }
     }
 }

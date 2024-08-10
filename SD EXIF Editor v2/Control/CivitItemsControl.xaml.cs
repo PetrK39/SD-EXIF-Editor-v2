@@ -28,9 +28,9 @@ namespace SD_EXIF_Editor_v2.Control
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-            Popup popup = Resources.MergedDictionaries[1]["PopupTemplate"] as Popup;
+            Popup popup = (Popup)Resources.MergedDictionaries[1]["PopupTemplate"];
 
-            popup.PlacementTarget = (sender as Hyperlink).Parent as UIElement;
+            popup.PlacementTarget = ((Hyperlink)sender).Parent as UIElement;
             popup.IsOpen = true;
         }
     }

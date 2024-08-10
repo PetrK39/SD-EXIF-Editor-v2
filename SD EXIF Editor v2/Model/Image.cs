@@ -5,9 +5,9 @@ namespace SD_EXIF_Editor_v2.Model
     public class Image
     {
         private const string MetadataFieldName = "parameters";
-        private ImageFile imageFile;
+        private ImageFile? imageFile;
 
-        public string FilePath { get; private set; }
+        public string? FilePath { get; private set; }
         public string RawMetadata
         {
             get => GetMetadataProperty().Value;
@@ -21,11 +21,11 @@ namespace SD_EXIF_Editor_v2.Model
         }
         public void SaveChanges()
         {
-            imageFile.Save(FilePath);
+            imageFile!.Save(FilePath);
         }
         private PNGText GetMetadataProperty()
         {
-            var prop = imageFile.Properties.Where(p => p is PNGText).Cast<PNGText>().SingleOrDefault(p => p.Keyword == MetadataFieldName);
+            var prop = imageFile!.Properties.Where(p => p is PNGText).Cast<PNGText>().SingleOrDefault(p => p.Keyword == MetadataFieldName);
 
             if (prop is null)
             {

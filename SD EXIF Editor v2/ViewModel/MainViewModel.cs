@@ -58,8 +58,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 try
                 {
                     byte[] buffer = await ReadAllFileAsync(filename).ConfigureAwait(false);
-                    MemoryStream ms = new MemoryStream(buffer);
-                    BitmapImage image = new BitmapImage();
+                    MemoryStream ms = new(buffer);
+                    BitmapImage image = new();
                     image.BeginInit();
                     image.CacheOption = BitmapCacheOption.OnLoad;
                     image.StreamSource = ms;
@@ -78,16 +78,14 @@ namespace SD_EXIF_Editor_v2.ViewModel
         {
             try
             {
-                using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
-                {
-                    byte[] buff = new byte[file.Length];
-                    await file.ReadAsync(buff, 0, (int)file.Length).ConfigureAwait(false);
-                    return buff;
-                }
+                using var file = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+                byte[] buff = new byte[file.Length];
+                await file.ReadAsync(buff, 0, (int)file.Length).ConfigureAwait(false);
+                return buff;
             }
             catch
             {
-                return null;
+                return [];
             }
         }
         #endregion

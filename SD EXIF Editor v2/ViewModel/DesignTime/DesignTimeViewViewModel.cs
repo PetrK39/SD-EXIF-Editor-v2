@@ -19,6 +19,8 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
 
         public DesignTimeViewViewModel()
         {
+            RawMetadata = "test raw metadata";
+
             Metadata = new SDMetadata
             {
                 Prompt = "",
@@ -40,6 +42,8 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
             ShouldDisplayPlaceholder = true;
             ShouldDisplayNegativePlaceholder = true;
 
+            CivitItemViewModels = [];
+            CivitItemViewModels.Add(new CivitItemViewModel(new CivitItem("test", 1.5f), new Service.SettingsService()));
         }
 
         [RelayCommand]
