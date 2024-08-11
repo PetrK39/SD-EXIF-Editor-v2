@@ -9,27 +9,45 @@ namespace SD_EXIF_Editor_v2.Service
     {
         private readonly HttpClient client;
         private readonly MessageService _messageService;
-        public CivitService(MessageService messageService)
+        private readonly ILoggingService _loggingService;
+
+        public CivitService(MessageService messageService, ILoggingService loggingService)
         {
             _messageService = messageService;
+            _loggingService = loggingService;
 
             client = new HttpClient();
+            _loggingService.Trace("CivitService initialized.");
         }
+
         public async Task<CivitItem> GetItemFromHash(string origName, string origHash, float? strength = null)
         {
-            var requestUri = $"https://civitai.com/api/v1/model-versions/by-hash/{origHash}";
+            _loggingService.Trace("Entering GetItemFromHash method.");
+            _loggingService.Debug($"Requesting item with hash: {origHash}");
 
+            var requestUri = $"https://civitai.com/api/v1/model-versions/by-hash/{origHash}";
 
             try
             {
                 var response = await client.GetAsync(requestUri);
                 var content = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _loggingService.Error($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
+                    _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
+                    return new CivitItem(origName, strength);
+                }
+
                 var data = JsonConvert.DeserializeObject<Root>(content);
 
                 if (data is null || data.id == 0)
-                    return new(origName, strength);
+                {
+                    _loggingService.Warn("Deserialized data is null or invalid.");
+                    return new CivitItem(origName, strength);
+                }
 
-                return new CivitItem(origName,
+                var civitItem = new CivitItem(origName,
                     strength,
                     origName,
                     data.model.name,
@@ -38,16 +56,22 @@ namespace SD_EXIF_Editor_v2.Service
                     data.images.Select(i => new CivitItemImage(i.url, i.nsfwLevel)).ToList(),
                     data.downloadUrl,
                     $"https://civitai.com/models/{data.modelId}?modelVersionId={data.id}");
+
+                _loggingService.Info($"Successfully retrieved and parsed item with hash: {origHash}");
+                _loggingService.Trace("Exiting GetItemFromHash method.");
+                return civitItem;
             }
             catch (HttpRequestException ex)
             {
+                _loggingService.Error($"HttpRequestException while retrieving data from the API: {ex.Message}", ex);
                 _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
-                return new(origName, strength);
+                return new CivitItem(origName, strength);
             }
             catch (JsonException ex)
             {
-                _messageService.ShowErrorMessage($"\"Failed to deserialize the API response\r\n{ex.Message}");
-                return new(origName, strength);
+                _loggingService.Error($"JsonException while deserializing the API response: {ex.Message}", ex);
+                _messageService.ShowErrorMessage($"Failed to deserialize the API response\r\n{ex.Message}");
+                return new CivitItem(origName, strength);
             }
         }
 

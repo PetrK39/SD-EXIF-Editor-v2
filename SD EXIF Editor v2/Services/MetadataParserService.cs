@@ -9,6 +9,7 @@ namespace SD_EXIF_Editor_v2.Service
     public partial class MetadataParserService : IMetadataParserService
     {
         private readonly MessageService _messageService;
+        private readonly ILoggingService _loggingService;
 
         private enum ErrorCodes
         {
@@ -18,9 +19,11 @@ namespace SD_EXIF_Editor_v2.Service
             MetadataRegexFail
         }
 
-        public MetadataParserService(MessageService messageService)
+        public MetadataParserService(MessageService messageService, ILoggingService loggingService)
         {
             _messageService = messageService;
+            _loggingService = loggingService;
+            _loggingService.Trace("MetadataParserService initialized.");
         }
 
         [GeneratedRegex("(?:(?<prompt>.+?)\n)?(?:Negative prompt: (?<negative>.+?)\n)?(?<metadata>.+)")]
@@ -31,11 +34,15 @@ namespace SD_EXIF_Editor_v2.Service
 
         public SDMetadata ParseFromRawMetadata(string rawMetadata)
         {
+            _loggingService.Trace("Entering ParseFromRawMetadata method.");
+            _loggingService.Debug($"Trying to parse raw metadata: {rawMetadata}");
+
             List<ErrorCodes> errorCodes = [];
 
             if (rawMetadata == "")
             {
                 errorCodes.Add(ErrorCodes.MetadataEmpty);
+                _loggingService.Warn("Raw metadata is empty.");
 
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata();
@@ -45,7 +52,8 @@ namespace SD_EXIF_Editor_v2.Service
 
             if (matchesGeneralSplit.Count == 0)
             {
-                errorCodes.Add(ErrorCodes.GeneralRegexFail); // If we can't regex raw metadata correctly
+                errorCodes.Add(ErrorCodes.GeneralRegexFail);
+                _loggingService.Error("Failed to match general split regex.");
 
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata();
@@ -60,16 +68,20 @@ namespace SD_EXIF_Editor_v2.Service
 
             if (string.IsNullOrWhiteSpace(metadata))
             {
-                errorCodes.Add(ErrorCodes.MetadataEmpty); // If metadata is empty
+                errorCodes.Add(ErrorCodes.MetadataEmpty);
+                _loggingService.Warn("Metadata is empty.");
+
                 DisplayErrorMessage(errorCodes);
-                return new SDMetadata{Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
+                return new SDMetadata { Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
             }
 
             var matchesMetadata = MetadataRegex().Matches(metadata);
 
             if (matchesMetadata.Count == 0)
             {
-                errorCodes.Add(ErrorCodes.MetadataRegexFail); // If we can't regex metadata correctly
+                errorCodes.Add(ErrorCodes.MetadataRegexFail);
+                _loggingService.Error("Failed to match metadata regex.");
+
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata { Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
             }
@@ -90,7 +102,6 @@ namespace SD_EXIF_Editor_v2.Service
             var loras = matchMetadata.Groups["loras"].Value;
 
             var sdVersion = matchMetadata.Groups["version"].Value;
-
 
             var sdMetadata = new SDMetadata
             {
@@ -120,6 +131,7 @@ namespace SD_EXIF_Editor_v2.Service
 
             DisplayErrorMessage(errorCodes);
 
+            _loggingService.Trace("Exiting ParseFromRawMetadata method.");
             return sdMetadata;
         }
 
@@ -127,8 +139,10 @@ namespace SD_EXIF_Editor_v2.Service
         {
             if (errorCodes.Any())
             {
+                var errorCodesJoined = string.Join(", ", errorCodes);
+                _loggingService.Warn($"Encountered errors during parsing: {errorCodesJoined}");
                 _messageService.ShowInfoMessage(
-                    $"An error occurred while parsing data (Code: {string.Join(", ", errorCodes)})\r\n" +
+                    $"An error occurred while parsing data (Code: {errorCodesJoined})\r\n" +
                     "Consider sending your raw metadata to project's github issues\r\n" +
                     "But only if you're not the one who broke it");
             }

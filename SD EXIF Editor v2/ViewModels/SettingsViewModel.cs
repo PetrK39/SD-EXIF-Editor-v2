@@ -7,6 +7,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
     public class SettingsViewModel : ObservableObject, ISettingsViewModel
     {
         private readonly SettingsService _settingsService;
+        private readonly ILoggingService _loggingService;
 
         public NSFWLevels NSFWLevel
         {
@@ -16,6 +17,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 _settingsService.NSFWLevel = value;
                 OnPropertyChanged();
                 _settingsService.Save();
+                _loggingService.Info($"NSFWLevel changed to: {value}");
             }
         }
 
@@ -27,12 +29,16 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 _settingsService.DisplayPlaceholders = value;
                 OnPropertyChanged();
                 _settingsService.Save();
+                _loggingService.Info($"DisplayPlaceholders changed to: {value}");
             }
         }
 
-        public SettingsViewModel(SettingsService settingsService)
+        public SettingsViewModel(SettingsService settingsService, ILoggingService loggingService)
         {
             _settingsService = settingsService;
+            _loggingService = loggingService;
+
+            _loggingService.Trace("SettingsViewModel initialized.");
         }
     }
 }
