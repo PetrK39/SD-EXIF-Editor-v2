@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.Services.Interfaces;
 using System.Net.Http;
-using System.Xml.Linq;
 
 namespace SD_EXIF_Editor_v2.Service
 {
-    public class CivitService
+    public class CivitService : ICivitService
     {
         private readonly HttpClient client;
         private readonly MessageService _messageService;
@@ -35,7 +35,7 @@ namespace SD_EXIF_Editor_v2.Service
                     data.model.name,
                     data.model.type.ToUpper(),
                     data.files[0].sizeKB,
-                    data.images.Select(i => new CivitItemImage ( i.url, i.nsfwLevel)).ToList(),
+                    data.images.Select(i => new CivitItemImage(i.url, i.nsfwLevel)).ToList(),
                     data.downloadUrl,
                     $"https://civitai.com/models/{data.modelId}?modelVersionId={data.id}");
             }
@@ -47,13 +47,13 @@ namespace SD_EXIF_Editor_v2.Service
             catch (JsonException ex)
             {
                 _messageService.ShowErrorMessage($"\"Failed to deserialize the API response\r\n{ex.Message}");
-                return new (origName, strength);
+                return new(origName, strength);
             }
         }
 
-        public record Root(int id, int modelId, string name, Model model, List<File> files, List<Image> images, string downloadUrl);
-        public record Model(string name, string type);
-        public record File(double sizeKB);
-        public record Image(string url, NSFWLevels nsfwLevel);
+        private sealed record Root(int id, int modelId, string name, Model model, List<File> files, List<Image> images, string downloadUrl);
+        private sealed record Model(string name, string type);
+        private sealed record File(double sizeKB);
+        private sealed record Image(string url, NSFWLevels nsfwLevel);
     }
 }

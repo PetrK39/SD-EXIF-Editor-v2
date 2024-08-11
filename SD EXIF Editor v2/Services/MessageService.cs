@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using SD_EXIF_Editor_v2.Services.Interfaces;
+using System.Windows;
 
 namespace SD_EXIF_Editor_v2.Service
 {
-    public class MessageService
+    public class MessageService : IMessageService
     {
         public void ShowErrorMessage(string message)
         {

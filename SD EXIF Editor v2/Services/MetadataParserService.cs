@@ -1,11 +1,12 @@
 ﻿using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.Services.Interfaces;
 using System.Drawing;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace SD_EXIF_Editor_v2.Service
 {
-    public partial class MetadataParserService
+    public partial class MetadataParserService : IMetadataParserService
     {
         private readonly MessageService _messageService;
 

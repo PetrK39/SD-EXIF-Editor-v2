@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿using SD_EXIF_Editor_v2.Services.Interfaces;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
 namespace SD_EXIF_Editor_v2.Service
 {
-    public class ArgsParserService
+    public class ArgsParserService : IArgsParserService
     {
         private readonly MessageService _messageService;
         public ArgsParserService(MessageService messageService)
