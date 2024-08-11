@@ -2,13 +2,14 @@
 using CommunityToolkit.Mvvm.Input;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
+using SD_EXIF_Editor_v2.ViewModel.Interfaces;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 
 namespace SD_EXIF_Editor_v2.ViewModel
 {
-    public partial class CivitItemViewModel : ObservableObject
+    public partial class CivitItemViewModel : ObservableObject, ICivitItemViewModel
     {
         private readonly CivitItem _civitItem;
         private readonly SettingsService _settingsService;
@@ -27,7 +28,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public string DownloadUri => _civitItem.DownloadUri;
 
 
-        public ObservableCollection<CivitItemImage> Images { get; set; }
+        public ObservableCollection<CivitItemImage> Images { get; init; }
         public ICollectionView FilteredImages
         {
             get
