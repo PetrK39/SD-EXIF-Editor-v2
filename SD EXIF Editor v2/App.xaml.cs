@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NLog;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
@@ -8,6 +7,9 @@ using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.View;
 using SD_EXIF_Editor_v2.ViewModel;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime;
 using System.Windows;
 
 namespace SD_EXIF_Editor_v2
@@ -21,6 +23,10 @@ namespace SD_EXIF_Editor_v2
         private ILoggingService loggingService;
         public App()
         {
+            var startupDir = new FileInfo(Process.GetCurrentProcess()!.MainModule!.FileName).Directory!.FullName;
+            ProfileOptimization.SetProfileRoot(startupDir); // (a writable directory)
+            ProfileOptimization.StartProfile("Startup.Profile");
+
             host = Host.CreateDefaultBuilder()
             .ConfigureServices((services) =>
             {
