@@ -184,7 +184,8 @@
                                     Grid.RowSpan="3">
                                 <local:Spinner HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               RenderTransformOrigin="0.5, 0.5" />
+                                               RenderTransformOrigin="0.5, 0.5"
+                                               Visibility="{Binding IsNotEmpty, Converter={StaticResource B2VConverter}}"/>
                             </Border>
                             <Image Source="{Binding FilteredImages.CurrentItem.Uri}"
                                    MaxHeight="400"

@@ -39,6 +39,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         }
 
         public bool IsHaveStrength => Strength is not null;
+        public bool IsNotEmpty => !FilteredImages.IsEmpty;
 
         public CivitItemViewModel(CivitItem civitItem, SettingsService settingsService)
         {
@@ -73,6 +74,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
             {
                 FilteredImages.Refresh();
                 FilteredImages.MoveCurrentToFirst();
+
+                OnPropertyChanged(nameof(IsNotEmpty));
             }
         }
 
