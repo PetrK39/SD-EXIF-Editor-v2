@@ -99,5 +99,10 @@ namespace SD_EXIF_Editor_v2.ViewModel
             if (!FilteredImages.MoveCurrentToPrevious())
                 FilteredImages.MoveCurrentToLast();
         }
+        [RelayCommand]
+        public void GoToImage(CivitItemImage image)
+        {
+            FilteredImages.MoveCurrentTo(image);
+        }
     }
 }

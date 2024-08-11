@@ -245,42 +245,11 @@
                                 </Button>
                             </DockPanel>
 
-                            <ItemsControl Grid.Row="2"
-                                          HorizontalAlignment="Center"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          ItemsSource="{Binding FilteredImages}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Ellipse Width="10"
-                                                 Height="10"
-                                                 Stroke="white"
-                                                 StrokeThickness="2"
-                                                 Margin="2">
-                                            <Ellipse.Effect>
-                                                <DropShadowEffect BlurRadius="4"
-                                                                  ShadowDepth="4" />
-                                            </Ellipse.Effect>
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsCurrent}"
-                                                                     Value="True">
-                                                            <Setter Property="Fill"
-                                                                    Value="White" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <local:BulletIndicatorControl Grid.Row="2"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"
+                                                          CollectionView="{Binding FilteredImages}"
+                                                          GoToItemCommand="{Binding GoToImageCommand}"/>
                         </Grid>
                     </Popup>
                 </ResourceDictionary>

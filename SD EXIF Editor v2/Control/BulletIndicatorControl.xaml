@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="SD_EXIF_Editor_v2.Control.BulletIndicatorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <utils:EqualityMultiConverter x:Key="EqualityMultiConverter" />
+    </UserControl.Resources>
+    <ItemsControl HorizontalContentAlignment="Center"
+                  ItemsSource="{Binding CollectionView, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border Padding="4">
+                    <Ellipse Width="10"
+                             Height="10"
+                             StrokeThickness="0">
+                        <Ellipse.Effect>
+                            <DropShadowEffect BlurRadius="2"
+                                              ShadowDepth="0" />
+                        </Ellipse.Effect>
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding Converter="{StaticResource EqualityMultiConverter}">
+                                                <Binding Path="CollectionView.CurrentItem"
+                                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                <Binding Path="." />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Fill"
+                                                Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Value="False">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding Converter="{StaticResource EqualityMultiConverter}">
+                                                <Binding Path="CollectionView.CurrentItem"
+                                                         RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                                                <Binding Path="." />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Fill"
+                                                Value="Gray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding GoToItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   CommandParameter="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

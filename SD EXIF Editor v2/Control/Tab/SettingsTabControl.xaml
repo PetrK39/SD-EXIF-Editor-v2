@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/Styles.xaml" />
+                <ResourceDictionary Source="../../Resources/Styles.xaml" />
                 <ResourceDictionary>
                     <ObjectDataProvider x:Key="NSFWLevels"
                                         MethodName="GetValues"
