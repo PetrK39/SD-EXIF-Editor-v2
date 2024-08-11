@@ -76,13 +76,13 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 if (Metadata.Model is SDModel model)
                 {
                     _loggingService.Debug($"Loading CivitItemViewModel for model: {model.Name}");
-                    CivitItemViewModels.Add(new CivitItemViewModel(await _civitService.GetItemFromHash(model.Name, model.Hash, null), _settingsService));
+                    CivitItemViewModels.Add(new CivitItemViewModel(await _civitService.GetItemFromHash(model.Name, model.Hash, null), _settingsService, _loggingService));
                 }
 
                 foreach (var lora in Metadata.Loras)
                 {
                     _loggingService.Debug($"Loading CivitItemViewModel for lora: {lora.Name}");
-                    CivitItemViewModels.Add(new CivitItemViewModel(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength), _settingsService));
+                    CivitItemViewModels.Add(new CivitItemViewModel(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength), _settingsService, _loggingService));
                 }
 
                 _loggingService.Info("CivitItemViewModels loaded successfully.");

@@ -43,7 +43,6 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
             ShouldDisplayNegativePlaceholder = true;
 
             CivitItemViewModels = [];
-            CivitItemViewModels.Add(new CivitItemViewModel(new CivitItem("test", 1.5f), new Service.SettingsService()));
         }
 
         [RelayCommand]

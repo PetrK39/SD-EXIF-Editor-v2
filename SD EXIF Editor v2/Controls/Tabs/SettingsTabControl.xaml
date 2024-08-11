@@ -22,6 +22,13 @@
                             <x:Type TypeName="s:NSFWLevels" />
                         </ObjectDataProvider.MethodParameters>
                     </ObjectDataProvider>
+                    <ObjectDataProvider x:Key="LogLevels"
+                                        MethodName="GetValues"
+                                        ObjectType="{x:Type System:Enum}">
+                        <ObjectDataProvider.MethodParameters>
+                            <x:Type TypeName="s:LogLevels" />
+                        </ObjectDataProvider.MethodParameters>
+                    </ObjectDataProvider>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -35,6 +42,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -54,5 +62,13 @@
                   IsChecked="{Binding DisplayPlaceholders}"
                   Grid.Row="1"
                   Grid.Column="2"/>
+
+        <TextBlock Text="Log Level"
+                   Padding="0,0,0,12"
+                   Grid.Row="2"/>
+        <ComboBox ItemsSource="{Binding Source={StaticResource LogLevels}}"
+                  SelectedItem="{Binding LogLevel}"
+                  Grid.Column="2"
+                  Grid.Row="2"/>
     </Grid>
 </UserControl>

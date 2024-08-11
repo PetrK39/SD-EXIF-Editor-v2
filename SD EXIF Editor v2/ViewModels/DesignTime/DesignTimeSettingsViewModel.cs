@@ -7,11 +7,13 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
     {
         public NSFWLevels NSFWLevel { get; set; }
         public bool DisplayPlaceholders { get; set; }
+        public LogLevels LogLevel { get; set; }
 
         public DesignTimeSettingsViewModel()
         {
             NSFWLevel = NSFWLevels.Soft;
             DisplayPlaceholders = true;
+            LogLevel = LogLevels.Info;
         }
     }
 }

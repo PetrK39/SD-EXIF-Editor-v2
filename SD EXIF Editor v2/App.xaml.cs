@@ -24,7 +24,7 @@ namespace SD_EXIF_Editor_v2
             host = Host.CreateDefaultBuilder()
             .ConfigureServices((services) =>
             {
-                services.AddSingleton(provider => new NLogService(LogManager.GetCurrentClassLogger()));
+                services.AddSingleton<ILoggingService>(provider => new NLogService(LogManager.GetCurrentClassLogger()));
 
                 services.AddTransient<MessageService>();
                 services.AddTransient<ArgsParserService>();

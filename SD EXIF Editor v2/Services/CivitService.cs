@@ -34,9 +34,17 @@ namespace SD_EXIF_Editor_v2.Service
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _loggingService.Error($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
-                    _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
-                    return new CivitItem(origName, strength);
+                    switch (response.StatusCode)
+                    {
+                        case System.Net.HttpStatusCode.NotFound:
+                            _loggingService.Error($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
+                            // No message here. That would happen if model wasn't uploaded to civit.ai
+                            return new CivitItem(origName, strength);
+                        default:
+                            _loggingService.Error($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
+                            _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
+                            return new CivitItem(origName, strength);
+                    }
                 }
 
                 var data = JsonConvert.DeserializeObject<Root>(content);

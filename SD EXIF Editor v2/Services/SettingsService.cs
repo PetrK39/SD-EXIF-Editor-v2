@@ -24,6 +24,14 @@ namespace SD_EXIF_Editor_v2.Service
                 OnPropertyChanged();
             }
         }
+        public LogLevels LogLevel
+        {
+            get => (LogLevels)Settings.Default.LogLevel;
+            set
+            {
+                Settings.Default.LogLevel = (int)value;
+            }
+        }
         public void Save()
         {
             Settings.Default.Save();
