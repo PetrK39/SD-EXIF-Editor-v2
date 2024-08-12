@@ -2,7 +2,7 @@
 
 namespace SD_EXIF_Editor_v2.Services.Interfaces
 {
-    interface IMetadataParserService
+    public interface IMetadataParserService
     {
         public SDMetadata ParseFromRawMetadata(string rawMetadata);
     }

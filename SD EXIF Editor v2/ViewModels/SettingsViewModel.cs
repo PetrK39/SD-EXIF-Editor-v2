@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.Utils;
@@ -7,8 +8,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
 {
     public class SettingsViewModel : ObservableObject, ISettingsViewModel
     {
-        private readonly SettingsService _settingsService;
-        private readonly ILoggingService _loggingService;
+        private readonly ISettingsService _settingsService;
+        private readonly ILogger<SettingsViewModel> _logger;
 
         public NSFWLevels NSFWLevel
         {
@@ -18,7 +19,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 _settingsService.NSFWLevel = value;
                 OnPropertyChanged();
                 _settingsService.Save();
-                _loggingService.Info($"NSFWLevel changed to: {value}");
+                _logger.LogInformation($"NSFWLevel changed to: {value}");
             }
         }
 
@@ -30,7 +31,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 _settingsService.DisplayPlaceholders = value;
                 OnPropertyChanged();
                 _settingsService.Save();
-                _loggingService.Info($"DisplayPlaceholders changed to: {value}");
+                _logger.LogInformation($"DisplayPlaceholders changed to: {value}");
             }
         }
         public LogLevels LogLevel
@@ -42,18 +43,16 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 OnPropertyChanged();
                 _settingsService.Save();
                 NLogConfigurator.UpdateLogLevel(value);
-                _loggingService.Info($"Log level changed to: {value}");
+                _logger.LogInformation($"Log level changed to: {value}");
             }
         }
 
-        public SettingsViewModel(SettingsService settingsService, ILoggingService loggingService)
+        public SettingsViewModel(ISettingsService settingsService, ILogger<SettingsViewModel> logger)
         {
             _settingsService = settingsService;
-            _loggingService = loggingService;
+            _logger = logger;
 
-            NLogConfigurator.UpdateLogLevel(_settingsService.LogLevel);
-
-            _loggingService.Trace("SettingsViewModel initialized.");
+            _logger.LogTrace("SettingsViewModel initialized.");
         }
     }
 }

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SD_EXIF_Editor_v2"
         xmlns:dt="clr-namespace:SD_EXIF_Editor_v2.ViewModel.DesignTime"
-        xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
         xmlns:c="clr-namespace:SD_EXIF_Editor_v2.Control"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type dt:DesignTimeMainViewModel}, IsDesignTimeCreatable=True}"
@@ -14,6 +14,11 @@
         Height="500"
         Width="1000"
         Style="{DynamicResource CustomWindowStyle}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadImageCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

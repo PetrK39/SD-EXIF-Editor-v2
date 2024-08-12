@@ -1,6 +1,8 @@
-﻿namespace SD_EXIF_Editor_v2.Services.Interfaces
+﻿using System.ComponentModel;
+
+namespace SD_EXIF_Editor_v2.Services.Interfaces
 {
-    interface ISettingsService
+    public interface ISettingsService : INotifyPropertyChanged
     {
         public NSFWLevels NSFWLevel{ get; set; }
         public bool DisplayPlaceholders { get; set; }

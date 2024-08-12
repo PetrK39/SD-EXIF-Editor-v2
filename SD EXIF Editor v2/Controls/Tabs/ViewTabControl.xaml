@@ -62,13 +62,13 @@
                     <Separator />
                     <!--Prompt-->
                     <c:PromptControl Title="Prompt"
-                                     Prompt="{Binding Metadata.Prompt}"
+                                     Prompt="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}"
                                      CopyCommand="{Binding CopyCommand}"
                                      ShouldDisplayHeader="{Binding ShouldDisplayPromptHeader}"
                                      ShouldDisplayPlaceholder="{Binding ShouldDisplayPlaceholder}"/>
                     <!--Negative prompt-->
                     <c:PromptControl Title="Negative Prompt"
-                                     Prompt="{Binding Metadata.NegativePrompt}"
+                                     Prompt="{Binding NegativePrompt, Mode=OneWay}"
                                      CopyCommand="{Binding CopyCommand}"
                                      ShouldDisplayHeader="{Binding ShouldDisplayNegativePromptHeader}"
                                      ShouldDisplayPlaceholder="{Binding ShouldDisplayNegativePlaceholder}" />

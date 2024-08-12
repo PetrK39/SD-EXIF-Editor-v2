@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.Services.Interfaces;
@@ -13,8 +14,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
     public partial class CivitItemViewModel : ObservableObject, ICivitItemViewModel
     {
         private readonly CivitItem _civitItem;
-        private readonly SettingsService _settingsService;
-        private readonly ILoggingService _loggingService;
+        private readonly ISettingsService _settingsService;
+        private readonly ILogger<CivitItemViewModel> _logger;
 
         public bool IsUnknown => _civitItem.IsUnknown;
 
@@ -43,13 +44,13 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public bool IsHaveStrength => Strength is not null;
         public bool IsNotEmpty => !FilteredImages.IsEmpty;
 
-        public CivitItemViewModel(CivitItem civitItem, SettingsService settingsService, ILoggingService loggingService)
+        public CivitItemViewModel(CivitItem civitItem, ISettingsService settingsService, ILogger<CivitItemViewModel> logger)
         {
             _civitItem = civitItem;
             _settingsService = settingsService;
-            _loggingService = loggingService;
+            _logger = logger;
 
-            _loggingService.Trace("CivitItemViewModel initialized.");
+            _logger.LogTrace("CivitItemViewModel initialized.");
 
             if (!_civitItem.IsUnknown)
             {
@@ -67,26 +68,26 @@ namespace SD_EXIF_Editor_v2.ViewModel
 
         private void FilteredImages_CurrentChanged(object? sender, EventArgs e)
         {
-            _loggingService.Trace("FilteredImages_CurrentChanged event triggered.");
+            _logger.LogTrace("FilteredImages_CurrentChanged event triggered.");
 
             if (FilteredImages.CurrentItem is CivitItemImage civitItemImage)
             {
                 foreach (CivitItemImage image in FilteredImages)
                     image.IsCurrent = false;
                 civitItemImage.IsCurrent = true;
-                _loggingService.Debug($"Current image changed to: {civitItemImage.Uri}");
+                _logger.LogDebug($"Current image changed to: {civitItemImage.Uri}");
             }
         }
 
         private void _settingsService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _loggingService.Trace("settingsService_PropertyChanged event triggered.");
+            _logger.LogTrace("settingsService_PropertyChanged event triggered.");
 
             if (e.PropertyName == nameof(_settingsService.NSFWLevel))
             {
                 FilteredImages.Refresh();
                 FilteredImages.MoveCurrentToFirst();
-                _loggingService.Debug("NSFWLevel property changed. Refreshed FilteredImages and moved to first.");
+                _logger.LogDebug("NSFWLevel property changed. Refreshed FilteredImages and moved to first.");
 
                 OnPropertyChanged(nameof(IsNotEmpty));
             }
@@ -95,8 +96,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
         [RelayCommand]
         public void OpenUri(string uri)
         {
-            _loggingService.Trace("Entering OpenUri method.");
-            _loggingService.Debug($"Opening URI: {uri}");
+            _logger.LogTrace("Entering OpenUri method.");
+            _logger.LogDebug($"Opening URI: {uri}");
 
             try
             {
@@ -105,50 +106,50 @@ namespace SD_EXIF_Editor_v2.ViewModel
                     UseShellExecute = true,
                 };
                 System.Diagnostics.Process.Start(sInfo);
-                _loggingService.Info($"Successfully opened URI: {uri}");
+                _logger.LogInformation($"Successfully opened URI: {uri}");
             }
             catch (Exception ex)
             {
-                _loggingService.Error($"Failed to open URI: {uri}. Error: {ex.Message}", ex);
+                _logger.LogError($"Failed to open URI: {uri}. Error: {ex.Message}", ex);
             }
 
-            _loggingService.Trace("Exiting OpenUri method.");
+            _logger.LogTrace("Exiting OpenUri method.");
         }
 
         [RelayCommand]
         public void NextImage()
         {
-            _loggingService.Trace("Entering NextImage method.");
+            _logger.LogTrace("Entering NextImage method.");
 
             if (!FilteredImages.MoveCurrentToNext())
                 FilteredImages.MoveCurrentToFirst();
-            _loggingService.Debug("Moved to next image.");
+            _logger.LogDebug("Moved to next image.");
 
-            _loggingService.Trace("Exiting NextImage method.");
+            _logger.LogTrace("Exiting NextImage method.");
         }
 
         [RelayCommand]
         public void PrevImage()
         {
-            _loggingService.Trace("Entering PrevImage method.");
+            _logger.LogTrace("Entering PrevImage method.");
 
             if (!FilteredImages.MoveCurrentToPrevious())
                 FilteredImages.MoveCurrentToLast();
-            _loggingService.Debug("Moved to previous image.");
+            _logger.LogDebug("Moved to previous image.");
 
-            _loggingService.Trace("Exiting PrevImage method.");
+            _logger.LogTrace("Exiting PrevImage method.");
         }
 
         [RelayCommand]
         public void GoToImage(CivitItemImage image)
         {
-            _loggingService.Trace("Entering GoToImage method.");
-            _loggingService.Debug($"Going to image: {image.Uri}");
+            _logger.LogTrace("Entering GoToImage method.");
+            _logger.LogDebug($"Going to image: {image.Uri}");
 
             FilteredImages.MoveCurrentTo(image);
-            _loggingService.Info($"Successfully moved to image: {image.Uri}");
+            _logger.LogInformation($"Successfully moved to image: {image.Uri}");
 
-            _loggingService.Trace("Exiting GoToImage method.");
+            _logger.LogTrace("Exiting GoToImage method.");
         }
     }
 }

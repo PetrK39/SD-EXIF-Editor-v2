@@ -1,4 +1,5 @@
-﻿using SD_EXIF_Editor_v2.Model;
+﻿using Microsoft.Extensions.Logging;
+using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using System.Drawing;
 using System.Globalization;
@@ -8,8 +9,8 @@ namespace SD_EXIF_Editor_v2.Service
 {
     public partial class MetadataParserService : IMetadataParserService
     {
-        private readonly MessageService _messageService;
-        private readonly ILoggingService _loggingService;
+        private readonly IMessageService _messageService;
+        private readonly ILogger<MetadataParserService> _logger;
 
         private enum ErrorCodes
         {
@@ -19,11 +20,11 @@ namespace SD_EXIF_Editor_v2.Service
             MetadataRegexFail
         }
 
-        public MetadataParserService(MessageService messageService, ILoggingService loggingService)
+        public MetadataParserService(IMessageService messageService, ILogger<MetadataParserService> logger)
         {
             _messageService = messageService;
-            _loggingService = loggingService;
-            _loggingService.Trace("MetadataParserService initialized.");
+            _logger = logger;
+            _logger.LogTrace("MetadataParserService initialized.");
         }
 
         [GeneratedRegex("(?:(?<prompt>.+?)\n)?(?:Negative prompt: (?<negative>.+?)\n)?(?<metadata>.+)")]
@@ -34,15 +35,15 @@ namespace SD_EXIF_Editor_v2.Service
 
         public SDMetadata ParseFromRawMetadata(string rawMetadata)
         {
-            _loggingService.Trace("Entering ParseFromRawMetadata method.");
-            _loggingService.Debug($"Trying to parse raw metadata: {rawMetadata}");
+            _logger.LogTrace("Entering ParseFromRawMetadata method.");
+            _logger.LogDebug($"Trying to parse raw metadata: {rawMetadata}");
 
             List<ErrorCodes> errorCodes = [];
 
             if (rawMetadata == "")
             {
                 errorCodes.Add(ErrorCodes.MetadataEmpty);
-                _loggingService.Warn("Raw metadata is empty.");
+                _logger.LogWarning("Raw metadata is empty.");
 
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata();
@@ -53,7 +54,7 @@ namespace SD_EXIF_Editor_v2.Service
             if (matchesGeneralSplit.Count == 0)
             {
                 errorCodes.Add(ErrorCodes.GeneralRegexFail);
-                _loggingService.Error("Failed to match general split regex.");
+                _logger.LogError("Failed to match general split regex.");
 
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata();
@@ -69,7 +70,7 @@ namespace SD_EXIF_Editor_v2.Service
             if (string.IsNullOrWhiteSpace(metadata))
             {
                 errorCodes.Add(ErrorCodes.MetadataEmpty);
-                _loggingService.Warn("Metadata is empty.");
+                _logger.LogWarning("Metadata is empty.");
 
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata { Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
@@ -80,7 +81,7 @@ namespace SD_EXIF_Editor_v2.Service
             if (matchesMetadata.Count == 0)
             {
                 errorCodes.Add(ErrorCodes.MetadataRegexFail);
-                _loggingService.Error("Failed to match metadata regex.");
+                _logger.LogError("Failed to match metadata regex.");
 
                 DisplayErrorMessage(errorCodes);
                 return new SDMetadata { Prompt = sdPrompt, NegativePrompt = sdNegativePrompt };
@@ -131,7 +132,7 @@ namespace SD_EXIF_Editor_v2.Service
 
             DisplayErrorMessage(errorCodes);
 
-            _loggingService.Trace("Exiting ParseFromRawMetadata method.");
+            _logger.LogTrace("Exiting ParseFromRawMetadata method.");
             return sdMetadata;
         }
 
@@ -140,7 +141,7 @@ namespace SD_EXIF_Editor_v2.Service
             if (errorCodes.Any())
             {
                 var errorCodesJoined = string.Join(", ", errorCodes);
-                _loggingService.Warn($"Encountered errors during parsing: {errorCodesJoined}");
+                _logger.LogWarning($"Encountered errors during parsing: {errorCodesJoined}");
                 _messageService.ShowInfoMessage(
                     $"An error occurred while parsing data (Code: {errorCodesJoined})\r\n" +
                     "Consider sending your raw metadata to project's github issues\r\n" +
