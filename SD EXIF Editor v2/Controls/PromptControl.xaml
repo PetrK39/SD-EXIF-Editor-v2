@@ -21,7 +21,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <GroupBox BorderThickness="0"
-              Visibility="{Binding ElementName=uc, Path=ShouldDisplayHeader, Converter={StaticResource B2VConverter}}">
+              Visibility="{Binding ShouldDisplayHeader, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource B2VConverter}}">
         <GroupBox.Header>
             <Grid Width="{Binding ActualWidth, Converter={StaticResource SubtractionConverter}, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <Grid.ColumnDefinitions>
@@ -29,15 +29,15 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding Title, ElementName=uc}"
+                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
                            Style="{StaticResource TextBlockMedium}" />
 
                 <Button Grid.Column="1"
                         Padding="6,0,6,0"
                         Margin="0,0,30,0"
                         BorderThickness="0"
-                        Command="{Binding CopyCommand, ElementName=uc}"
-                        CommandParameter="{Binding Prompt, ElementName=uc}">
+                        Command="{Binding CopyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        CommandParameter="{Binding Prompt, RelativeSource={RelativeSource AncestorType=UserControl}}">
                     <iconPacks:PackIconBootstrapIcons Kind="Copy"
                                                       VerticalAlignment="Center" />
                 </Button>
@@ -45,14 +45,14 @@
         </GroupBox.Header>
 
         <StackPanel>
-            <TextBlock Text="{Binding Prompt, ElementName=uc}"
+            <TextBlock Text="{Binding Prompt, RelativeSource={RelativeSource AncestorType=UserControl}}"
                        TextWrapping="WrapWithOverflow"
                        Style="{StaticResource Opacity}"
                        Margin="10,0,30,0" />
             <TextBlock Text="No prompt available"
                        FontStyle="Italic"
                        Style="{StaticResource Opacity}"
-                       Visibility="{Binding ElementName=uc, Path=ShouldDisplayPlaceholder, Converter={StaticResource B2VConverter}}"
+                       Visibility="{Binding ShouldDisplayPlaceholder, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource B2VConverter}}"
                        Margin="10,0,30,0" />
         </StackPanel>
 

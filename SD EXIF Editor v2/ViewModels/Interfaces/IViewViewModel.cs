@@ -7,6 +7,8 @@ namespace SD_EXIF_Editor_v2.ViewModel
     {
         public string RawMetadata { get; }
         public SDMetadata Metadata { get; }
+        public string? Prompt { get; }
+        public string? NegativePrompt { get; }
         public bool IsCivitBusy { get; }
         public ObservableCollection<CivitItemViewModel> CivitItemViewModels { get; }
 

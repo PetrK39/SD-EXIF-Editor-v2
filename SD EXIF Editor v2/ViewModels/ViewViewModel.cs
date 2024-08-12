@@ -63,6 +63,12 @@ namespace SD_EXIF_Editor_v2.ViewModel
                 OnPropertyChanged(nameof(Prompt));
                 OnPropertyChanged(nameof(NegativePrompt));
 
+                OnPropertyChanged(nameof(ShouldDisplayPromptHeader));
+                OnPropertyChanged(nameof(ShouldDisplayNegativePromptHeader));
+                OnPropertyChanged(nameof(ShouldDisplayPlaceholder));
+                OnPropertyChanged(nameof(ShouldDisplayNegativePlaceholder));
+                OnPropertyChanged(nameof(ShouldDisplaySeparator));
+
                 CivitItemViewModels = [];
                 OnPropertyChanged(nameof(CivitItemViewModels));
 
