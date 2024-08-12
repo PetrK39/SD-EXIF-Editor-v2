@@ -81,9 +81,6 @@ namespace SD_EXIF_Editor_v2.ViewModel
             }
             else
                 _image.LoadFromFilePath(filePath);
-
-            OnPropertyChanged(nameof(FilePath));
-            OnPropertyChanged(nameof(BitmapImage));
         }
         #region Image Loading
         private async void getImageAsync()

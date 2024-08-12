@@ -6,6 +6,7 @@ using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Properties;
 using SD_EXIF_Editor_v2.Service;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using SD_EXIF_Editor_v2.Utils;
 using SD_EXIF_Editor_v2.View;
 using SD_EXIF_Editor_v2.ViewModel;
 using System.Diagnostics;
@@ -50,10 +51,11 @@ namespace SD_EXIF_Editor_v2
             .ConfigureLogging((context, logging) =>
             {
                 logging.ClearProviders();
-                logging.SetMinimumLevel((LogLevel)Settings.Default.LogLevel);
                 logging.AddNLog(context.Configuration.GetSection("NLog"));
             })
             .Build();
+
+            NLogConfigurator.UpdateLogLevel((LogLevels)Settings.Default.LogLevel);
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -78,8 +80,6 @@ namespace SD_EXIF_Editor_v2
             }
             finally
             {
-                //LogManager.Configuration.AllTargets.OfType<BufferingTargetWrapper>().ToList().ForEach(b => b.Flush(e => { }));
-
                 base.OnExit(e);
             }
         }
