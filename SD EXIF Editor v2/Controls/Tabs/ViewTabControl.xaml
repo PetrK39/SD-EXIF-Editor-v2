@@ -37,11 +37,12 @@
                             <TextBlock Text="Generation data"
                                        FontSize="20" />
                         </StackPanel>
-                        <Button Grid.Column="1"
-                                Margin="0,0,18,0"
-                                BorderThickness="0"
-                                Command="{Binding CopyCommand}"
-                                CommandParameter="{Binding RawMetadata}">
+                        <c:ButtonWithTempContent Grid.Column="1"
+                                                 Margin="0,0,18,0"
+                                                 BorderThickness="0"
+                                                 Command="{Binding CopyCommand}"
+                                                 CommandParameter="{Binding RawMetadata}"
+                                                 TempDuration="2">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconBootstrapIcons Kind="Copy"
                                                                   VerticalAlignment="Center"
@@ -53,7 +54,20 @@
                                            Foreground="LightSkyBlue"
                                            Grid.Column="2" />
                             </StackPanel>
-                        </Button>
+                            <c:ButtonWithTempContent.TempContent>
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconBootstrapIcons Kind="Check2"
+                                                                      VerticalAlignment="Center"
+                                                                      Foreground="LightGreen" />
+                                    <Separator Margin="4" />
+                                    <TextBlock Text="COPIED"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               Foreground="LightGreen"
+                                               Grid.Column="2" />
+                                </StackPanel>
+                            </c:ButtonWithTempContent.TempContent>
+                        </c:ButtonWithTempContent>
                     </Grid>
                 </GroupBox.Header>
                 <StackPanel>
@@ -65,7 +79,7 @@
                                      Prompt="{Binding Prompt}"
                                      CopyCommand="{Binding CopyCommand}"
                                      ShouldDisplayHeader="{Binding ShouldDisplayPromptHeader}"
-                                     ShouldDisplayPlaceholder="{Binding ShouldDisplayPlaceholder}"/>
+                                     ShouldDisplayPlaceholder="{Binding ShouldDisplayPlaceholder}" />
                     <!--Negative prompt-->
                     <c:PromptControl Title="Negative Prompt"
                                      Prompt="{Binding NegativePrompt}"

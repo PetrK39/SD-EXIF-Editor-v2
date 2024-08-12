@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
              xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:c="clr-namespace:SD_EXIF_Editor_v2.Control"
              mc:Ignorable="d"
              Name="uc"
              d:DesignHeight="450"
@@ -32,15 +33,21 @@
                 <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
                            Style="{StaticResource TextBlockMedium}" />
 
-                <Button Grid.Column="1"
-                        Padding="6,0,6,0"
-                        Margin="0,0,30,0"
-                        BorderThickness="0"
-                        Command="{Binding CopyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                        CommandParameter="{Binding Prompt, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <c:ButtonWithTempContent Grid.Column="1"
+                                         Padding="6,0,6,0"
+                                         Margin="0,0,30,0"
+                                         BorderThickness="0"
+                                         Command="{Binding CopyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                         CommandParameter="{Binding Prompt, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                         TempDuration="2">
                     <iconPacks:PackIconBootstrapIcons Kind="Copy"
                                                       VerticalAlignment="Center" />
-                </Button>
+                    <c:ButtonWithTempContent.TempContent>
+                        <iconPacks:PackIconBootstrapIcons Kind="Check2"
+                                                          Foreground="LightGreen"
+                                                          VerticalAlignment="Center" />
+                    </c:ButtonWithTempContent.TempContent>
+                </c:ButtonWithTempContent>
             </Grid>
         </GroupBox.Header>
 
