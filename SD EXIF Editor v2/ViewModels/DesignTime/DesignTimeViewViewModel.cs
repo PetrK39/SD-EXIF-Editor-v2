@@ -27,13 +27,6 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
             {
                 Prompt = "",
                 NegativePrompt = "test negative prompt",
-                CFGScale = 1.2f,
-                Sampler = "Test Sampler",
-                ScheduleType = "Test Schedule",
-                Seed = 123456,
-                Size = new System.Drawing.Size(768, 1024),
-                Steps = 20,
-                Version = "v0.0.0"
             };
 
             Prompt = Metadata.Prompt;

@@ -68,6 +68,20 @@ namespace SD_EXIF_Editor_v2.Tests.ServicesTests
             Assert.Equal("test prompt", result.Prompt);
             Assert.Equal("test negative prompt", result.NegativePrompt);
         }
+        [Fact]
+        public void ParseFromRawMetadata_MultiLinePrompts_ReturnsPartialSDMetadata()
+        {
+            // Arrange
+            string rawMetadata = "test\nprompt\nNegative prompt: test\nnegative\nprompt\nInvalidMetadata";
+
+            // Act
+            var result = _metadataParserService.ParseFromRawMetadata(rawMetadata);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("test\nprompt", result.Prompt);
+            Assert.Equal("test\nnegative\nprompt", result.NegativePrompt);
+        }
 
         [Fact]
         public void ParseFromRawMetadata_ValidMetadata_ReturnsCompleteSDMetadata()
@@ -82,15 +96,14 @@ namespace SD_EXIF_Editor_v2.Tests.ServicesTests
             Assert.NotNull(result);
             Assert.Equal("test prompt, <lora:test lora:-1.23>", result.Prompt);
             Assert.Equal("test negative prompt", result.NegativePrompt);
-            Assert.Equal(20, result.Steps);
-            Assert.Equal("sampler", result.Sampler);
-            Assert.Equal("schedule", result.ScheduleType);
-            Assert.Equal(7.5f, result.CFGScale);
-            Assert.Equal(12345L, result.Seed);
-            Assert.Equal(new Size(512, 512), result.Size);
+
+            Assert.Equal("20", result.MetadataProperties["Steps"]);
+            Assert.Equal("sampler", result.MetadataProperties["Sampler"]);
+            Assert.Equal("schedule", result.MetadataProperties["Schedule type"]);
+            Assert.Equal(7, result.MetadataProperties.Count);
+
             Assert.Equal("modelname", result.Model.Name);
             Assert.Equal("modelhash", result.Model.Hash);
-            Assert.Equal("version", result.Version);
 
             Assert.Equal("test lora", result.Loras.Single().Name);
             Assert.Equal("test lora hash", result.Loras.Single().Hash);

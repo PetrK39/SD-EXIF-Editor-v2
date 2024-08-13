@@ -9,60 +9,34 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/Styles.xaml" />
-                <ResourceDictionary>
-                    <utils:SizeConverter x:Key="SizeConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="../Resources/Styles.xaml" />
     </UserControl.Resources>
     <GroupBox BorderThickness="0">
         <GroupBox.Header>
             <TextBlock Text="Other metadata"
                        Style="{StaticResource TextBlockMedium}" />
         </GroupBox.Header>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <ItemsControl ItemsSource="{Binding Metadata.MetadataProperties}"
+                      Grid.IsSharedSizeScope="True"
+                      Margin="8">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"
+                                              SharedSizeGroup="a" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-            <StackPanel Margin="10,0,0,0">
-                <TextBlock Text="Steps"
-                           Style="{StaticResource Opacity}" />
-                <TextBlock Text="Sampler"
-                           Style="{StaticResource Opacity}" />
-                <TextBlock Text="Schedule type"
-                           Style="{StaticResource Opacity}" />
-                <TextBlock Text="Guidance"
-                           Style="{StaticResource Opacity}" />
-                <TextBlock Text="Seed"
-                           Style="{StaticResource Opacity}" />
-                <TextBlock Text="Size"
-                           Style="{StaticResource Opacity}" />
-                <TextBlock Text="WebUI version"
-                           Style="{StaticResource Opacity}" />
-            </StackPanel>
-
-            <StackPanel Grid.Column="1"
-                        Margin="0,0,24,0">
-                <TextBlock Text="{Binding Metadata.Steps}"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding Metadata.Sampler}"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding Metadata.ScheduleType}"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding Metadata.CFGScale}"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding Metadata.Seed}"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding Metadata.Size, Converter={StaticResource SizeConverter}}"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding Metadata.Version}"
-                           HorizontalAlignment="Right" />
-            </StackPanel>
-        </Grid>
+                        <TextBlock Text="{Binding Key}"
+                                   Style="{StaticResource Opacity}" />
+                        <TextBlock Text="{Binding Value}"
+                                   Margin="0,4,14,0"
+                                   HorizontalAlignment="Right"
+                                   Grid.Column="1" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </GroupBox>
 </UserControl>

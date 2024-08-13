@@ -6,17 +6,12 @@ namespace SD_EXIF_Editor_v2.Model
     {
         public string? Prompt { get; init; }
         public string? NegativePrompt { get; init; }
-        public int? Steps { get; init; }
-        public string? Sampler { get; init; }
-        public string? ScheduleType { get; init; }
-        public float? CFGScale { get; init; }
-        public long? Seed { get; init; }
-        public Size? Size { get; init; }
         public SDModel? Model { get; init; }
+        public Dictionary<string, string> MetadataProperties { get; init; }
         public List<SDLora> Loras { get; init; }
-        public string? Version { get; init; }
         public SDMetadata()
         {
+            MetadataProperties = [];
             Loras = [];
         }
     }
