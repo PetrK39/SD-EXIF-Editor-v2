@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD EXIF Editor v2", "SD EXIF Editor v2\SD EXIF Editor v2.csproj", "{150F11ED-4CD6-436D-BECE-C6AFED2B917F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD EXIF Editor v2", "SD EXIF Editor v2\SD EXIF Editor v2.csproj", "{150F11ED-4CD6-436D-BECE-C6AFED2B917F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD EXIF Editor v2.Tests", "SD EXIF Editor v2.Tests\SD EXIF Editor v2.Tests.csproj", "{FE21CA83-8DA7-4445-B3F7-F45EC8F4A9E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{150F11ED-4CD6-436D-BECE-C6AFED2B917F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{150F11ED-4CD6-436D-BECE-C6AFED2B917F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{150F11ED-4CD6-436D-BECE-C6AFED2B917F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE21CA83-8DA7-4445-B3F7-F45EC8F4A9E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE21CA83-8DA7-4445-B3F7-F45EC8F4A9E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE21CA83-8DA7-4445-B3F7-F45EC8F4A9E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE21CA83-8DA7-4445-B3F7-F45EC8F4A9E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

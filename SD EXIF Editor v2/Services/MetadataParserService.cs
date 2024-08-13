@@ -46,7 +46,7 @@ namespace SD_EXIF_Editor_v2.Service
                 _logger.LogWarning("Raw metadata is empty.");
 
                 DisplayErrorMessage(errorCodes);
-                return new SDMetadata();
+                return new SDMetadata { Prompt = "", NegativePrompt = "" };
             }
 
             var matchesGeneralSplit = GeneralSplitRegex().Matches(rawMetadata);
