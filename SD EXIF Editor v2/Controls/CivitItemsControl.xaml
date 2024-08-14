@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="../Resources/Styles.xaml" />
                 <ResourceDictionary>
                     <utils:KilobytesToHumanConverter x:Key="KilobytesToHumanConverter" />
+                    <utils:ToUpperStringConverter x:Key="ToUpperStringConverter" />
 
                     <Storyboard x:Key="OpacityTransformStoryboard">
                         <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
@@ -88,7 +89,7 @@
                                             CornerRadius="4"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Type}"
+                                        <TextBlock Text="{Binding Type,Converter={StaticResource ToUpperStringConverter}}"
                                                    Foreground="DeepSkyBlue" />
                                     </Border>
                                     <Separator Background="Transparent"
@@ -185,7 +186,7 @@
                                 <local:Spinner HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                RenderTransformOrigin="0.5, 0.5"
-                                               Visibility="{Binding IsNotEmpty, Converter={StaticResource B2VConverter}}"/>
+                                               Visibility="{Binding IsNotEmpty, Converter={StaticResource B2VConverter}}" />
                             </Border>
                             <Image Source="{Binding FilteredImages.CurrentItem.Uri}"
                                    MaxHeight="400"
@@ -250,7 +251,7 @@
                                                           HorizontalAlignment="Center"
                                                           VerticalAlignment="Center"
                                                           CollectionView="{Binding FilteredImages}"
-                                                          GoToItemCommand="{Binding GoToImageCommand}"/>
+                                                          GoToItemCommand="{Binding GoToImageCommand}" />
                         </Grid>
                     </Popup>
                 </ResourceDictionary>

@@ -12,12 +12,12 @@ namespace SD_EXIF_Editor_v2.Service
         private readonly IMessageService _messageService;
         private readonly ILogger<CivitService> _logger;
 
-        public CivitService(IMessageService messageService, ILogger<CivitService> logger)
+        public CivitService(IMessageService messageService, ILogger<CivitService> logger, HttpMessageHandler httpMessageHandler)
         {
             _messageService = messageService;
             _logger = logger;
 
-            client = new HttpClient();
+            client = new HttpClient(httpMessageHandler);
             _logger.LogTrace("CivitService initialized.");
         }
 
@@ -58,9 +58,9 @@ namespace SD_EXIF_Editor_v2.Service
 
                 var civitItem = new CivitItem(origName,
                     strength,
-                    origName,
                     data.model.name,
-                    data.model.type.ToUpper(),
+                    data.name,
+                    data.model.type,
                     data.files[0].sizeKB,
                     data.images.Select(i => new CivitItemImage(i.url, i.nsfwLevel)).ToList(),
                     data.downloadUrl,

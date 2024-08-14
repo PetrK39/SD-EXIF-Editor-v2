@@ -11,6 +11,7 @@ using SD_EXIF_Editor_v2.View;
 using SD_EXIF_Editor_v2.ViewModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Runtime;
 using System.Windows;
 
@@ -35,6 +36,7 @@ namespace SD_EXIF_Editor_v2
                 services.AddTransient<IMessageService, MessageService>();
                 services.AddTransient<IArgsParserService, ArgsParserService>();
                 services.AddTransient<IMetadataParserService, MetadataParserService>();
+                services.AddTransient<HttpMessageHandler, HttpClientHandler>();
 
                 services.AddSingleton<ICivitService, CivitService>();
                 services.AddSingleton<ISettingsService, SettingsService>();
