@@ -17,7 +17,7 @@ namespace SD_EXIF_Editor_v2.Control
         public static readonly DependencyProperty TempDurationProperty =
             DependencyProperty.Register("TempDuration", typeof(int), typeof(ButtonWithTempContent), new PropertyMetadata(3));
 
-        private object originalContent;
+        private object? originalContent;
         private DispatcherTimer timer;
 
         public object TempContent
@@ -41,7 +41,7 @@ namespace SD_EXIF_Editor_v2.Control
 
         private void TempContentButton_Click(object sender, RoutedEventArgs e)
         {
-            originalContent = Content;
+            originalContent ??= Content;
             Content = TempContent;
             timer.Interval = TimeSpan.FromSeconds(TempDuration);
             timer.Start();
@@ -50,6 +50,7 @@ namespace SD_EXIF_Editor_v2.Control
         private void Timer_Tick(object sender, System.EventArgs e)
         {
             Content = originalContent;
+            originalContent = null;
             timer.Stop();
         }
     }
