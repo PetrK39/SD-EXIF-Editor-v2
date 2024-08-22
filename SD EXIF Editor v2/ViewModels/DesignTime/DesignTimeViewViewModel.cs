@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.ViewModel.Interfaces;
 using System.Collections.ObjectModel;
 
 namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
@@ -12,7 +13,7 @@ namespace SD_EXIF_Editor_v2.ViewModel.DesignTime
         public string Prompt { get; }
         public string NegativePrompt { get; }
         public bool IsCivitBusy { get; }
-        public ObservableCollection<CivitItemViewModel> CivitItemViewModels { get; }
+        public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; }
         public bool ShouldDisplayPromptHeader { get; }
         public bool ShouldDisplayNegativePromptHeader { get; }
         public bool ShouldDisplaySeparator { get; }

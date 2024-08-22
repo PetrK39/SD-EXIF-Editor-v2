@@ -13,7 +13,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
 {
     public partial class CivitItemViewModel : ObservableObject, ICivitItemViewModel
     {
-        private readonly CivitItem _civitItem;
+        private CivitItem _civitItem;
         private readonly ISettingsService _settingsService;
         private readonly ILogger<CivitItemViewModel> _logger;
 
@@ -30,7 +30,7 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public string SiteUri => _civitItem.SiteUri;
         public string DownloadUri => _civitItem.DownloadUri;
 
-        public ObservableCollection<CivitItemImage> Images { get; init; }
+        public ObservableCollection<CivitItemImage> Images { get; private set; }
         public ICollectionView FilteredImages
         {
             get
@@ -44,26 +44,33 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public bool IsHaveStrength => Strength is not null;
         public bool IsNotEmpty => !FilteredImages.IsEmpty;
 
-        public CivitItemViewModel(CivitItem civitItem, ISettingsService settingsService, ILogger<CivitItemViewModel> logger)
+        public CivitItemViewModel(ISettingsService settingsService, ILogger<CivitItemViewModel> logger)
         {
-            _civitItem = civitItem;
             _settingsService = settingsService;
             _logger = logger;
 
             _logger.LogTrace("CivitItemViewModel initialized.");
 
+            Images = [];
+
+            _settingsService.PropertyChanged += _settingsService_PropertyChanged;
+        }
+        public void Initialize(CivitItem civitItem)
+        {
+            _logger.LogTrace("Entering Initialize method.");
+
+            _civitItem = civitItem;
+
             if (!_civitItem.IsUnknown)
             {
                 Images = new ObservableCollection<CivitItemImage>(_civitItem.Images);
+                OnPropertyChanged(nameof(Images));
+
                 FilteredImages.MoveCurrentToFirst();
                 FilteredImages.CurrentChanged += FilteredImages_CurrentChanged;
             }
-            else
-            {
-                Images = new ObservableCollection<CivitItemImage>();
-            }
 
-            _settingsService.PropertyChanged += _settingsService_PropertyChanged;
+            _logger.LogTrace("Exiting Initialize method.");
         }
 
         private void FilteredImages_CurrentChanged(object? sender, EventArgs e)

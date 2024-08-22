@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace SD_EXIF_Editor_v2.ViewModel.Interfaces
 {
-    interface ICivitItemViewModel
+    public interface ICivitItemViewModel
     {
         public bool IsUnknown { get; }
 
@@ -22,7 +22,7 @@ namespace SD_EXIF_Editor_v2.ViewModel.Interfaces
         public ObservableCollection<CivitItemImage> Images { get; }
         public ICollectionView FilteredImages { get; }
         public bool IsHaveStrength { get; }
-        public bool IsNotEmpty { get; }
+        public bool IsNotEmpty { get; } 
 
         public void OpenUri(string uri);
         public void NextImage();

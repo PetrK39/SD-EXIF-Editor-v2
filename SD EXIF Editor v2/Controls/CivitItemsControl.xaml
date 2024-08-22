@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SD_EXIF_Editor_v2.Control"
              xmlns:utils="clr-namespace:SD_EXIF_Editor_v2.Utils"
-             xmlns:vm="clr-namespace:SD_EXIF_Editor_v2.ViewModel"
+             xmlns:vmi="clr-namespace:SD_EXIF_Editor_v2.ViewModel.Interfaces"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"
              Name="cic"
@@ -35,7 +35,7 @@
                     </Storyboard>
 
                     <DataTemplate x:Key="CivitItemTemplate"
-                                  DataType="{x:Type vm:CivitItemViewModel}">
+                                  DataType="{x:Type vmi:ICivitItemViewModel}">
                         <Border>
                             <Border.RenderTransform>
                                 <TranslateTransform Y="-50" />
@@ -109,7 +109,7 @@
                         </Border>
                     </DataTemplate>
                     <DataTemplate x:Key="UnknownItemTemplate"
-                                  DataType="{x:Type vm:CivitItemViewModel}">
+                                  DataType="{x:Type vmi:ICivitItemViewModel}">
                         <Border>
                             <Border.RenderTransform>
                                 <TranslateTransform Y="-50" />

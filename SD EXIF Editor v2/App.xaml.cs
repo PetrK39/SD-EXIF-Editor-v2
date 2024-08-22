@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using SD_EXIF_Editor_v2.Factories;
+using SD_EXIF_Editor_v2.Factories.Interfaces;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Properties;
 using SD_EXIF_Editor_v2.Service;
@@ -9,6 +11,7 @@ using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.Utils;
 using SD_EXIF_Editor_v2.View;
 using SD_EXIF_Editor_v2.ViewModel;
+using SD_EXIF_Editor_v2.ViewModel.Interfaces;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
@@ -37,16 +40,18 @@ namespace SD_EXIF_Editor_v2
                 services.AddTransient<IArgsParserService, ArgsParserService>();
                 services.AddTransient<IMetadataParserService, MetadataParserService>();
                 services.AddTransient<HttpMessageHandler, HttpClientHandler>();
+                services.AddTransient<ICivitItemViewModelFactory, CivitItemViewModelFactory>();
 
                 services.AddSingleton<ICivitService, CivitService>();
                 services.AddSingleton<ISettingsService, SettingsService>();
 
                 services.AddSingleton<Image>();
 
-                services.AddSingleton<MainViewModel>();
-                services.AddSingleton<ViewViewModel>();
-                services.AddSingleton<EditViewModel>();
-                services.AddSingleton<SettingsViewModel>();
+                services.AddSingleton<IMainViewModel, MainViewModel>();
+                services.AddSingleton<IViewViewModel, ViewViewModel>();
+                services.AddSingleton<IEditViewModel, EditViewModel>();
+                services.AddSingleton<ISettingsViewModel, SettingsViewModel>();
+                services.AddTransient<ICivitItemViewModel, CivitItemViewModel>();
 
                 services.AddSingleton<MainView>();
             })

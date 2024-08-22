@@ -39,9 +39,9 @@ namespace SD_EXIF_Editor_v2.ViewModel
         public ISettingsViewModel SettingsViewModel => _settingsViewModel;
 
         public MainViewModel(Image image,
-            ViewViewModel viewViewModel,
-            EditViewModel editViewModel,
-            SettingsViewModel settingsViewModel,
+            IViewViewModel viewViewModel,
+            IEditViewModel editViewModel,
+            ISettingsViewModel settingsViewModel,
             ILogger<MainViewModel> logger,
             IArgsParserService argsParserService)
         {

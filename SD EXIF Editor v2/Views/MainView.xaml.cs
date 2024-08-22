@@ -7,7 +7,7 @@ namespace SD_EXIF_Editor_v2.View
 {
     public partial class MainView : Window
     {
-        public MainView(MainViewModel mvm)
+        public MainView(IMainViewModel mvm)
         {
             InitializeComponent();
             DataContext = mvm;
