@@ -1,31 +1,47 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using SD_EXIF_Editor_v2.ViewModels;
+using SD_EXIF_Editor_v2.Views;
 using System;
+using System.Collections.Generic;
 
 namespace SD_EXIF_Editor_v2
 {
     public class ViewLocator : IDataTemplate
     {
-        public Control? Build(object? data)
+        private readonly Dictionary<Type, Func<Control?>> _locator = [];
+
+        public ViewLocator()
+        {
+            RegisterViewFactory<MainViewModel, MainWindow>();
+            RegisterViewFactory<ViewMetadataViewModel, ViewMetadataView>();
+            RegisterViewFactory<EditMetadataViewModel, EditMetadataView>();
+            RegisterViewFactory<SettingsViewModel, SettingsView>();
+        }
+        public Control Build(object? data)
         {
             if (data is null)
-                return null;
+                return new TextBlock { Text = "No VM provided" };
 
-            var name = data.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-            var type = Type.GetType(name);
+            _locator.TryGetValue(data.GetType(), out var factory);
 
-            if (type != null)
-            {
-                return (Control)Activator.CreateInstance(type)!;
-            }
-
-            return new TextBlock { Text = "Not Found: " + name };
+            return factory?.Invoke() ?? new TextBlock { Text = $"VM Not Registered: {data.GetType()}" };
         }
 
         public bool Match(object? data)
         {
-            return data is ViewModelBase;
+            return data is ObservableObject;
         }
+
+        private void RegisterViewFactory<TViewModel, TView>()
+        where TViewModel : class
+        where TView : Control
+        => _locator.Add(
+            typeof(TViewModel),
+            Design.IsDesignMode
+                ? Activator.CreateInstance<TView>
+                : Ioc.Default.GetService<TView>);
     }
 }

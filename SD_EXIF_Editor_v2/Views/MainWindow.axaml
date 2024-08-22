@@ -7,6 +7,6 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SD_EXIF_Editor_v2.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="SD_EXIF_Editor_v2">
+        Title="SD EXIF Editor">
         <views:MainView />
 </Window>

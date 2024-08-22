@@ -2,14 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:SD_EXIF_Editor_v2"
              x:Class="SD_EXIF_Editor_v2.App"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
+			 xmlns:semi="https://irihi.tech/semi"
+			 RequestedThemeVariant="Dark">
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+		<semi:SemiTheme Locale="en-us" />
+		<StyleInclude Source="avares://SD_EXIF_Editor_v2/Assets/Icons.axaml" />
+	</Application.Styles>
 </Application>
