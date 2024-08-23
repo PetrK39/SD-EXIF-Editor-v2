@@ -13,16 +13,16 @@
 	</Design.DataContext>
 
 	<SplitView IsPaneOpen="{Binding IsPaneOpen}"
-               CompactPaneLength="45"
-               DisplayMode="CompactInline"
-               OpenPaneLength="135"
-               Background="#1e1e1e"
-               PaneBackground="#1e1e1e">
+			   CompactPaneLength="45"
+			   DisplayMode="CompactInline"
+			   OpenPaneLength="150"
+			   Background="#1e1e1e"
+			   PaneBackground="#1e1e1e">
 		<SplitView.Pane>
 			<StackPanel Orientation="Vertical"
-                  Spacing="5"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Top">
+						Spacing="5"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Top">
 				<Button HorizontalAlignment="Left"
 						Width="32"
 						Height="32"
@@ -49,9 +49,10 @@
 				</ListBox>
 			</StackPanel>
 		</SplitView.Pane>
+
 		<SplitView.Content>
 			<Border CornerRadius="12 0 0 0"
-              Background="#2d2d2d">
+					Background="#2d2d2d">
 				<TransitioningContentControl Content="{Binding CurrentPage}" />
 			</Border>
 		</SplitView.Content>

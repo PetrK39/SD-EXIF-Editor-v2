@@ -27,7 +27,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         [
             new ListItemTemplate(typeof(ViewMetadataViewModel), "InputCursorText", "View"),
             new ListItemTemplate(typeof(EditMetadataViewModel), "Pencil", "Edit"),
-            new ListItemTemplate(typeof(SettingsViewModel), "GearFill", "Settings"),
+            new ListItemTemplate(typeof(SettingsViewModel), "Gear", "Settings"),
         ];
 
         public MainViewModel()
