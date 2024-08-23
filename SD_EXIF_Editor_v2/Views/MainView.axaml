@@ -53,7 +53,25 @@
 		<SplitView.Content>
 			<Border CornerRadius="12 0 0 0"
 					Background="#2d2d2d">
-				<TransitioningContentControl Content="{Binding CurrentPage}" />
+				<DockPanel>
+					<Menu DockPanel.Dock="Top">
+						<MenuItem Header="Open" 
+								  CornerRadius="12 0 0 0">
+							<MenuItem Header="File..."/>
+							<MenuItem Header="Directory..."/>
+						</MenuItem>
+						<MenuItem Header="Close"/>
+						<MenuItem Header="Save">
+							<MenuItem Header="Save"/>
+							<MenuItem Header="Save as..."/>
+						</MenuItem>
+						<MenuItem Header="Help">
+							<MenuItem Header="About..."/>
+						</MenuItem>
+
+					</Menu>
+					<TransitioningContentControl Content="{Binding CurrentPage}" />
+				</DockPanel>
 			</Border>
 		</SplitView.Content>
 	</SplitView>
