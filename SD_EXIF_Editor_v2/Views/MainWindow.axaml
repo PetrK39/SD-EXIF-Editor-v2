@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:SD_EXIF_Editor_v2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SD_EXIF_Editor_v2.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/SD_EXIF_Editor_v2.ico"
         Title="SD EXIF Editor">
         <views:MainView />
 </Window>
