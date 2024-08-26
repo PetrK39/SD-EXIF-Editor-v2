@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace SD_EXIF_Editor_v2.Services.Interfaces
 {
@@ -9,14 +10,17 @@ namespace SD_EXIF_Editor_v2.Services.Interfaces
         public LogLevels LogLevel { get; set; }
         public void Save();
     }
+
+    [Flags]
     public enum NSFWLevels
     {
         None = 1,
         Soft = 2,
         Mature = 4,
         X = 8,
-        xxx = 16
+        XXX = 16
     }
+
     public enum LogLevels
     {
         Trace,

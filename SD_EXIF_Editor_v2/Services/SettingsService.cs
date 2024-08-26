@@ -2,7 +2,7 @@
 using SD_EXIF_Editor_v2.Properties;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 
-namespace SD_EXIF_Editor_v2.Service
+namespace SD_EXIF_Editor_v2.Services
 {
     public class SettingsService : ObservableObject, ISettingsService
     {

@@ -1,8 +1,7 @@
 ﻿using SD_EXIF_Editor_v2.Model;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Generic;
 
-namespace SD_EXIF_Editor_v2.ViewModel.Interfaces
+namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
 {
     public interface ICivitItemViewModel
     {
@@ -19,14 +18,8 @@ namespace SD_EXIF_Editor_v2.ViewModel.Interfaces
         public string SiteUri { get; }
         public string DownloadUri { get; }
 
-        public ObservableCollection<CivitItemImage> Images { get; }
-        public ICollectionView FilteredImages { get; }
-        public bool IsHaveStrength { get; }
-        public bool IsNotEmpty { get; } 
+        public IEnumerable<CivitItemImage> FilteredImages { get; }
 
         public void OpenUri(string uri);
-        public void NextImage();
-        public void PrevImage();
-        public void GoToImage(CivitItemImage image);
     }
 }

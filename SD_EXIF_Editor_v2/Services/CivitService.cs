@@ -2,9 +2,12 @@
 using Newtonsoft.Json;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace SD_EXIF_Editor_v2.Service
+namespace SD_EXIF_Editor_v2.Services
 {
     public class CivitService : ICivitService
     {
@@ -43,7 +46,7 @@ namespace SD_EXIF_Editor_v2.Service
                             return new CivitItem(origName, strength);
                         default:
                             _logger.LogError($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
-                            _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
+                            await _messageService.ShowErrorMessageAsync($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
                             return new CivitItem(origName, strength);
                     }
                 }
@@ -73,13 +76,13 @@ namespace SD_EXIF_Editor_v2.Service
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"HttpRequestException while retrieving data from the API: {ex.Message}", ex);
-                _messageService.ShowErrorMessage($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
+                await _messageService.ShowErrorMessageAsync($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
                 return new CivitItem(origName, strength);
             }
             catch (JsonException ex)
             {
                 _logger.LogError($"JsonException while deserializing the API response: {ex.Message}", ex);
-                _messageService.ShowErrorMessage($"Failed to deserialize the API response\r\n{ex.Message}");
+                await _messageService.ShowErrorMessageAsync($"Failed to deserialize the API response\r\n{ex.Message}");
                 return new CivitItem(origName, strength);
             }
         }

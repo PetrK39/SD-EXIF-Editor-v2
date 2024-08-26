@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ExifLibrary;
 using Microsoft.Extensions.Logging;
-using SD_EXIF_Editor_v2.Services.Interfaces;
+using System;
+using System.Linq;
 
 namespace SD_EXIF_Editor_v2.Model
 {

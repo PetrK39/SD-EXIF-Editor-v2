@@ -1,4 +1,4 @@
-﻿namespace SD_EXIF_Editor_v2.ViewModel
+﻿namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
 {
     public interface IEditViewModel
     {

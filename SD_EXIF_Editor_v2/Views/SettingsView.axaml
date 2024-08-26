@@ -2,7 +2,140 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SD_EXIF_Editor_v2.SettingsView">
-  Welcome to Avalonia from SV!
+             xmlns:vm="using:SD_EXIF_Editor_v2.ViewModels"
+xmlns:interfaces="using:SD_EXIF_Editor_v2.Services.Interfaces"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="550"
+             x:Class="SD_EXIF_Editor_v2.SettingsView"
+			 x:DataType="vm:SettingsViewModel">
+	<ScrollViewer>
+		<StackPanel>
+			<TextBlock Text="Settings"
+					   Classes="H5"
+					   Margin="0 12"
+					   Theme="{StaticResource TitleTextBlock}"/>
+			<Separator/>
+
+			<TextBlock Text="Browsing levels"
+					   Classes="H6 Margin"
+					   Margin="0 10"
+					   Theme="{StaticResource TitleTextBlock}"/>
+			<ThemeVariantScope RequestedThemeVariant="Dark">
+				<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+					  ColumnDefinitions="Auto,*,Auto"
+					  Margin="8 0"
+					  Background="{StaticResource SemiColorBackground1}">
+					<TextBlock Text="None"
+							   FontWeight="Bold"
+							   HorizontalAlignment="Center"
+							   Margin="8"
+							   Grid.Row="0"
+							   Grid.Column="0"/>
+					<TextBlock Text="Safe for work. No naughty stuff"
+							   Margin="8"
+							   Grid.Row="0"
+							   Grid.Column="1"/>
+					<ToggleSwitch IsChecked="{Binding NSFWLevel, Converter={StaticResource NSFWLevelsToBoolConverter}, ConverterParameter={x:Static interfaces:NSFWLevels.None}, Mode=OneWay}"
+							  Command="{Binding ToggleNSFWLevelFlagCommand}"
+							  CommandParameter="{x:Static interfaces:NSFWLevels.None}"
+								  Margin="8"
+								  Grid.Row="0"
+								  Grid.Column="2"
+								  OffContent="" OnContent=""/>
+
+					<TextBlock Text="PG-13"
+							   FontWeight="Bold"
+							   HorizontalAlignment="Center"
+							   Margin="8"
+							   Grid.Row="1"
+							   Grid.Column="0"/>
+					<TextBlock Text="Revealing clothing, violence, or light gore"
+							   Margin="8"
+							   Grid.Row="1"
+							   Grid.Column="1"/>
+					<ToggleSwitch IsChecked="{Binding NSFWLevel, Converter={StaticResource NSFWLevelsToBoolConverter}, ConverterParameter={x:Static interfaces:NSFWLevels.Soft}, Mode=OneWay}"
+							  Command="{Binding ToggleNSFWLevelFlagCommand}"
+							  CommandParameter="{x:Static interfaces:NSFWLevels.Soft}"
+								  Margin="8"
+								  Grid.Row="1"
+								  Grid.Column="2"
+								  OffContent="" OnContent=""/>
+
+					<TextBlock Text="R"
+							   FontWeight="Bold"
+							   HorizontalAlignment="Center"
+							   Margin="8"
+							   Grid.Row="2"
+							   Grid.Column="0"/>
+					<TextBlock Text="Adult themes and situations, partial nudity, graphic violence, or death"
+							   Margin="8"
+							   Grid.Row="2"
+							   Grid.Column="1"/>
+					<ToggleSwitch IsChecked="{Binding NSFWLevel, Converter={StaticResource NSFWLevelsToBoolConverter}, ConverterParameter={x:Static interfaces:NSFWLevels.Mature}, Mode=OneWay}"
+							  Command="{Binding ToggleNSFWLevelFlagCommand}"
+							  CommandParameter="{x:Static interfaces:NSFWLevels.Mature}"
+								  Margin="8"
+								  Grid.Row="2"
+								  Grid.Column="2"
+								  OffContent="" OnContent=""/>
+
+					<TextBlock Text="X"
+							   FontWeight="Bold"
+							   HorizontalAlignment="Center"
+							   Margin="8"
+							   Grid.Row="3"
+							   Grid.Column="0"/>
+					<TextBlock Text="Graphic nudity, adult objects, or settings"
+							   Margin="8"
+							   Grid.Row="3"
+							   Grid.Column="1"/>
+					<ToggleSwitch IsChecked="{Binding NSFWLevel, Converter={StaticResource NSFWLevelsToBoolConverter}, ConverterParameter={x:Static interfaces:NSFWLevels.X}, Mode=OneWay}"
+							  Command="{Binding ToggleNSFWLevelFlagCommand}"
+							  CommandParameter="{x:Static interfaces:NSFWLevels.X}"
+								  Margin="8"
+								  Grid.Row="3"
+								  Grid.Column="2"
+								  OffContent="" OnContent=""/>
+
+					<TextBlock Text="XXX"
+							   FontWeight="Bold"
+							   HorizontalAlignment="Center"
+							   Margin="8"
+							   Grid.Row="4"
+							   Grid.Column="0"/>
+					<TextBlock Text="Overtly sexual or disturbing graphic content"
+							   Margin="8"
+							   Grid.Row="4"
+							   Grid.Column="1"/>
+					<ToggleSwitch IsChecked="{Binding NSFWLevel, Converter={StaticResource NSFWLevelsToBoolConverter}, ConverterParameter={x:Static interfaces:NSFWLevels.XXX}, Mode=OneWay}"
+							  Command="{Binding ToggleNSFWLevelFlagCommand}"
+							  CommandParameter="{x:Static interfaces:NSFWLevels.XXX}"
+								  Margin="8"
+								  Grid.Row="4"
+								  Grid.Column="2"
+								  OffContent="" OnContent=""/>
+				</Grid>
+			</ThemeVariantScope>
+
+			<TextBlock Text="Visuals"
+					   Classes="H6"
+					   Margin="0 10"
+					   Theme="{StaticResource TitleTextBlock}"/>
+			<CheckBox IsChecked="{Binding DisplayPlaceholders}"
+					  Margin="8 0">
+				Display placeholders
+			</CheckBox>
+
+			<TextBlock Text="Logging"
+					   Classes="H6"
+					   Margin="0 10"
+					   Theme="{StaticResource TitleTextBlock}"/>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="Logging level"
+						   Margin="8 0"
+						   VerticalAlignment="Center"/>
+				<ComboBox ItemsSource="{Binding LogLevels}"
+						  SelectedItem="{Binding LogLevel}"/>
+			</StackPanel>
+		</StackPanel>
+	</ScrollViewer>
 </UserControl>

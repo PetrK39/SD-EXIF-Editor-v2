@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SD_EXIF_Editor_v2.Factories.Interfaces;
 using SD_EXIF_Editor_v2.Model;
-using SD_EXIF_Editor_v2.ViewModel;
-using SD_EXIF_Editor_v2.ViewModel.Interfaces;
+using SD_EXIF_Editor_v2.ViewModels.Interfaces;
+using System;
 
 namespace SD_EXIF_Editor_v2.Factories
 {

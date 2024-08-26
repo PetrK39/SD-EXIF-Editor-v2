@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace SD_EXIF_Editor_v2.Service
+namespace SD_EXIF_Editor_v2.Services
 {
     public partial class MetadataParserService : IMetadataParserService
     {
@@ -186,7 +189,7 @@ namespace SD_EXIF_Editor_v2.Service
             return (prompt, negative, lines.Last());
         }
 
-        private void DisplayErrorMessage(IEnumerable<ErrorCodes> errorCodes)
+        private async Task DisplayErrorMessage(IEnumerable<ErrorCodes> errorCodes)
         {
             _logger.LogTrace("Entering DisplayErrorMessage method.");
 
@@ -194,7 +197,7 @@ namespace SD_EXIF_Editor_v2.Service
             {
                 var errorCodesJoined = string.Join(", ", errorCodes);
                 _logger.LogWarning($"Encountered errors during parsing: {errorCodesJoined}");
-                _messageService.ShowInfoMessage(
+                await _messageService.ShowInfoMessageAsync(
                     $"An error occurred while parsing data (Code: {errorCodesJoined})\r\n" +
                     "Consider sending your raw metadata to project's github issues\r\n" +
                     "But only if you're not the one who broke it");

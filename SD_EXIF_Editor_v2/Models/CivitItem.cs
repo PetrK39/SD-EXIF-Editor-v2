@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using SD_EXIF_Editor_v2.Service;
+using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using System.Collections.Generic;
 
 namespace SD_EXIF_Editor_v2.Model
 {

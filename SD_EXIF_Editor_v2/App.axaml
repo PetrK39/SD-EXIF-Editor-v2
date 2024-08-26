@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:SD_EXIF_Editor_v2"
+			 xmlns:c="using:SD_EXIF_Editor_v2.Converters"
              x:Class="SD_EXIF_Editor_v2.App"
 			 xmlns:semi="https://irihi.tech/semi"
 			 RequestedThemeVariant="Dark">
@@ -8,8 +9,15 @@
         <local:ViewLocator/>
     </Application.DataTemplates>
 
+	<Application.Resources>
+		<ResourceDictionary>
+			<c:NSFWLevelsToBoolConverter x:Key="NSFWLevelsToBoolConverter"/>
+		</ResourceDictionary>
+	</Application.Resources>
+
     <Application.Styles>
 		<semi:SemiTheme Locale="en-us" />
 		<StyleInclude Source="avares://SD_EXIF_Editor_v2/Assets/Icons.axaml" />
+		<StyleInclude Source="avares://SD_EXIF_Editor_v2/Assets/Styles.axaml" />
 	</Application.Styles>
 </Application>
