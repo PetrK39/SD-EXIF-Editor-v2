@@ -2,7 +2,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SD_EXIF_Editor_v2.EditMetadataView">
-  Welcome to Avalonia from EMV!
+             xmlns:interfaces="using:SD_EXIF_Editor_v2.ViewModels.Interfaces"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SD_EXIF_Editor_v2.EditMetadataView"
+			 x:DataType="interfaces:IEditMetadataViewModel">
+	<StackPanel>
+		<TextBlock Text="Edit"
+				   Grid.Row="0"
+				   Classes="H5"
+				   Margin="0 12"
+				   Theme="{StaticResource TitleTextBlock}"/>
+		<Separator/>
+		<StackPanel Orientation="Horizontal"
+					Margin="0 6">
+			<PathIcon Data="{StaticResource ExclamationTriangle}"
+					  Foreground="{StaticResource SemiColorWarning}"/>
+			<TextBlock Text="Warning: Incorrect edits may break metadata parsing. Proceed with caution."
+					   Margin="6 0"
+					   Classes="Warning"/>
+		</StackPanel>
+		<TextBox Text="{Binding RawMetadata}"
+				 Grid.Row="1"
+				 HorizontalAlignment="Stretch"
+				 Classes="TextArea"
+				 TextWrapping="Wrap"
+				 AcceptsReturn="True"
+				 AcceptsTab="False"/>
+		<Grid ColumnDefinitions="*,Auto,Auto"
+					 Margin="18">
+			<Button Content="Clear"
+					Classes="Danger"
+					Padding="14"
+					Margin="12 0"
+					Grid.Column="1"
+					Theme="{DynamicResource OutlineButton}"/>
+			<Button Content="Save"
+					Classes="Success"
+					Padding="14"
+					Grid.Column="2"
+					Theme="{DynamicResource OutlineButton}"/>
+		</Grid>
+	</StackPanel>
 </UserControl>
