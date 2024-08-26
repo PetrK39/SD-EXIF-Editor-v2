@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.Linq;
 
-namespace SD_EXIF_Editor_v2.Factories
+namespace SD_EXIF_Editor_v2.ViewModels
 {
     public partial class CivitItemViewModel : ObservableObject, ICivitItemViewModel
     {
