@@ -3,18 +3,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:SD_EXIF_Editor_v2.ViewModels"
-xmlns:interfaces="using:SD_EXIF_Editor_v2.Services.Interfaces"
+			 xmlns:interfaces="using:SD_EXIF_Editor_v2.Services.Interfaces"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="550"
              x:Class="SD_EXIF_Editor_v2.SettingsView"
 			 x:DataType="vm:SettingsViewModel">
-	<ScrollViewer>
-		<StackPanel>
-			<TextBlock Text="Settings"
-					   Classes="H5"
-					   Margin="0 12"
-					   Theme="{StaticResource TitleTextBlock}"/>
-			<Separator/>
-
+	<Design.DataContext>
+		<vm:SettingsViewModel/>
+	</Design.DataContext>
+	<StackPanel>
+		<TextBlock Text="Settings"
+				   Classes="H5"
+				   Margin="0 12"
+				   Theme="{StaticResource TitleTextBlock}"/>
+		<Separator/>
+		<ScrollViewer>
+			<StackPanel>
 			<TextBlock Text="Browsing levels"
 					   Classes="H6 Margin"
 					   Margin="0 10"
@@ -136,6 +139,7 @@ xmlns:interfaces="using:SD_EXIF_Editor_v2.Services.Interfaces"
 				<ComboBox ItemsSource="{Binding LogLevels}"
 						  SelectedItem="{Binding LogLevel}"/>
 			</StackPanel>
-		</StackPanel>
-	</ScrollViewer>
+			</StackPanel>
+		</ScrollViewer>
+	</StackPanel>
 </UserControl>

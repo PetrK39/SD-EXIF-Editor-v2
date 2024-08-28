@@ -12,6 +12,7 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<c:NSFWLevelsToBoolConverter x:Key="NSFWLevelsToBoolConverter"/>
+			<c:PathBitmapConverter x:Key="PathBitmapConverter"/>
 		</ResourceDictionary>
 	</Application.Resources>
 

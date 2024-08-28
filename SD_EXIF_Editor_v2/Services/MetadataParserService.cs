@@ -35,7 +35,7 @@ namespace SD_EXIF_Editor_v2.Services
         [GeneratedRegex(@"\s*(?<key>\w[\w \-/]+):\s*(?<value>""(?:\\.|[^\\""])+""|[^,]*)(?:,|$)")]
         private static partial Regex MetadataRegex();
 
-        public SDMetadata ParseFromRawMetadata(string rawMetadata)
+        public async Task<SDMetadata> ParseFromRawMetadataAsync(string rawMetadata)
         {
             _logger.LogTrace("Entering ParseFromRawMetadata method.");
             _logger.LogDebug($"Trying to parse raw metadata: {rawMetadata}");
@@ -49,7 +49,7 @@ namespace SD_EXIF_Editor_v2.Services
                 errorCodes.Add(ErrorCodes.MetadataEmpty);
                 _logger.LogWarning("Metadata is empty.");
 
-                DisplayErrorMessage(errorCodes);
+                await DisplayErrorMessageAsync(errorCodes);
                 _logger.LogTrace("Exiting ParseFromRawMetadata method as metadata is empty.");
                 return new SDMetadata { Prompt = prompt, NegativePrompt = negative };
             }
@@ -61,7 +61,7 @@ namespace SD_EXIF_Editor_v2.Services
                 errorCodes.Add(ErrorCodes.MetadataRegexFail);
                 _logger.LogError("Failed to match metadata regex.");
 
-                DisplayErrorMessage(errorCodes);
+                await DisplayErrorMessageAsync(errorCodes);
                 _logger.LogTrace("Exiting ParseFromRawMetadata method as we can't regex metadata.");
                 return new SDMetadata { Prompt = prompt, NegativePrompt = negative };
             }
@@ -70,6 +70,9 @@ namespace SD_EXIF_Editor_v2.Services
                 matchesMetadata.Single(i => i.Groups["key"].Value == "Model hash").Groups["value"].Value);
 
             var sdMetadata = new SDMetadata { Prompt = prompt, NegativePrompt = negative, Model = sdModel };
+
+            var sdMetadataProperties = new Dictionary<string, string>();
+            var sdMetadataLoras = new List<SDLora>();
 
             foreach (Match match in matchesMetadata)
             {
@@ -83,21 +86,23 @@ namespace SD_EXIF_Editor_v2.Services
                 if (key == "Lora hashes")
                 {
                     value = value[1..^1];
-                    ProcessLoraHashes(value, sdMetadata, errorCodes);
+                    sdMetadataLoras = ProcessLoraHashes(value, sdMetadata.Prompt, errorCodes).ToList();
                 }
                 else
                 {
-                    sdMetadata.MetadataProperties.Add(key, value);
+                    sdMetadataProperties.Add(key, value);
                 }
             }
+            sdMetadata.MetadataProperties = sdMetadataProperties;
+            sdMetadata.Loras = sdMetadataLoras;
 
-            DisplayErrorMessage(errorCodes);
+            await DisplayErrorMessageAsync(errorCodes);
 
             _logger.LogTrace("Exiting ParseFromRawMetadata method.");
             return sdMetadata;
         }
 
-        private void ProcessLoraHashes(string value, SDMetadata sdMetadata, List<ErrorCodes> errorCodes)
+        private IEnumerable<SDLora> ProcessLoraHashes(string value, string prompt, List<ErrorCodes> errorCodes)
         {
             _logger.LogTrace("Entering ProcessLoraHashes method.");
 
@@ -106,47 +111,44 @@ namespace SD_EXIF_Editor_v2.Services
                 _logger.LogError("Failed to regex loras in metadata");
                 errorCodes.Add(ErrorCodes.MetadataLorasRegexFail);
                 _logger.LogTrace("Exiting ProcessLoraHashes method as value is empty.");
-                return;
+                yield return new SDLora("Unknown lora", "unknown", 0);
             }
 
             var matchesLoras = MetadataRegex().Matches(value);
             foreach (Match matchLora in matchesLoras)
             {
-                ProcessLoraMatch(matchLora, sdMetadata, errorCodes);
+                yield return ProcessLoraMatch(matchLora, prompt, errorCodes);
             }
 
             _logger.LogTrace("Exiting ProcessLoraHashes method.");
         }
 
-        void ProcessLoraMatch(Match matchLora, SDMetadata sdMetadata, List<ErrorCodes> errorCodes)
+        private SDLora ProcessLoraMatch(Match matchLora, string prompt, List<ErrorCodes> errorCodes)
         {
             _logger.LogTrace("Entering ProcessLoraMatch method.");
 
             var loraKey = matchLora.Groups["key"].Value;
             var loraValue = matchLora.Groups["value"].Value;
-            var loraStrengthMatch = Regex.Match(sdMetadata.Prompt, $@"\<lora:{loraKey}:([\d\.-]+)\>");
+            var loraStrengthMatch = Regex.Match(prompt, $@"\<lora:{loraKey}:([\d\.-]+)\>");
 
             if (!loraStrengthMatch.Success)
             {
                 _logger.LogError($"Failed to regex lora's ({loraKey}) strength");
                 errorCodes.Add(ErrorCodes.LoraStrengthRegexFail);
-                sdMetadata.Loras.Add(new SDLora(loraKey, loraValue, float.NaN));
                 _logger.LogTrace("Exiting ProcessLoraMatch method as regex failed.");
-                return;
+                return new SDLora(loraKey, loraValue, float.NaN);
             }
 
             if (!float.TryParse(loraStrengthMatch.Groups[1].Value, CultureInfo.InvariantCulture, out float loraStrength))
             {
                 _logger.LogError($"Failed to parse lora's ({loraKey}) strength");
                 errorCodes.Add(ErrorCodes.LoraStrengthParseFail);
-                sdMetadata.Loras.Add(new SDLora(loraKey, loraValue, float.NaN));
                 _logger.LogTrace("Exiting ProcessLoraMatch method as parsing failed.");
-                return;
+                return new SDLora(loraKey, loraValue, float.NaN);
             }
 
-            sdMetadata.Loras.Add(new SDLora(loraKey, loraValue, loraStrength));
-
             _logger.LogTrace("Exiting ProcessLoraMatch method.");
+            return new SDLora(loraKey, loraValue, loraStrength);
         }
 
         private (string Prompt, string NegativePrompt, string Metadata) ParseGeneral(string rawMetadata, List<ErrorCodes> errorCodes)
@@ -189,7 +191,7 @@ namespace SD_EXIF_Editor_v2.Services
             return (prompt, negative, lines.Last());
         }
 
-        private async Task DisplayErrorMessage(IEnumerable<ErrorCodes> errorCodes)
+        private async Task DisplayErrorMessageAsync(IEnumerable<ErrorCodes> errorCodes)
         {
             _logger.LogTrace("Entering DisplayErrorMessage method.");
 

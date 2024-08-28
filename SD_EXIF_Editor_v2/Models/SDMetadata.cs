@@ -8,11 +8,11 @@ namespace SD_EXIF_Editor_v2.Model
         public string? Prompt { get; init; }
         public string? NegativePrompt { get; init; }
         public SDModel? Model { get; init; }
-        public Dictionary<string, string> MetadataProperties { get; init; }
-        public List<SDLora> Loras { get; init; }
+        public IReadOnlyDictionary<string, string> MetadataProperties { get; set; }
+        public IReadOnlyCollection<SDLora> Loras { get; set; }
         public SDMetadata()
         {
-            MetadataProperties = [];
+            MetadataProperties = new Dictionary<string, string>();
             Loras = [];
         }
     }

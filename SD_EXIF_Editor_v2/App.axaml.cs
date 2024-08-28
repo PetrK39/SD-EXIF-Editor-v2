@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SD_EXIF_Editor_v2.Factories;
 using SD_EXIF_Editor_v2.Factories.Interfaces;
+using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Properties;
 using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
@@ -40,6 +41,12 @@ namespace SD_EXIF_Editor_v2
 
                 services.AddSingleton<ICivitService, CivitService>();
                 services.AddSingleton<ISettingsService, SettingsService>();
+
+                // Http Client
+                services.AddHttpClient();
+
+                // Models
+                services.AddSingleton<ImageModel>();
 
                 // ViewModels
                 services.AddSingleton<MainViewModel>();

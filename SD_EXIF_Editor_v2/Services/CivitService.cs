@@ -11,16 +11,16 @@ namespace SD_EXIF_Editor_v2.Services
 {
     public class CivitService : ICivitService
     {
-        private readonly HttpClient client;
+        private readonly HttpClient _client;
         private readonly IMessageService _messageService;
         private readonly ILogger<CivitService> _logger;
 
-        public CivitService(IMessageService messageService, ILogger<CivitService> logger, HttpMessageHandler httpMessageHandler)
+        public CivitService(IMessageService messageService, ILogger<CivitService> logger, HttpClient httpClient)
         {
             _messageService = messageService;
             _logger = logger;
 
-            client = new HttpClient(httpMessageHandler);
+            _client = httpClient;
             _logger.LogTrace("CivitService initialized.");
         }
 
@@ -33,7 +33,7 @@ namespace SD_EXIF_Editor_v2.Services
 
             try
             {
-                var response = await client.GetAsync(requestUri);
+                var response = await _client.GetAsync(requestUri);
                 var content = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)

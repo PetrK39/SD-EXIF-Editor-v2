@@ -1,9 +1,16 @@
-﻿using ExifLibrary;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
+using ExifLibrary;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using SD_EXIF_Editor_v2.Views;
 using System;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.Services
 {
@@ -14,9 +21,10 @@ namespace SD_EXIF_Editor_v2.Services
         public FileService(ILogger<FileService> logger)
         {
             _logger = logger;
+
             _logger.LogTrace("FileService initialized.");
         }
-        public void LoadFile(ref ImageModel imageModel, string filePath)
+        public void LoadFileIntoModel(ImageModel imageModel, string filePath)
         {
             _logger.LogTrace("Entering LoadFile method.");
             _logger.LogDebug("Loading image from file path: {FilePath}", filePath);
@@ -24,13 +32,16 @@ namespace SD_EXIF_Editor_v2.Services
             try
             {
                 imageModel.FilePath = filePath;
+                
+                using (var stream = File.OpenRead(filePath))
+                {
+                    var imageFile = ImageFile.FromStream(stream);
 
-                var imageFile = ImageFile.FromFile(filePath);
+                    var prop = GetMetadataProperty(imageFile);
+                    imageModel.RawMetadata = prop.Value;
 
-                var prop = GetMetadataProperty(imageFile);
-                imageModel.RawMetadata = prop.Value;
-
-                _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
+                    _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
+                }
             }
             catch (Exception ex)
             {
@@ -69,6 +80,17 @@ namespace SD_EXIF_Editor_v2.Services
 
             _logger.LogTrace("Exiting SaveFile method.");
         }
+        public async Task<Uri?> PickFile()
+        {
+            var result = await GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                AllowMultiple = false,
+                FileTypeFilter = [FilePickerFileTypes.ImagePng],
+                Title = "Open Stable Diffusion image:"
+            });
+
+            return result.Count >= 1 ? result[0].Path : null;
+        }
 
         private PNGText GetMetadataProperty(ImageFile imageFile)
         {
@@ -80,6 +102,19 @@ namespace SD_EXIF_Editor_v2.Services
                 imageFile.Properties.Add(prop);
             }
             return prop;
+        }
+        private IStorageProvider GetStorageProvider()
+        {
+            if (App.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow!.StorageProvider;
+            }
+            else if (App.Current.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+            {
+                return TopLevel.GetTopLevel(singleViewPlatform.MainView).StorageProvider;
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
