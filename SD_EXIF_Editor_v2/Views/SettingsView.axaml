@@ -10,12 +10,13 @@
 	<Design.DataContext>
 		<vm:SettingsViewModel/>
 	</Design.DataContext>
-	<StackPanel>
+	<DockPanel>
 		<TextBlock Text="Settings"
+				   DockPanel.Dock="Top"
 				   Classes="H5"
 				   Margin="0 12"
 				   Theme="{StaticResource TitleTextBlock}"/>
-		<Separator/>
+		<Separator DockPanel.Dock="Top"/>
 		<ScrollViewer>
 			<StackPanel>
 			<TextBlock Text="Browsing levels"
@@ -141,5 +142,5 @@
 			</StackPanel>
 			</StackPanel>
 		</ScrollViewer>
-	</StackPanel>
+	</DockPanel>
 </UserControl>
