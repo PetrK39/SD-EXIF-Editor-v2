@@ -10,14 +10,14 @@
 	<Design.DataContext>
 		<vm:EditMetadataViewModel/>
 	</Design.DataContext>
-	<StackPanel>
+	<DockPanel>
 		<TextBlock Text="Edit"
-				   Grid.Row="0"
+				   DockPanel.Dock="Top"
 				   Classes="H5"
 				   Margin="0 12"
 				   Theme="{StaticResource TitleTextBlock}"/>
-		<Separator/>
-		<ScrollViewer>
+		<Separator DockPanel.Dock="Top"/>
+		<ScrollViewer DockPanel.Dock="Top">
 			<StackPanel>
 				<StackPanel Orientation="Horizontal"
 							Margin="0 6">
@@ -35,21 +35,23 @@
 						 AcceptsReturn="True"
 						 AcceptsTab="False"/>
 
+
+				<Grid ColumnDefinitions="*,Auto,Auto"
+					  Margin="18"
+					  DockPanel.Dock="Top">
+					<Button Content="Clear"
+							Classes="Danger"
+							Padding="14"
+							Margin="12 0"
+							Grid.Column="1"
+							Theme="{DynamicResource OutlineButton}"/>
+					<Button Content="Save"
+							Classes="Success"
+							Padding="14"
+							Grid.Column="2"
+							Theme="{DynamicResource OutlineButton}"/>
+				</Grid>
 			</StackPanel>
 		</ScrollViewer>
-		<Grid ColumnDefinitions="*,Auto,Auto"
-					 Margin="18">
-			<Button Content="Clear"
-					Classes="Danger"
-					Padding="14"
-					Margin="12 0"
-					Grid.Column="1"
-					Theme="{DynamicResource OutlineButton}"/>
-			<Button Content="Save"
-					Classes="Success"
-					Padding="14"
-					Grid.Column="2"
-					Theme="{DynamicResource OutlineButton}"/>
-		</Grid>
-	</StackPanel>
+	</DockPanel>
 </UserControl>
