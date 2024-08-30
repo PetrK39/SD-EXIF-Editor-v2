@@ -11,6 +11,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
     {
         private readonly ImageModel _imageModel;
         private readonly ILogger _logger;
+
+        public bool IsFileLoaded => _imageModel.IsFileLoaded;
         public string RawMetadata
         {
             get => _imageModel.RawMetadata;
@@ -25,7 +27,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 {
                     FilePath = "/test/path/to/image.png",
                     RawMetadata = "prompt\r\nNegative prompt:negative\r\nVersion: design",
-                    IsFileLoaded = true
+                    IsFileLoaded = false
                 };
                 _logger = null!;
             }
@@ -35,7 +37,23 @@ namespace SD_EXIF_Editor_v2.ViewModels
         {
             _imageModel = imageModel;
             _logger = logger;
+
+            _imageModel.PropertyChanged += imageModel_PropertyChanged;
         }
+
+        private void imageModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ImageModel.RawMetadata):
+                    OnPropertyChanged(nameof(RawMetadata));
+                    break;
+                case nameof(ImageModel.IsFileLoaded):
+                    OnPropertyChanged(nameof(IsFileLoaded));
+                    break;
+            }
+        }
+
         [RelayCommand]
         private void Clear()
         {

@@ -6,7 +6,7 @@
 			 xmlns:interfaces="using:SD_EXIF_Editor_v2.ViewModels.Interfaces"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SD_EXIF_Editor_v2.EditMetadataView"
-			 x:DataType="interfaces:IEditMetadataViewModel">
+			 x:DataType="vm:EditMetadataViewModel">
 	<Design.DataContext>
 		<vm:EditMetadataViewModel/>
 	</Design.DataContext>
@@ -19,23 +19,32 @@
 		<Separator DockPanel.Dock="Top"/>
 		<ScrollViewer DockPanel.Dock="Top">
 			<StackPanel>
-				<StackPanel Orientation="Horizontal"
-							Margin="0 6">
+				<DockPanel Margin="0 6">
 					<PathIcon Data="{StaticResource ExclamationTriangle}"
-							  Foreground="{StaticResource SemiColorWarning}"/>
+							  Foreground="{StaticResource SemiColorWarning}"
+							  DockPanel.Dock="Left"
+							  Width="16"
+							  HorizontalAlignment="Center"
+							  VerticalAlignment="Center"/>
 					<TextBlock Text="Warning: Incorrect edits may break metadata parsing. Proceed with caution."
+							   TextWrapping="WrapWithOverflow"
 							   Margin="6 0"
+							   DockPanel.Dock="Left"
+							   VerticalAlignment="Center"
 							   Classes="Warning"/>
-				</StackPanel>
+				</DockPanel>
 				<TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=LostFocus}"
-						 Grid.Row="1"
+						 IsEnabled="{Binding IsFileLoaded}"
 						 HorizontalAlignment="Stretch"
 						 Classes="TextArea"
 						 TextWrapping="Wrap"
 						 AcceptsReturn="True"
 						 AcceptsTab="False"/>
-
-
+				<TextBlock Text="No image loaded"
+						   Margin="0 6"
+						   FontSize="16"
+						   HorizontalAlignment="Center"
+						   IsVisible="{Binding !IsFileLoaded}"/>
 				<Grid ColumnDefinitions="*,Auto,Auto"
 					  Margin="18"
 					  DockPanel.Dock="Top">
