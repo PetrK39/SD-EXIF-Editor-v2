@@ -27,6 +27,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
         private SDMetadata? _sdMetadata;
 
+        public bool IsFileLoaded => _imageModel.IsFileLoaded;
         public string FilePath => _imageModel.FilePath;
         public string RawMetadata => _imageModel.RawMetadata;
         public string? Prompt => _sdMetadata?.Prompt;
@@ -44,9 +45,9 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _imageModel = new ImageModel()
                 {
-                    FilePath = "/test/path/to/image.png",
-                    RawMetadata = "prompt\r\nNegative prompt:negative\r\nVersion: design",
-                    IsFileLoaded = true
+                    FilePath = null,
+                    RawMetadata = null,
+                    IsFileLoaded = false
                 };
                 _sdMetadata = new()
                 {
@@ -90,16 +91,16 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _logger.LogTrace("ViewViewModel initialized.");
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CopyToClipboardCanExecute))]
         private void CopyToClipboard(string text)
         {
             // TODO: implement the service 
             ;
         }
+        private bool CopyToClipboardCanExecute() => _imageModel.IsFileLoaded;
         private async Task UpdateSdMetadata()
         {
             _sdMetadata = await _metadataParserService.ParseFromRawMetadataAsync(_imageModel.RawMetadata);
-            OnPropertyChanged(nameof(FilePath));
             OnPropertyChanged(nameof(Prompt));
             OnPropertyChanged(nameof(NegativePrompt));
             OnPropertyChanged(nameof(MetadataProperties));
@@ -110,12 +111,20 @@ namespace SD_EXIF_Editor_v2.ViewModels
         {
             _logger.LogTrace("image_PropertyChanged event triggered.");
 
-            if (e.PropertyName == nameof(_imageModel.RawMetadata) && _imageModel.RawMetadata is not null)
+            switch (e.PropertyName)
             {
-                _logger.LogDebug("RawMetadata property changed. Updating relevant properties.");
-
-                await UpdateSdMetadata();
+                case nameof(_imageModel.IsFileLoaded):
+                    OnPropertyChanged(nameof(IsFileLoaded));
+                    break;
+                case nameof(_imageModel.FilePath):
+                    OnPropertyChanged(nameof(FilePath));
+                    break;
+                case nameof(_imageModel.RawMetadata):
+                    await UpdateSdMetadata();
+                    break;
             }
+
+
         }
         private async void LoadItemsCivitItemViewModels()
         {

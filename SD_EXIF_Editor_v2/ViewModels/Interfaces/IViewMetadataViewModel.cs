@@ -6,6 +6,7 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
 {
     public interface IViewMetadataViewModel
     {
+        public bool IsFileLoaded { get; }
         public string FilePath { get; }
 
         public string RawMetadata { get; }

@@ -22,8 +22,22 @@
 			<Grid ColumnDefinitions="1*,1*"
 				  Grid.Row="2">
 				<Image Grid.Column="0"
+					   IsVisible="{Binding IsFileLoaded}"
 					   Source="{Binding FilePath, Converter={StaticResource PathBitmapConverter}}"
 					   Stretch="Uniform"/>
+				<Border Grid.Column="0"
+						IsVisible="{Binding !IsFileLoaded}"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center">
+					<StackPanel>
+						<PathIcon Data="{StaticResource Image}"
+								  Width="100"
+								  Height="100"/>
+						<TextBlock Text="No image loaded"
+								   FontSize="20"
+								   Margin="24"/>
+					</StackPanel>
+				</Border>
 				<ScrollViewer Grid.Column="1">
 					<Border Background="{StaticResource SemiColorBackground1}"
 							CornerRadius="12"
@@ -76,63 +90,70 @@
 										</c:ButtonWithTempContent>
 									</Grid>
 								</HeaderedContentControl.Header>
-								<DockPanel>
-									<HeaderedContentControl DockPanel.Dock="Top"
-															Margin="0 4">
-										<HeaderedContentControl.Header>
-											<TextBlock Text="Resources used"
-													   FontWeight="Bold"
-													   FontSize="18"/>
-										</HeaderedContentControl.Header>
-										<ItemsControl ItemsSource="{Binding CivitItemViewModels}"
-													  Margin="0 4">
-											<ItemsControl.ItemsPanel>
-												<ItemsPanelTemplate>
-													<StackPanel Spacing="8"/>
-												</ItemsPanelTemplate>
-											</ItemsControl.ItemsPanel>
-										</ItemsControl>
-									</HeaderedContentControl>
-									<Separator DockPanel.Dock="Top"/>
-									<c:PromptControl DockPanel.Dock="Top"
-													 Title="Prompt"
-													 Prompt="{Binding Prompt}"
-													 Margin="0 4"/>
-									<c:PromptControl DockPanel.Dock="Top"
-													 Title="Negative prompt"
-													 Prompt="{Binding NegativePrompt}"
-													 Margin="0 4"/>
-									<Separator DockPanel.Dock="Top"/>
-									<HeaderedContentControl DockPanel.Dock="Top"
-															Margin="0 4">
-										<HeaderedContentControl.Header>
-											<TextBlock Text="Other metadata"
-													   FontWeight="Bold"
-													   FontSize="18"/>
-										</HeaderedContentControl.Header>
-										<ItemsControl ItemsSource="{Binding MetadataProperties}"
-													  Grid.IsSharedSizeScope="True">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<Grid>
-														<Grid.ColumnDefinitions>
-															<ColumnDefinition Width="Auto"
-																			  SharedSizeGroup="a"/>
-															<ColumnDefinition Width="*"/>
-														</Grid.ColumnDefinitions>
+								<StackPanel>
+									<DockPanel IsVisible="{Binding IsFileLoaded}">
+										<HeaderedContentControl DockPanel.Dock="Top"
+																Margin="0 4">
+											<HeaderedContentControl.Header>
+												<TextBlock Text="Resources used"
+														   FontWeight="Bold"
+														   FontSize="18"/>
+											</HeaderedContentControl.Header>
+											<ItemsControl ItemsSource="{Binding CivitItemViewModels}"
+														  Margin="0 4">
+												<ItemsControl.ItemsPanel>
+													<ItemsPanelTemplate>
+														<StackPanel Spacing="8"/>
+													</ItemsPanelTemplate>
+												</ItemsControl.ItemsPanel>
+											</ItemsControl>
+										</HeaderedContentControl>
+										<Separator DockPanel.Dock="Top"/>
+										<c:PromptControl DockPanel.Dock="Top"
+														 Title="Prompt"
+														 Prompt="{Binding Prompt}"
+														 Margin="0 4"/>
+										<c:PromptControl DockPanel.Dock="Top"
+														 Title="Negative prompt"
+														 Prompt="{Binding NegativePrompt}"
+														 Margin="0 4"/>
+										<Separator DockPanel.Dock="Top"/>
+										<HeaderedContentControl DockPanel.Dock="Top"
+																Margin="0 4">
+											<HeaderedContentControl.Header>
+												<TextBlock Text="Other metadata"
+														   FontWeight="Bold"
+														   FontSize="18"/>
+											</HeaderedContentControl.Header>
+											<ItemsControl ItemsSource="{Binding MetadataProperties}"
+														  Grid.IsSharedSizeScope="True">
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<Grid>
+															<Grid.ColumnDefinitions>
+																<ColumnDefinition Width="Auto"
+																				  SharedSizeGroup="a"/>
+																<ColumnDefinition Width="*"/>
+															</Grid.ColumnDefinitions>
 
-														<TextBlock Text="{Binding Key}"
-																	   Classes="Secondary"/>
-														<TextBlock Text="{Binding Value}"
-																   Grid.Column="1"
-																   HorizontalAlignment="Right"
-																   TextWrapping="WrapWithOverflow"/>
-													</Grid>
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-									</HeaderedContentControl>
-								</DockPanel>
+															<TextBlock Text="{Binding Key}"
+																		   Classes="Secondary"/>
+															<TextBlock Text="{Binding Value}"
+																	   Grid.Column="1"
+																	   HorizontalAlignment="Right"
+																	   TextWrapping="WrapWithOverflow"/>
+														</Grid>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+										</HeaderedContentControl>
+									</DockPanel>
+									<TextBlock Text="No image loaded"
+											   IsVisible="{Binding !IsFileLoaded}"
+											   FontSize="16"
+											   HorizontalAlignment="Center"
+											   Margin="20"/>
+								</StackPanel>
 							</HeaderedContentControl>
 						</ScrollViewer>
 					</Border>
