@@ -1,0 +1,186 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ail="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+			 xmlns:vm="using:SD_EXIF_Editor_v2.ViewModels"
+			 xmlns:m="using:SD_EXIF_Editor_v2.Model"
+			 xmlns:utils="using:SD_EXIF_Editor_v2.Utils"
+			 mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="150"
+             x:Class="SD_EXIF_Editor_v2.CivitItemView"
+			 x:DataType="vm:CivitItemViewModel"
+			 Name="CivitItemViewControl"
+			 PointerPressed="UserControl_PointerPressed">
+	<Design.DataContext>
+		<vm:CivitItemViewModel/>
+	</Design.DataContext>
+	<UserControl.Resources>
+		<utils:CivitItemViewModelBindingProxy x:Key="VMProxy" 
+											  VM="{Binding}"/>
+		<!-- 
+		The default carousel resources in the Semi theme have low visibility on random images.
+        Therefore, local resources are defined to customize the appearance of the carousel buttons. 
+		Yet, it seems impossible to add shadow effect to PathIcon which is being RenderTranslated
+		So we're going with just ugly transparent background
+		 -->
+
+		<SolidColorBrush x:Key="CarouselButtonBackground"
+						 Color="{Binding Source={StaticResource SemiGrey9Color}, Converter={StaticResource ColorToColorWithTransparencyConverter}, ConverterParameter=0.2}"/>
+
+		<SolidColorBrush x:Key="CarouselButtonForeground"
+						 Color="{StaticResource SemiGrey0Color}"/>
+		<SolidColorBrush x:Key="CarouselButtonPointeroverForeground"
+						 Color="{StaticResource SemiGrey2Color}"/>
+		<SolidColorBrush x:Key="CarouselButtonPressedForeground"
+						 Color="{StaticResource SemiGrey4Color}"/>
+
+		<SolidColorBrush x:Key="CarouselIndicatorForeground"
+						 Color="{StaticResource SemiGrey0Color}"/>
+		<SolidColorBrush x:Key="CarouselIndicatorForegroundPointerover"
+						 Color="{StaticResource SemiGrey2Color}"/>
+		<SolidColorBrush x:Key="CarouselIndicatorForegroundPressed"
+						 Color="{StaticResource SemiGrey4Color}"/>
+		<SolidColorBrush x:Key="CarouselIndicatorForegroundSelected"
+						 Color="{StaticResource SemiGrey0Color}"/>
+	</UserControl.Resources>
+	
+	<Border>
+		<Grid ColumnDefinitions="3*,1*"
+			  RowDefinitions="Auto,Auto,Auto">
+			<TextBlock Text="{Binding OriginalName}"
+					   Classes="Underline"
+					   FontSize="16"
+					   IsVisible="{Binding !IsUnknown}"
+					   Grid.Column="0"
+					   Grid.Row="0"/>
+			<TextBlock Text="{Binding PromptName}"
+					   IsVisible="{Binding IsUnknown}"
+					   FontSize="16"
+					   Grid.Column="0"
+					   Grid.Row="0"/>
+
+			<TextBlock Text="{Binding PromptName}"
+					   Classes="Tertiary"
+					   FontSize="12"
+					   IsVisible="{Binding !IsUnknown}"
+					   Grid.Column="0"
+					   Grid.Row="1"/>
+			<TextBlock Text="{Binding OriginalVersion}"
+					   Classes="Tertiary"
+					   FontSize="12"
+					   IsVisible="{Binding !IsUnknown}"
+					   Grid.Column="0"
+					   Grid.Row="2"/>
+
+			<StackPanel Orientation="Horizontal"
+						Grid.Column="1"
+						Grid.Row="0"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center">
+				<Border Background="{StaticResource SemiLightBlue9}"
+						Padding="10 2"
+						CornerRadius="4"
+						IsVisible="{Binding !IsUnknown}">
+					<TextBlock Text="{Binding Type, Converter={StaticResource ToUpperConverter}}"
+							   Foreground="{StaticResource SemiLightBlue1}"
+							   FontSize="11"
+							   FontWeight="Bold"/>
+				</Border>
+				<Border Background="{StaticResource SemiGrey8}"
+						IsVisible="{Binding IsHaveStrength}"
+						Padding="10 2"
+						CornerRadius="4"
+						Margin="8 0 0 0">
+					<TextBlock Text="{Binding Strength}"
+							   Foreground="{StaticResource SemiGrey1}"
+							   FontSize="11"
+							   FontWeight="Bold"/>
+				</Border>
+			</StackPanel>
+		</Grid>
+	</Border>
+	<FlyoutBase.AttachedFlyout>
+		<Flyout Placement="BottomEdgeAlignedLeft">
+			<Grid RowDefinitions="Auto,*"
+				  ColumnDefinitions="1*,1*">
+				<Button Grid.Column="0"
+						Grid.Row="0"
+						HorizontalAlignment="Left"
+					    Theme="{DynamicResource BorderlessButton}"
+					    Command="{Binding OpenUriCommand}"
+						CommandParameter="{Binding SiteUri}">
+					<StackPanel Orientation="Horizontal">
+						<PathIcon Data="{StaticResource BoxArrowUpRight}"/>
+						<TextBlock Text="Civit.Ai"
+								   Margin="6 0"/>
+					</StackPanel>
+				</Button>
+				<Button Grid.Column="1" 
+						Grid.Row="0"
+						HorizontalAlignment="Right"
+						Theme="{DynamicResource BorderlessButton}"
+						Command="{Binding OpenUriCommand}"
+						CommandParameter="{Binding DownloadUri}">
+					<StackPanel Orientation="Horizontal">
+						<PathIcon Data="{StaticResource Download}"/>
+						<TextBlock Text="Download"
+								   Margin="6 0"/>
+					</StackPanel>
+				</Button>
+				<Carousel ItemsSource="{Binding FilteredImages}"
+						  Theme="{DynamicResource FullCarousel}"
+						  IsVisible="{Binding !VM.IsFilteredImagesEmpty, Source={StaticResource VMProxy}}"
+						  Grid.Row="1"
+						  Grid.ColumnSpan="2">
+					<Carousel.PageTransition>
+						<PageSlide Duration="0.25"
+								   Orientation="Horizontal"/>
+					</Carousel.PageTransition>
+					<Carousel.ItemTemplate>
+						<DataTemplate DataType="m:CivitItemImage">
+							<StackPanel>
+								<ail:AdvancedImage Source="{Binding Uri}"
+												   Name="Image"
+												   MaxHeight="400"
+												   MaxWidth="400"/>
+								<ProgressBar Theme="{DynamicResource ProgressRing}"
+											 IsIndeterminate="True"
+											 IsVisible="{Binding ElementName=Image, Path=IsLoading}"
+											 HorizontalAlignment="Center"
+											 VerticalAlignment="Center"
+											 Margin="24 48"
+											 Width="100"
+											 Height="100"/>
+							</StackPanel>
+						</DataTemplate>
+					</Carousel.ItemTemplate>
+					<Carousel.Styles>
+						<Style Selector="Grid PathIcon">
+							<Setter Property="Grid.Background"
+									Value="{StaticResource CarouselButtonBackground}"/>
+							<Setter Property="PathIcon.Padding"
+									Value="16"/>
+						</Style>
+						<Style Selector="Ellipse">
+							<Setter Property="Effect">
+								<DropShadowEffect Color="{StaticResource SemiGrey8Color}"
+												  BlurRadius="4"
+												  OffsetX="2"
+												  OffsetY="2"/>
+							</Setter>
+						</Style>
+					</Carousel.Styles>
+				</Carousel>
+				<Border	Grid.Row="1"
+						Grid.ColumnSpan="2"
+						IsVisible="{Binding VM.IsFilteredImagesEmpty, Source={StaticResource VMProxy}}"
+						Width="400"
+						Height="200">
+					<TextBlock Text="Images hidden due to mature content settings"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center"/>
+				</Border>
+			</Grid>
+		</Flyout>
+	</FlyoutBase.AttachedFlyout>
+</UserControl>

@@ -19,6 +19,7 @@ namespace SD_EXIF_Editor_v2
             RegisterViewFactory<ViewMetadataViewModel, ViewMetadataView>();
             RegisterViewFactory<EditMetadataViewModel, EditMetadataView>();
             RegisterViewFactory<SettingsViewModel, SettingsView>();
+            RegisterViewFactory<CivitItemViewModel, CivitItemView>();
         }
         public Control Build(object? data)
         {

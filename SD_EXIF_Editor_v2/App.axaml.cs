@@ -14,6 +14,7 @@ using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.Utils;
 using SD_EXIF_Editor_v2.ViewModels;
+using SD_EXIF_Editor_v2.ViewModels.Interfaces;
 using SD_EXIF_Editor_v2.Views;
 
 namespace SD_EXIF_Editor_v2
@@ -50,12 +51,14 @@ namespace SD_EXIF_Editor_v2
 
                 // ViewModels
                 services.AddSingleton<MainViewModel>();
+                services.AddTransient<ICivitItemViewModel, CivitItemViewModel>();
                 services.AddTransient<ViewMetadataViewModel>();
                 services.AddTransient<EditMetadataViewModel>();
                 services.AddTransient<SettingsViewModel>();
 
                 // Views
                 services.AddSingleton<MainWindow>();
+                services.AddTransient<CivitItemView>();
                 services.AddTransient<ViewMetadataView>();
                 services.AddTransient<EditMetadataView>();
                 services.AddTransient<SettingsView>();

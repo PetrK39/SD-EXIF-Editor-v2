@@ -48,6 +48,19 @@ namespace SD_EXIF_Editor_v2.ViewModels
                     RawMetadata = "prompt\r\nNegative prompt:negative\r\nVersion: design",
                     IsFileLoaded = true
                 };
+                _sdMetadata = new()
+                {
+                    Prompt = "prompt",
+                    NegativePrompt = "negative prompt",
+                    Model = new SDModel("model name", "model hash"),
+                    Loras = [new SDLora("lora1", "lora1h", 1.23f), new SDLora("lora2", "lora2", -1.23f)]
+                };
+
+                CivitItemViewModels = [
+                    new CivitItemViewModel(),
+                    new CivitItemViewModel()
+                    ];
+
                 _metadataParserService = null!;
                 _civitService = null!;
                 _settingsService = null!;

@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System;
 using System.Collections;
 using System.Linq;
+using Avalonia.Controls;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
@@ -19,6 +20,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private readonly ILogger<CivitItemViewModel> _logger;
 
         public bool IsUnknown => _civitItem.IsUnknown;
+        public bool IsHaveStrength => _civitItem.Strength != null;
 
         public string OriginalName => _civitItem.OriginalName;
         public string OriginalVersion => _civitItem.OriginalVersion;
@@ -32,16 +34,27 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public string DownloadUri => _civitItem.DownloadUri;
 
         public IEnumerable<CivitItemImage> FilteredImages => _civitItem.Images.Where(i => i.NSFWLevel < _settingsService.NSFWLevel);
+        public bool IsFilteredImagesEmpty => !FilteredImages.Any();
+        // Design only
+        public CivitItemViewModel()
+        {
+            if (Design.IsDesignMode)
+            {
+                _settingsService = null;
+                _logger = null;
 
+                _civitItem = new("promptName", -1.23f, "originalName", "originalVersion", "type", 123, [], "/download/uri", "site/uri");
+            }
+        }
         public CivitItemViewModel(ISettingsService settingsService, ILogger<CivitItemViewModel> logger)
         {
             _settingsService = settingsService;
             _logger = logger;
 
-            _logger.LogTrace("CivitItemViewModel initialized.");
 
-            _settingsService.PropertyChanged += _settingsService_PropertyChanged;
+            _logger.LogTrace("CivitItemViewModel initialized.");
         }
+
         public void Initialize(CivitItem civitItem)
         {
             _logger.LogTrace("Entering Initialize method.");
@@ -49,17 +62,6 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _civitItem = civitItem;
 
             _logger.LogTrace("Exiting Initialize method.");
-        }
-
-        private void _settingsService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            _logger.LogTrace("settingsService_PropertyChanged event triggered.");
-
-            if (e.PropertyName == nameof(_settingsService.NSFWLevel))
-            {
-                OnPropertyChanged(nameof(FilteredImages));
-                _logger.LogDebug("NSFWLevel property changed. Refreshed FilteredImages.");
-            }
         }
 
         [RelayCommand]
