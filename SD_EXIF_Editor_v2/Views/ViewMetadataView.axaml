@@ -77,7 +77,7 @@
 											<c:ButtonWithTempContent.TempContent>
 												<StackPanel Orientation="Horizontal">
 													<PathIcon Data="{StaticResource Check2}"
-															  Height="14"
+															  Height="10"
 															  Foreground="{StaticResource SemiColorSuccess}"/>
 													<TextBlock Text="COPIED"
 															   VerticalAlignment="Center"
