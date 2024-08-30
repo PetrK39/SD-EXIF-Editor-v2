@@ -86,7 +86,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _imageModel.PropertyChanged += imageModel_PropertyChanged;
             CivitItemViewModels = [];
 
-            UpdateSdMetadata();
+            if (_imageModel.IsFileLoaded)
+                UpdateSdMetadata();
 
             _logger.LogTrace("ViewViewModel initialized.");
         }
