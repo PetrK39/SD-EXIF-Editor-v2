@@ -3,14 +3,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:c="using:SD_EXIF_Editor_v2.Controls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
              x:Class="SD_EXIF_Editor_v2.Controls.PromptControl"
 			 x:Name="PromptCtrl">
 	<HeaderedContentControl>
 		<HeaderedContentControl.Header>
-			<TextBlock Text="{Binding Title, ElementName=PromptCtrl}"
-					   FontWeight="Bold"
-					   FontSize="18"/>
+			<DockPanel>
+				<TextBlock Text="{Binding Title, ElementName=PromptCtrl}"
+						   FontWeight="Bold"
+						   FontSize="18"
+						   DockPanel.Dock="Left"/>
+				<c:ButtonWithTempContent Command="{Binding CopyCommand, ElementName=PromptCtrl}"
+										 CommandParameter="{Binding Prompt, ElementName=PromptCtrl}"
+										 Theme="{DynamicResource BorderlessButton}"
+										 DockPanel.Dock="Right"
+										 VerticalAlignment="Center"
+										 HorizontalAlignment="Right">
+					<c:ButtonWithTempContent.Content>
+						<PathIcon Data="{StaticResource Copy}"
+								  Height="14"
+								  Foreground="{StaticResource SemiGrey2}"/>
+					</c:ButtonWithTempContent.Content>
+					<c:ButtonWithTempContent.TempContent>
+						<PathIcon Data="{StaticResource Check2}"
+								  Height="10"
+								  Foreground="{StaticResource SemiColorSuccess}"/>
+					</c:ButtonWithTempContent.TempContent>
+				</c:ButtonWithTempContent>
+			</DockPanel>
 		</HeaderedContentControl.Header>
 		<TextBlock Text="{Binding Prompt, ElementName=PromptCtrl}"
 				   TextWrapping="WrapWithOverflow"
