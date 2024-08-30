@@ -68,11 +68,14 @@ namespace SD_EXIF_Editor_v2
             .ConfigureLogging((context, logging) =>
             {
                 logging.ClearProviders();
-                logging.AddNLog(context.Configuration.GetSection("NLog"));
+                logging.AddNLog("NLog-windows.config");
             })
             .Build();
 
             _host.Start();
+
+            var ss = _host.Services.GetRequiredService<ISettingsService>();
+            NLogConfigurator.UpdateLogLevel(ss.LogLevel);
 
             Ioc.Default.ConfigureServices(_host.Services);
 
