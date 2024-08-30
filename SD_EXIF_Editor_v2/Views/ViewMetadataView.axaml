@@ -112,10 +112,12 @@
 										<c:PromptControl DockPanel.Dock="Top"
 														 Title="Prompt"
 														 Prompt="{Binding Prompt}"
+														 CopyCommand="{Binding CopyToClipboardCommand}"
 														 Margin="0 4"/>
 										<c:PromptControl DockPanel.Dock="Top"
 														 Title="Negative prompt"
 														 Prompt="{Binding NegativePrompt}"
+														 CopyCommand="{Binding CopyToClipboardCommand}"
 														 Margin="0 4"/>
 										<Separator DockPanel.Dock="Top"/>
 										<HeaderedContentControl DockPanel.Dock="Top"

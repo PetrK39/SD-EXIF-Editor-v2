@@ -118,11 +118,13 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 case nameof(_imageModel.IsFileLoaded):
                     OnPropertyChanged(nameof(IsFileLoaded));
+                    CopyToClipboardCommand.NotifyCanExecuteChanged();
                     break;
                 case nameof(_imageModel.FilePath):
                     OnPropertyChanged(nameof(FilePath));
                     break;
                 case nameof(_imageModel.RawMetadata):
+                    OnPropertyChanged(nameof(RawMetadata));
                     await UpdateSdMetadata();
                     break;
             }
