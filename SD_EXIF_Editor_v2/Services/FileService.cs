@@ -31,6 +31,7 @@ namespace SD_EXIF_Editor_v2.Services
 
             try
             {
+                imageModel.IsFileLoaded = true;
                 imageModel.FilePath = filePath;
 
                 using (var stream = File.OpenRead(filePath))
@@ -39,11 +40,8 @@ namespace SD_EXIF_Editor_v2.Services
 
                     var prop = GetMetadataProperty(imageFile);
                     imageModel.RawMetadata = prop.Value;
-
-                    imageModel.IsFileLoaded = true;
-
-                    _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
                 }
+                    _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
             }
             catch (Exception ex)
             {

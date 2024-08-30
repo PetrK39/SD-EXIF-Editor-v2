@@ -86,8 +86,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _imageModel.PropertyChanged += imageModel_PropertyChanged;
             CivitItemViewModels = [];
 
-            if (_imageModel.IsFileLoaded)
-                UpdateSdMetadata();
+            UpdateSdMetadata();
 
             _logger.LogTrace("ViewViewModel initialized.");
         }
@@ -101,12 +100,15 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private bool CopyToClipboardCanExecute() => _imageModel.IsFileLoaded;
         private async Task UpdateSdMetadata()
         {
-            _sdMetadata = await _metadataParserService.ParseFromRawMetadataAsync(_imageModel.RawMetadata);
+            if (!_imageModel.IsFileLoaded) return;
+
+            _sdMetadata = await _metadataParserService.ParseFromRawMetadataAsync(_imageModel.RawMetadata!);
+
             OnPropertyChanged(nameof(Prompt));
             OnPropertyChanged(nameof(NegativePrompt));
             OnPropertyChanged(nameof(MetadataProperties));
 
-            LoadItemsCivitItemViewModels();
+            await LoadItemsCivitItemViewModels();
         }
         private async void imageModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -127,7 +129,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
 
         }
-        private async void LoadItemsCivitItemViewModels()
+        private async Task LoadItemsCivitItemViewModels()
         {
             _logger.LogTrace("Entering LoadItemsCivitItemViewModels method.");
             IsCivitBusy = true;
