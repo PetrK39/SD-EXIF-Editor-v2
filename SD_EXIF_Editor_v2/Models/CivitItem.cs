@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using System.Collections.Generic;
 
@@ -62,8 +61,6 @@ namespace SD_EXIF_Editor_v2.Model
     {
         public string Uri { get; init; }
         public NSFWLevels NSFWLevel { get; init; }
-        [ObservableProperty]
-        public bool isCurrent = false;
 
         public CivitItemImage(string uri, NSFWLevels nSFWLevel)
         {
