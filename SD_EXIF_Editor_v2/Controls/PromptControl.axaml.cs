@@ -26,6 +26,19 @@ public partial class PromptControl : UserControl
         AvaloniaProperty.Register<PromptControl, ICommand>(nameof(CopyCommand));
 
     /// <summary>
+    /// CopyCommand StyledProperty definition
+    /// </summary>
+    public static readonly StyledProperty<bool> DisplayPlaceholderProperty =
+        AvaloniaProperty.Register<PromptControl, bool>(nameof(DisplayPlaceholder));
+
+
+    public static readonly DirectProperty<PromptControl, bool> ShouldDisplayControlProperty =
+        AvaloniaProperty.RegisterDirect<PromptControl, bool>(nameof(ShouldDisplayControl), o => o.ShouldDisplayControl);
+
+    public static readonly DirectProperty<PromptControl, bool> ShouldDisplayPlaceholderProperty =
+        AvaloniaProperty.RegisterDirect<PromptControl, bool>(nameof(ShouldDisplayPlaceholder), o => o.ShouldDisplayPlaceholder);
+
+    /// <summary>
     /// Gets or sets the Title property. This StyledProperty
     /// indicates title of the PromptControl.
     /// </summary>
@@ -55,10 +68,43 @@ public partial class PromptControl : UserControl
         set => SetValue(CopyCommandProperty, value);
     }
 
+    public bool DisplayPlaceholder
+    {
+        get => GetValue(DisplayPlaceholderProperty);
+        set => SetValue(DisplayPlaceholderProperty, value);
+    }
 
+    private bool _shouldDisplayControl;
+    public bool ShouldDisplayControl
+    {
+        get => _shouldDisplayControl;
+        set => SetAndRaise(ShouldDisplayControlProperty, ref _shouldDisplayControl, value);
+    }
+
+    private bool _shouldDisplayPlaceholder;
+    public bool ShouldDisplayPlaceholder
+    {
+        get => _shouldDisplayPlaceholder;
+        set => SetAndRaise(ShouldDisplayPlaceholderProperty, ref _shouldDisplayPlaceholder, value);
+    }
 
     public PromptControl()
     {
         InitializeComponent();
+
+        UpdateProperties();
+    }
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == PromptProperty || change.Property == DisplayPlaceholderProperty)
+            UpdateProperties();
+    }
+
+    private void UpdateProperties()
+    {
+        ShouldDisplayControl =  !string.IsNullOrEmpty(Prompt) || DisplayPlaceholder;
+        ShouldDisplayPlaceholder = string.IsNullOrEmpty(Prompt) && DisplayPlaceholder;
     }
 }

@@ -38,6 +38,11 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private bool _isCivitBusy = false;
         public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; init; }
 
+        public bool ShouldDisplayPlaceholders => _settingsService.DisplayPlaceholders;
+
+
+
+
         // Design only
         public ViewMetadataViewModel()
         {
@@ -45,13 +50,13 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _imageModel = new ImageModel()
                 {
-                    FilePath = null,
-                    RawMetadata = null,
-                    IsFileLoaded = false
+                    FilePath = "null",
+                    RawMetadata = "null",
+                    IsFileLoaded = true
                 };
                 _sdMetadata = new()
                 {
-                    Prompt = "prompt",
+                    Prompt = null,
                     NegativePrompt = "negative prompt",
                     Model = new SDModel("model name", "model hash"),
                     Loras = [new SDLora("lora1", "lora1h", 1.23f), new SDLora("lora2", "lora2", -1.23f)]
@@ -84,11 +89,20 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _logger = logger;
 
             _imageModel.PropertyChanged += imageModel_PropertyChanged;
+            _settingsService.PropertyChanged += settingsService_PropertyChanged;
             CivitItemViewModels = [];
 
             UpdateSdMetadata();
 
             _logger.LogTrace("ViewViewModel initialized.");
+        }
+
+        private void settingsService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(_settingsService.DisplayPlaceholders))
+            {
+                OnPropertyChanged(nameof(ShouldDisplayPlaceholders));
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CopyToClipboardCanExecute))]
@@ -107,6 +121,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
             OnPropertyChanged(nameof(Prompt));
             OnPropertyChanged(nameof(NegativePrompt));
             OnPropertyChanged(nameof(MetadataProperties));
+
+            OnPropertyChanged(nameof(ShouldDisplayPlaceholders));
 
             await LoadItemsCivitItemViewModels();
         }

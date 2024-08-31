@@ -18,6 +18,8 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
         public bool IsCivitBusy { get; }
         public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; }
 
+        public bool ShouldDisplayPlaceholders { get; }
+
         public IRelayCommand<string> CopyToClipboardCommand { get; }
     }
 }
