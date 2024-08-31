@@ -33,7 +33,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public string SiteUri => _civitItem.SiteUri;
         public string DownloadUri => _civitItem.DownloadUri;
 
-        public IEnumerable<CivitItemImage> FilteredImages => _civitItem.Images.Where(i => i.NSFWLevel < _settingsService.NSFWLevel);
+        public IEnumerable<CivitItemImage> FilteredImages => _civitItem.Images.Where(i => (i.NSFWLevel & _settingsService.NSFWLevel) == i.NSFWLevel);
         public bool IsFilteredImagesEmpty => !FilteredImages.Any();
         // Design only
         public CivitItemViewModel()
