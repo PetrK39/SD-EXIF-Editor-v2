@@ -5,16 +5,18 @@
 			 xmlns:c="using:SD_EXIF_Editor_v2.Controls"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
              x:Class="SD_EXIF_Editor_v2.Controls.PromptControl"
-			 x:DataType="c:PromptControl">
-	<HeaderedContentControl IsVisible="{Binding ShouldDisplayControl, RelativeSource={RelativeSource AncestorType=c:PromptControl}}">
+			 x:DataType="c:PromptControl"
+			 Name="PromptCtrl"
+			 IsVisible="{Binding ShouldDisplayControl, ElementName=PromptCtrl}">
+	<HeaderedContentControl>
 		<HeaderedContentControl.Header>
 			<DockPanel>
-				<TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=c:PromptControl}}"
+				<TextBlock Text="{Binding Title, ElementName=PromptCtrl}"
 						   FontWeight="Bold"
 						   FontSize="18"
 						   DockPanel.Dock="Left"/>
-				<c:ButtonWithTempContent Command="{Binding CopyCommand, RelativeSource={RelativeSource AncestorType=c:PromptControl}}"
-										 CommandParameter="{Binding Prompt, RelativeSource={RelativeSource AncestorType=c:PromptControl}}"
+				<c:ButtonWithTempContent Command="{Binding CopyCommand, ElementName=PromptCtrl}"
+										 CommandParameter="{Binding Prompt, ElementName=PromptCtrl}"
 										 Theme="{DynamicResource BorderlessButton}"
 										 DockPanel.Dock="Right"
 										 VerticalAlignment="Center"
@@ -33,12 +35,12 @@
 			</DockPanel>
 		</HeaderedContentControl.Header>
 		<StackPanel>
-			<TextBlock Text="{Binding Prompt, RelativeSource={RelativeSource AncestorType=c:PromptControl}}"
+			<TextBlock Text="{Binding Prompt, ElementName=PromptCtrl}"
 					   TextWrapping="WrapWithOverflow"
-					   IsVisible="{Binding !ShouldDisplayPlaceholder, RelativeSource={RelativeSource AncestorType=c:PromptControl}}"
+					   IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=PromptCtrl}"
 					   Classes="Secondary"/>
 			<TextBlock Text="No prompt available"
-					   IsVisible="{Binding ShouldDisplayPlaceholder, RelativeSource={RelativeSource AncestorType=c:PromptControl}}"
+					   IsVisible="{Binding ShouldDisplayPlaceholder, ElementName=PromptCtrl}"
 					   FontStyle="Italic"
 				       TextWrapping="WrapWithOverflow"
 				       Classes="Secondary"/>
