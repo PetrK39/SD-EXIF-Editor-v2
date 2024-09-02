@@ -14,6 +14,15 @@
 	<Design.DataContext>
 		<vm:CivitItemViewModel/>
 	</Design.DataContext>
+
+	<UserControl.Styles>
+		<Style Selector="TextBlock:pointerover.InteractiveText">
+			<Setter Property="TextBlock.TextDecorations"
+					Value="Underline"/>
+			<Setter Property="TextBlock.Foreground"
+					Value="{StaticResource SemiColorPrimaryPointerover}"/>
+		</Style>
+	</UserControl.Styles>
 	<UserControl.Resources>
 		<utils:CivitItemViewModelBindingProxy x:Key="VMProxy" 
 											  VM="{Binding}"/>
@@ -48,7 +57,7 @@
 		<Grid ColumnDefinitions="3*,1*"
 			  RowDefinitions="Auto,Auto,Auto">
 			<TextBlock Text="{Binding OriginalName}"
-					   Classes="Underline"
+					   Classes="InteractiveText"
 					   FontSize="16"
 					   IsVisible="{Binding !IsUnknown}"
 					   Grid.Column="0"
