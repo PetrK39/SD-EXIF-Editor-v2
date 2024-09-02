@@ -111,7 +111,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             // TODO: implement the service 
             ;
         }
-        private bool CopyToClipboardCanExecute() => _imageModel.IsFileLoaded;
+        private bool CopyToClipboardCanExecute(string text) => !string.IsNullOrWhiteSpace(text);
         private async Task UpdateSdMetadata()
         {
             if (!_imageModel.IsFileLoaded) return;
