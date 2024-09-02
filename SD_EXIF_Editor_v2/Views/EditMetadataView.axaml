@@ -33,18 +33,21 @@
 							   VerticalAlignment="Center"
 							   Classes="Warning"/>
 				</DockPanel>
-				<TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=LostFocus}"
-						 IsEnabled="{Binding IsFileLoaded}"
-						 HorizontalAlignment="Stretch"
-						 Classes="TextArea"
-						 TextWrapping="Wrap"
-						 AcceptsReturn="True"
-						 AcceptsTab="False"/>
-				<TextBlock Text="No image loaded"
-						   Margin="0 6"
-						   FontSize="16"
-						   HorizontalAlignment="Center"
-						   IsVisible="{Binding !IsFileLoaded}"/>
+				<Grid>
+					<TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=LostFocus}"
+							 IsEnabled="{Binding IsFileLoaded}"
+							 HorizontalAlignment="Stretch"
+							 Classes="TextArea"
+							 TextWrapping="Wrap"
+							 AcceptsReturn="True"
+							 AcceptsTab="False"/>
+					<TextBlock Text="No image loaded"
+							   Margin="0 6"
+							   FontSize="16"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center"
+							   IsVisible="{Binding !IsFileLoaded}"/>
+				</Grid>
 				<Grid ColumnDefinitions="*,Auto,Auto"
 					  Margin="18"
 					  DockPanel.Dock="Top">
