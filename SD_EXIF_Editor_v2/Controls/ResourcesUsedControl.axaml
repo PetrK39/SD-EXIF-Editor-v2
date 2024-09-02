@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SD_EXIF_Editor_v2.Controls.ResourcesUsedControl"
+			 Name="ResourcesUsedCtrl">
+	<HeaderedContentControl>
+		<HeaderedContentControl.Header>
+			<TextBlock Text="Resources used"
+					   FontWeight="Bold"
+					   FontSize="18"/>
+		</HeaderedContentControl.Header>
+		<StackPanel>
+			<ItemsControl ItemsSource="{Binding TruncatedItemsSource, ElementName=ResourcesUsedCtrl}"
+						  Margin="0 4">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Spacing="8"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+			<Button Click="ShowMoreLessButton_Click"
+						IsVisible="{Binding ShouldDisplayShowMoreLessButton, ElementName=ResourcesUsedCtrl}"
+						Classes="Small"
+						Name="ShowMoreLessButton"
+						HorizontalAlignment="Left"
+						Padding="-2 0"
+						FontWeight="Normal"
+						Theme="{DynamicResource BorderlessButton}"/>
+		</StackPanel>
+	</HeaderedContentControl>
+</UserControl>

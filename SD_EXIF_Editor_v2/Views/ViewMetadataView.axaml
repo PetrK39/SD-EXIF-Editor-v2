@@ -92,22 +92,10 @@
 								</HeaderedContentControl.Header>
 								<StackPanel>
 									<DockPanel IsVisible="{Binding IsFileLoaded}">
-										<HeaderedContentControl DockPanel.Dock="Top"
-																Margin="0 4">
-											<HeaderedContentControl.Header>
-												<TextBlock Text="Resources used"
-														   FontWeight="Bold"
-														   FontSize="18"/>
-											</HeaderedContentControl.Header>
-											<ItemsControl ItemsSource="{Binding CivitItemViewModels}"
-														  Margin="0 4">
-												<ItemsControl.ItemsPanel>
-													<ItemsPanelTemplate>
-														<StackPanel Spacing="8"/>
-													</ItemsPanelTemplate>
-												</ItemsControl.ItemsPanel>
-											</ItemsControl>
-										</HeaderedContentControl>
+										<c:ResourcesUsedControl DockPanel.Dock="Top"
+																Margin="0 4"
+																ItemsSource="{Binding CivitItemViewModels}"
+																MaximumLines="1"/>
 										<Separator DockPanel.Dock="Top"/>
 										<c:PromptControl DockPanel.Dock="Top"
 														 Title="Prompt"
