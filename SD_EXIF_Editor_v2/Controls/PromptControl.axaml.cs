@@ -178,7 +178,7 @@ public partial class PromptControl : UserControl
         if(!_isExpanded && lines.Count > MaximumLines)
         {
             // No "..." as it overflows into MaximumLines+1
-            TruncatedPrompt = string.Join(Environment.NewLine, lines.Take(MaximumLines).Select(tl => tl.TextRuns.Single().Text));
+            TruncatedPrompt = string.Join("", lines.Take(MaximumLines).Select(tl => tl.TextRuns.Single().Text));
         }
         else
         {
