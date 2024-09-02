@@ -64,14 +64,12 @@
 											<c:ButtonWithTempContent.Content>
 												<StackPanel Orientation="Horizontal">
 													<PathIcon Data="{StaticResource Copy}"
-															  Height="14"
-															  Foreground="{StaticResource SemiLightBlue5}"/>
+															  Height="14"/>
 													<TextBlock Text="COPY ALL"
 															   Margin="10,0,0,0"
 															   VerticalAlignment="Center"
 															   FontSize="12"
-															   FontWeight="Regular"
-															   Foreground="{StaticResource SemiLightBlue5}"/>
+															   FontWeight="Regular"/>
 												</StackPanel>
 											</c:ButtonWithTempContent.Content>
 											<c:ButtonWithTempContent.TempContent>
