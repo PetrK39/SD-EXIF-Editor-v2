@@ -35,8 +35,9 @@
 			</DockPanel>
 		</HeaderedContentControl.Header>
 		<StackPanel>
-			<TextBlock Text="{Binding Prompt, ElementName=PromptCtrl}"
-					   TextWrapping="WrapWithOverflow"
+			<TextBlock Text="{Binding TruncatedPrompt, ElementName=PromptCtrl}"
+					   Name="PromptTextBlock"
+					   TextWrapping="Wrap"
 					   IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=PromptCtrl}"
 					   Classes="Secondary"/>
 			<TextBlock Text="No prompt available"
@@ -44,6 +45,14 @@
 					   FontStyle="Italic"
 				       TextWrapping="WrapWithOverflow"
 				       Classes="Secondary"/>
+			<Button Click="ShowMoreLessButton_Click"
+					IsVisible="{Binding ShouldDisplayShowMoreLessButton, ElementName=PromptCtrl}"
+					Classes="Small"
+					Content="Show more"
+					HorizontalAlignment="Left"
+					Padding="-2 0"
+					FontWeight="Normal"
+					Theme="{DynamicResource BorderlessButton}"/>
 		</StackPanel>
 	</HeaderedContentControl>
 </UserControl>

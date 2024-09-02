@@ -56,7 +56,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 };
                 _sdMetadata = new()
                 {
-                    Prompt = null,
+                    Prompt = "multi\r\nline\r\nprompt\r\ntest",
                     NegativePrompt = "",
                     Model = new SDModel("model name", "model hash"),
                     Loras = [new SDLora("lora1", "lora1h", 1.23f), new SDLora("lora2", "lora2", -1.23f)]
