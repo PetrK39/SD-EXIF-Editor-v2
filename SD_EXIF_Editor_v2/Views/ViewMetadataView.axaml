@@ -94,8 +94,7 @@
 									<DockPanel IsVisible="{Binding IsFileLoaded}">
 										<c:ResourcesUsedControl DockPanel.Dock="Top"
 																Margin="0 4"
-																ItemsSource="{Binding CivitItemViewModels}"
-																MaximumLines="1"/>
+																ItemsSource="{Binding CivitItemViewModels}"/>
 										<Separator DockPanel.Dock="Top"/>
 										<c:PromptControl DockPanel.Dock="Top"
 														 Title="Prompt"

@@ -24,6 +24,8 @@ public partial class ResourcesUsedControl : UserControl
     public static readonly DirectProperty<ResourcesUsedControl, IEnumerable> TruncatedItemsSourceProperty =
         AvaloniaProperty.RegisterDirect<ResourcesUsedControl, IEnumerable>(nameof(TruncatedItemsSource), o => o.TruncatedItemsSource);
 
+    public static readonly DirectProperty<ResourcesUsedControl, bool> ShouldDisplayPlaceholderProperty =
+        AvaloniaProperty.RegisterDirect<ResourcesUsedControl, bool>(nameof(ShouldDisplayPlaceholder), o => o.ShouldDisplayPlaceholder);
     public IEnumerable ItemsSource
     {
         get => GetValue(ItemsSourceProperty);
@@ -48,6 +50,13 @@ public partial class ResourcesUsedControl : UserControl
     {
         get => _truncatedItemsSource;
         set => SetAndRaise(TruncatedItemsSourceProperty, ref _truncatedItemsSource, value);
+    }
+
+    private bool _shouldDisplayPlaceholder;
+    public bool ShouldDisplayPlaceholder
+    {
+        get => _shouldDisplayPlaceholder;
+        set => SetAndRaise(ShouldDisplayPlaceholderProperty, ref _shouldDisplayPlaceholder, value);
     }
 
     private bool _isExpanded = false;
@@ -120,7 +129,10 @@ public partial class ResourcesUsedControl : UserControl
 
     private void UpdateDisplayProperties()
     {
-        ShouldDisplayShowMoreLessButton = GetItemsSourceCount() > MaximumLines;
+        var count = GetItemsSourceCount();
+
+        ShouldDisplayPlaceholder = count == 0;
+        ShouldDisplayShowMoreLessButton = count > MaximumLines;
     }
 
     private void OnItemsSourceChanged(object? sender, NotifyCollectionChangedEventArgs e)

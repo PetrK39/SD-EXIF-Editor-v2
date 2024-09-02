@@ -20,6 +20,8 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
+			<TextBlock Text="No data available"
+					   IsVisible="{Binding ShouldDisplayPlaceholder, ElementName=ResourcesUsedCtrl}"/>
 			<Button Click="ShowMoreLessButton_Click"
 						IsVisible="{Binding ShouldDisplayShowMoreLessButton, ElementName=ResourcesUsedCtrl}"
 						Classes="Small"
