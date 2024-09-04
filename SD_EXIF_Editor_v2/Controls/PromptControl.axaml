@@ -35,9 +35,10 @@
 			</DockPanel>
 		</HeaderedContentControl.Header>
 		<StackPanel>
-			<TextBlock Text="{Binding TruncatedPrompt, ElementName=PromptCtrl}"
+			<TextBlock Text="{Binding Prompt, ElementName=PromptCtrl}"
 					   Name="PromptTextBlock"
 					   TextWrapping="Wrap"
+					   TextTrimming="CharacterEllipsis"
 					   IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=PromptCtrl}"
 					   Classes="Secondary"/>
 			<TextBlock Text="No prompt available"

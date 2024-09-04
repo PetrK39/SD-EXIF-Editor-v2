@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 
@@ -36,7 +37,7 @@ public partial class PromptControl : UserControl
     public static readonly StyledProperty<bool> DisplayPlaceholderProperty =
         AvaloniaProperty.Register<PromptControl, bool>(nameof(DisplayPlaceholder));
 
-    public static readonly StyledProperty<int> MaximumLinesProperty = 
+    public static readonly StyledProperty<int> MaximumLinesProperty =
         AvaloniaProperty.Register<PromptControl, int>(nameof(MaximumLines), 3);
 
 
@@ -48,9 +49,6 @@ public partial class PromptControl : UserControl
 
     public static readonly DirectProperty<PromptControl, bool> ShouldDisplayShowMoreLessButtonProperty =
         AvaloniaProperty.RegisterDirect<PromptControl, bool>(nameof(ShouldDisplayShowMoreLessButton), o => o.ShouldDisplayShowMoreLessButton);
-
-    public static readonly DirectProperty<PromptControl, string> TruncatedPromptProperty =
-        AvaloniaProperty.RegisterDirect<PromptControl, string>(nameof(TruncatedPrompt), o => o.TruncatedPrompt);
 
     /// <summary>
     /// Gets or sets the Title property. This StyledProperty
@@ -108,13 +106,6 @@ public partial class PromptControl : UserControl
         set => SetAndRaise(ShouldDisplayPlaceholderProperty, ref _shouldDisplayPlaceholder, value);
     }
 
-    private string _truncatedPrompt;
-    public string TruncatedPrompt
-    {
-        get => _truncatedPrompt;
-        set => SetAndRaise(TruncatedPromptProperty, ref _truncatedPrompt, value);
-    }
-
     private bool _shouldDisplayShowMoreLessButton;
     public bool ShouldDisplayShowMoreLessButton
     {
@@ -133,10 +124,9 @@ public partial class PromptControl : UserControl
 
     private void PromptTextBlock_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        if(e.Property == BoundsProperty)
+        if (e.Property == BoundsProperty)
         {
             UpdateShowMoreLessButtonVisibility();
-            UpdateTruncatedPrompt();
         }
     }
 
@@ -150,7 +140,7 @@ public partial class PromptControl : UserControl
         if (change.Property == PromptProperty || change.Property == MaximumLinesProperty)
         {
             UpdateShowMoreLessButtonVisibility();
-            UpdateTruncatedPrompt();
+            UpdateTextBlockMaxLines();
         }
     }
 
@@ -164,46 +154,42 @@ public partial class PromptControl : UserControl
     {
         _isExpanded = !_isExpanded;
 
-        if(sender is Button btn) btn.Content = _isExpanded ? "Show less" : "Show more";
+        if (sender is Button btn) btn.Content = _isExpanded ? "Show less" : "Show more";
 
-        UpdateTruncatedPrompt();
+        UpdateTextBlockMaxLines();
     }
-
-    private void UpdateTruncatedPrompt()
+    private void UpdateTextBlockMaxLines()
     {
-        if (string.IsNullOrEmpty(Prompt)) return;
-
-        var lines = GetTextLines();
-
-        if(!_isExpanded && lines.Count > MaximumLines)
+        if (!_isExpanded)
         {
-            // No "..." as it overflows into MaximumLines+1
-            TruncatedPrompt = string.Join("", lines.Take(MaximumLines).Select(tl => tl.TextRuns.Single().Text));
+            PromptTextBlock.MaxLines = MaximumLines;
         }
         else
         {
-            TruncatedPrompt = Prompt;
+            PromptTextBlock.MaxLines = int.MaxValue;
         }
-
     }
+
     private void UpdateShowMoreLessButtonVisibility()
     {
-        ShouldDisplayShowMoreLessButton = GetTextLines().Count > MaximumLines;
-    }
-    private IReadOnlyList<TextLine> GetTextLines()
-    {
-        var textLayout = new TextLayout(Prompt,
-            GetTypeface(),
-            PromptTextBlock.FontSize,
-            PromptTextBlock.Foreground,
-            PromptTextBlock.TextAlignment,
-            PromptTextBlock.TextWrapping,
-            PromptTextBlock.TextTrimming,
-            PromptTextBlock.TextDecorations,
-            PromptTextBlock.FlowDirection,
-            PromptTextBlock.Bounds.Width * 0.95); // taking 95% of controls width
+        ShouldDisplayShowMoreLessButton = IsTextBlockTruncated();
 
-        return textLayout.TextLines;
+        // Reset _isExpanded state if text fits
+        if (_isExpanded && !ShouldDisplayShowMoreLessButton)
+        {
+            _isExpanded = false;
+            UpdateTextBlockMaxLines();
+        }
     }
-    private Typeface GetTypeface() => new(PromptTextBlock.FontFamily, PromptTextBlock.FontStyle, PromptTextBlock.FontWeight, PromptTextBlock.FontStretch);
+    private bool IsTextBlockTruncated()
+    {
+        // I'm not proud of this solution but hopefully I see no flicker
+
+        var tempMaxLines = PromptTextBlock.MaxLines;
+        PromptTextBlock.MaxLines = MaximumLines;
+        var actualText = string.Join("", PromptTextBlock.TextLayout.TextLines.SelectMany(tl => tl.TextRuns.Select(tr => tr.Text)));
+        PromptTextBlock.MaxLines = tempMaxLines;
+
+        return Prompt.Length > actualText.Length;
+    }
 }
