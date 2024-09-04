@@ -4,13 +4,15 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.ViewModels.Interfaces;
+using System;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
-    public partial class EditMetadataViewModel : ObservableObject, IEditMetadataViewModel
+    public partial class EditMetadataViewModel : ObservableObject, IEditMetadataViewModel, IDisposable
     {
         private readonly ImageModel _imageModel;
         private readonly ILogger _logger;
+        private bool disposedValue;
 
         public bool IsFileLoaded => _imageModel.IsFileLoaded;
         public string RawMetadata
@@ -58,6 +60,24 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private void Clear()
         {
             RawMetadata = "";
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _imageModel.PropertyChanged -= imageModel_PropertyChanged;
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
