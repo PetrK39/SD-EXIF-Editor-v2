@@ -11,9 +11,9 @@
 					   FontWeight="Bold"
 					   FontSize="18"/>
 		</HeaderedContentControl.Header>
-		<StackPanel>
+		<StackPanel Margin="0 6">
 			<ItemsControl ItemsSource="{Binding TruncatedItemsSource, ElementName=ResourcesUsedCtrl}"
-						  Margin="0 4">
+						  IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=ResourcesUsedCtrl}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Spacing="8"/>
@@ -21,6 +21,8 @@
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
 			<TextBlock Text="No data available"
+					   Classes="Secondary"
+					   FontStyle="Italic"
 					   IsVisible="{Binding ShouldDisplayPlaceholder, ElementName=ResourcesUsedCtrl}"/>
 			<Button Click="ShowMoreLessButton_Click"
 						IsVisible="{Binding ShouldDisplayShowMoreLessButton, ElementName=ResourcesUsedCtrl}"
