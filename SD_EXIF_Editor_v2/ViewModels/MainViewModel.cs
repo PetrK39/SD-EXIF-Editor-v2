@@ -28,6 +28,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private readonly ImageModel _imageModel;
         private readonly IFileService _fileService;
 
+        private IDisposable? _previousViewModel = null;
+
         public ObservableCollection<ListItemTemplate> Items { get; }
 
         private readonly List<ListItemTemplate> _templates =
@@ -70,6 +72,9 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 : Ioc.Default.GetService(value.ModelType);
 
             if (vm is not ObservableObject oo) return;
+
+            if(_previousViewModel != null) _previousViewModel.Dispose();
+            if(vm is IDisposable disposable) _previousViewModel = disposable;
 
             CurrentPage = oo;
         }

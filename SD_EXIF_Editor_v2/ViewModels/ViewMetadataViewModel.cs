@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
-    public partial class ViewMetadataViewModel : ObservableObject, IViewMetadataViewModel
+    public partial class ViewMetadataViewModel : ObservableObject, IViewMetadataViewModel, IDisposable
     {
         private readonly ImageModel _imageModel;
         private readonly IMetadataParserService _metadataParserService;
@@ -36,6 +36,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
         [ObservableProperty]
         private bool _isCivitBusy = false;
+        private bool disposedValue;
+
         public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; init; }
 
         public bool ShouldDisplayPlaceholders => _settingsService.DisplayPlaceholders;
@@ -134,7 +136,6 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 case nameof(_imageModel.IsFileLoaded):
                     OnPropertyChanged(nameof(IsFileLoaded));
-                    CopyToClipboardCommand.NotifyCanExecuteChanged();
                     break;
                 case nameof(_imageModel.FilePath):
                     OnPropertyChanged(nameof(FilePath));
@@ -142,6 +143,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 case nameof(_imageModel.RawMetadata):
                     OnPropertyChanged(nameof(RawMetadata));
                     await UpdateSdMetadata();
+                    CopyToClipboardCommand.NotifyCanExecuteChanged();
                     break;
             }
 
@@ -180,6 +182,25 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 IsCivitBusy = false;
                 _logger.LogTrace("Exiting LoadItemsCivitItemViewModels method.");
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _imageModel.PropertyChanged -= imageModel_PropertyChanged;
+                    _settingsService.PropertyChanged -= settingsService_PropertyChanged;
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
