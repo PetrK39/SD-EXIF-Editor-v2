@@ -185,6 +185,8 @@ public partial class PromptControl : UserControl
     {
         // I'm not proud of this solution but hopefully I see no flicker
 
+        if (string.IsNullOrWhiteSpace(Prompt)) return false;
+
         var tempMaxLines = PromptTextBlock.MaxLines;
         PromptTextBlock.MaxLines = MaximumLines;
         var actualText = string.Join("", PromptTextBlock.TextLayout.TextLines.SelectMany(tl => tl.TextRuns.Select(tr => tr.Text)));
