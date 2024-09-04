@@ -38,7 +38,7 @@
 			<TextBlock Text="{Binding Prompt, ElementName=PromptCtrl}"
 					   Name="PromptTextBlock"
 					   TextWrapping="Wrap"
-					   TextTrimming="CharacterEllipsis"
+					   TextTrimming="WordEllipsis"
 					   IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=PromptCtrl}"
 					   Classes="Secondary"/>
 			<TextBlock Text="No prompt available"
