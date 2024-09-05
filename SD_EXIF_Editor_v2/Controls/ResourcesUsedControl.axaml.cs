@@ -18,6 +18,9 @@ public partial class ResourcesUsedControl : UserControl
     public static readonly StyledProperty<int> MaximumLinesProperty =
         AvaloniaProperty.Register<ResourcesUsedControl, int>(nameof(MaximumLines), 3);
 
+    public static readonly StyledProperty<bool> IsCivitServiceBusyProperty =
+        AvaloniaProperty.Register<ResourcesUsedControl, bool>(nameof(IsCivitServiceBusy));
+
     public static readonly DirectProperty<ResourcesUsedControl, bool> ShouldDisplayShowMoreLessButtonProperty =
         AvaloniaProperty.RegisterDirect<ResourcesUsedControl, bool>(nameof(ShouldDisplayShowMoreLessButton), o => o.ShouldDisplayShowMoreLessButton);
 
@@ -36,6 +39,12 @@ public partial class ResourcesUsedControl : UserControl
     {
         get => GetValue(MaximumLinesProperty);
         set => SetValue(MaximumLinesProperty, value);
+    }
+
+    public bool IsCivitServiceBusy
+    {
+        get => GetValue(IsCivitServiceBusyProperty);
+        set => SetValue(IsCivitServiceBusyProperty, value);
     }
 
     private bool _shouldDisplayShowMoreLessButton;

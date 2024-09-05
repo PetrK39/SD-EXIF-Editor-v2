@@ -12,6 +12,10 @@
 					   FontSize="18"/>
 		</HeaderedContentControl.Header>
 		<StackPanel Margin="0 6">
+			<ProgressBar Opacity="{Binding IsCivitServiceBusy, Converter={StaticResource BoolToFloatConverter}, ElementName=ResourcesUsedCtrl}"
+						 IsIndeterminate="True"
+						 Name="BusyProgressBar"
+						 Margin="0 4"/>
 			<ItemsControl ItemsSource="{Binding TruncatedItemsSource, ElementName=ResourcesUsedCtrl}"
 						  IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=ResourcesUsedCtrl}">
 				<ItemsControl.ItemsPanel>
