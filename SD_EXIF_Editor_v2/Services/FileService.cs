@@ -56,7 +56,7 @@ namespace SD_EXIF_Editor_v2.Services
             _logger.LogTrace("Exiting LoadFile method.");
         }
 
-        public void SaveFile(ImageModel imageModel)
+        public void SaveFileFromModel(ImageModel imageModel)
         {
             _logger.LogTrace("Entering SaveFile method.");
 
@@ -84,6 +84,23 @@ namespace SD_EXIF_Editor_v2.Services
 
             _logger.LogTrace("Exiting SaveFile method.");
         }
+        public void SaveFileAsFromModel(ImageModel imageModel, string newPath)
+        {
+            if (!imageModel.IsFileLoaded) return;
+
+            var oldFile = new FileInfo(imageModel.FilePath!);
+
+            if (!oldFile.Exists)
+            {
+                throw new FileNotFoundException("File not found", oldFile.FullName);
+            }
+
+            oldFile.CopyTo(newPath, true);
+
+            imageModel.FilePath = newPath;
+
+            SaveFileFromModel(imageModel);
+        }
         public void CloseFileFromModel(ImageModel imageModel)
         {
             imageModel.IsFileLoaded = false;
@@ -101,7 +118,16 @@ namespace SD_EXIF_Editor_v2.Services
 
             return result.Count >= 1 ? result[0].Path : null;
         }
+        public async Task<Uri?> PickFileToSave()
+        {
+            var result = await GetStorageProvider().SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                ShowOverwritePrompt = true,
+                Title = "Save Stable Diffusion image:"
+            });
 
+            return result?.Path;
+        }
         private PNGText GetMetadataProperty(ImageFile imageFile)
         {
             var prop = imageFile.Properties.Where(p => p is PNGText).Cast<PNGText>().SingleOrDefault(p => p.Keyword == MetadataFieldName);

@@ -63,8 +63,10 @@
 							<MenuItem Header="Close"
 									  Command="{Binding CloseCommand}"/>
 							<MenuItem Header="Save">
-								<MenuItem Header="Save"/>
-								<MenuItem Header="Save as..."/>
+								<MenuItem Header="Save"
+										  Command="{Binding SaveCommand}"/>
+								<MenuItem Header="Save as..."
+										  Command="{Binding SaveAsCommand}"/>
 							</MenuItem>
 						</MenuItem>
 						<MenuItem Header="Edit">
