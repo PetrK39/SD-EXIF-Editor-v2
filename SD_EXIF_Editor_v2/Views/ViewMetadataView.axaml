@@ -28,14 +28,16 @@
 					   Grid.RowSpan="{Binding !IsHorisontal, Converter={StaticResource OrientationToGridSpanConverter}}"
 					   IsVisible="{Binding IsFileLoaded}"
 					   Source="{Binding FileUri, Converter={StaticResource PathBitmapConverter}}"
-					   Stretch="Uniform"/>
+					   Stretch="Uniform"
+					   Margin="12"/>
 				<Border Grid.Column="0"
 						Grid.Row="0"
 						Grid.ColumnSpan="{Binding IsHorisontal, Converter={StaticResource OrientationToGridSpanConverter}}"
 					    Grid.RowSpan="{Binding !IsHorisontal, Converter={StaticResource OrientationToGridSpanConverter}}"
 						IsVisible="{Binding !IsFileLoaded}"
 						HorizontalAlignment="Center"
-						VerticalAlignment="Center">
+						VerticalAlignment="Center"
+						Margin="12">
 					<StackPanel>
 						<PathIcon Data="{StaticResource Image}"
 								  Width="100"
