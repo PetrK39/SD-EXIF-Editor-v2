@@ -68,7 +68,7 @@ namespace SD_EXIF_Editor_v2
             .ConfigureLogging((context, logging) =>
             {
                 logging.ClearProviders();
-                logging.AddNLog("NLog-windows.config");
+                logging.AddNLog();
             })
             .Build();
 
