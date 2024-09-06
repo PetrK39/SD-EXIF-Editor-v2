@@ -9,6 +9,7 @@ using NLog.Extensions.Logging;
 using SD_EXIF_Editor_v2.Factories;
 using SD_EXIF_Editor_v2.Factories.Interfaces;
 using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.Models;
 using SD_EXIF_Editor_v2.Properties;
 using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
@@ -37,6 +38,7 @@ namespace SD_EXIF_Editor_v2
                 services.AddTransient<IStartupFileService, StartupFileService>();
                 services.AddTransient<IMetadataParserService, MetadataParserService>();
                 services.AddTransient<IFileService, FileService>();
+                services.AddTransient<IClipboardService, ClipboardService>();
 
                 services.AddTransient<ICivitItemViewModelFactory, CivitItemViewModelFactory>();
 
@@ -48,6 +50,7 @@ namespace SD_EXIF_Editor_v2
 
                 // Models
                 services.AddSingleton<ImageModel>();
+                services.AddSingleton<WindowOrientationModel>();
 
                 // ViewModels
                 services.AddSingleton<MainViewModel>();

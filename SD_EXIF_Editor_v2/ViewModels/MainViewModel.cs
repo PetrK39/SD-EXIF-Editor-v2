@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
-    public partial class MainViewModel : ObservableObject, IRecipient<WindowLoadedMessage>
+    public partial class MainViewModel : ObservableObject, IRecipient<WindowLoadedMessage>, IRecipient<WindowSizeChangedMessage>
     {
         [ObservableProperty]
         private bool _isPaneOpen;
@@ -28,6 +28,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private ListItemTemplate? _selectedListItem;
 
         private readonly ImageModel _imageModel;
+        private readonly WindowOrientationModel _windowOrientationModel;
         private readonly IFileService _fileService;
         private readonly IStartupFileService _startupFileService;
 
@@ -56,23 +57,29 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 _startupFileService = null!;
             }
         }
-        public MainViewModel(ImageModel imageModel, IFileService fileService, IStartupFileService startupFileService)
+        public MainViewModel(ImageModel imageModel, WindowOrientationModel windowOrientationModel, IFileService fileService, IStartupFileService startupFileService)
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
 
             SelectedListItem = Items.First(vm => vm.ModelType == typeof(ViewMetadataViewModel));
 
             _imageModel = imageModel;
+            _windowOrientationModel = windowOrientationModel;
             _fileService = fileService;
             _startupFileService = startupFileService;
 
-            WeakReferenceMessenger.Default.Register(this);
+            WeakReferenceMessenger.Default.Register<WindowLoadedMessage>(this);
+            WeakReferenceMessenger.Default.Register<WindowSizeChangedMessage>(this);
         }
 
         public async void Receive(WindowLoadedMessage message)
         {
             if (message.Value)
                 await InitializeStartupFile();
+        }
+        public void Receive(WindowSizeChangedMessage message)
+        {
+            _windowOrientationModel.IsHorizontal = message.Value;
         }
 
         private async Task InitializeStartupFile()

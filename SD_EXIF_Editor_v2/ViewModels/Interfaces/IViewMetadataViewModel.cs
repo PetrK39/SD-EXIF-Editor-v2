@@ -21,6 +21,6 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
 
         public bool ShouldDisplayPlaceholders { get; }
 
-        public IRelayCommand<string> CopyToClipboardCommand { get; }
+        public IAsyncRelayCommand<string> CopyToClipboardCommand { get; }
     }
 }

@@ -35,7 +35,7 @@ namespace SD_EXIF_Editor_v2.Services
                 imageModel.IsFileLoaded = true;
                 imageModel.FileUri = fileUri;
 
-                var storageFile = await StorageProviderUtils.GetStorageProvider().TryGetFileFromPathAsync(fileUri);
+                var storageFile = await AvaloniaUtils.GetStorageProvider().TryGetFileFromPathAsync(fileUri);
 
                 using (var stream = await storageFile.OpenReadAsync())
                 {
@@ -72,7 +72,7 @@ namespace SD_EXIF_Editor_v2.Services
 
             try
             {
-                var file = await StorageProviderUtils.GetStorageProvider().TryGetFileFromPathAsync(imageModel.FileUri!);
+                var file = await AvaloniaUtils.GetStorageProvider().TryGetFileFromPathAsync(imageModel.FileUri!);
 
                 if (file is null)
                 {
@@ -108,7 +108,7 @@ namespace SD_EXIF_Editor_v2.Services
         {
             if (!imageModel.IsFileLoaded) return;
 
-            var sp = StorageProviderUtils.GetStorageProvider();
+            var sp = AvaloniaUtils.GetStorageProvider();
 
             var oldFile = await sp.TryGetFileFromPathAsync(imageModel.FileUri!);
 
@@ -140,7 +140,7 @@ namespace SD_EXIF_Editor_v2.Services
         }
         public async Task<Uri?> PickFileToLoad()
         {
-            var result = await StorageProviderUtils.GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions
+            var result = await AvaloniaUtils.GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 AllowMultiple = false,
                 FileTypeFilter = [FilePickerFileTypes.ImagePng],
@@ -151,7 +151,7 @@ namespace SD_EXIF_Editor_v2.Services
         }
         public async Task<IStorageFile?> PickFileToSave()
         {
-            var result = await StorageProviderUtils.GetStorageProvider().SaveFilePickerAsync(new FilePickerSaveOptions
+            var result = await AvaloniaUtils.GetStorageProvider().SaveFilePickerAsync(new FilePickerSaveOptions
             {
                 ShowOverwritePrompt = true,
                 Title = "Save Stable Diffusion image:"

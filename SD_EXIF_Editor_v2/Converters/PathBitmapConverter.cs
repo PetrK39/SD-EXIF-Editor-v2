@@ -25,7 +25,7 @@ namespace SD_EXIF_Editor_v2.Converters
             }
             else
             {
-                var file = StorageProviderUtils.GetStorageProvider().TryGetFileFromPathAsync(uri).Result;
+                var file = AvaloniaUtils.GetStorageProvider().TryGetFileFromPathAsync(uri).Result;
                 using var stream = file.OpenReadAsync().Result;
                 return new Bitmap(stream);
             }

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Factories.Interfaces;
 using SD_EXIF_Editor_v2.Model;
+using SD_EXIF_Editor_v2.Models;
 using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.ViewModels.Interfaces;
@@ -19,10 +20,12 @@ namespace SD_EXIF_Editor_v2.ViewModels
     public partial class ViewMetadataViewModel : ObservableObject, IViewMetadataViewModel, IDisposable
     {
         private readonly ImageModel _imageModel;
+        private readonly WindowOrientationModel _windowOrientationModel;
         private readonly IMetadataParserService _metadataParserService;
         private readonly ICivitService _civitService;
         private readonly ISettingsService _settingsService;
         private readonly ICivitItemViewModelFactory _civitItemViewModelFactory;
+        private readonly IClipboardService _clipboardService;
         private readonly ILogger _logger;
 
         private SDMetadata? _sdMetadata;
@@ -41,6 +44,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; init; }
 
         public bool ShouldDisplayPlaceholders => _settingsService.DisplayPlaceholders;
+
+        public bool IsHorisontal => _windowOrientationModel.IsHorizontal;
 
 
 
@@ -76,20 +81,25 @@ namespace SD_EXIF_Editor_v2.ViewModels
             }
         }
         public ViewMetadataViewModel(ImageModel imageModel,
+            WindowOrientationModel windowOrientationModel,
             IMetadataParserService metadataParserService,
             ICivitService civitService,
             ISettingsService settingsService,
             ICivitItemViewModelFactory viewModelFactory,
+            IClipboardService clipboardService,
             ILogger<ViewMetadataViewModel> logger)
         {
             _imageModel = imageModel;
+            _windowOrientationModel = windowOrientationModel;
             _metadataParserService = metadataParserService;
             _civitService = civitService;
             _settingsService = settingsService;
             _civitItemViewModelFactory = viewModelFactory;
+            _clipboardService = clipboardService;
             _logger = logger;
 
             _imageModel.PropertyChanged += imageModel_PropertyChanged;
+            _windowOrientationModel.PropertyChanged += windowOrientationModel_PropertyChanged;
             _settingsService.PropertyChanged += settingsService_PropertyChanged;
             CivitItemViewModels = [];
 
@@ -98,19 +108,24 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _logger.LogTrace("ViewViewModel initialized.");
         }
 
+        private void windowOrientationModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_windowOrientationModel.IsHorizontal))
+                OnPropertyChanged(nameof(IsHorisontal));
+        }
+
         private void settingsService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(_settingsService.DisplayPlaceholders))
+            if (e.PropertyName == nameof(_settingsService.DisplayPlaceholders))
             {
                 OnPropertyChanged(nameof(ShouldDisplayPlaceholders));
             }
         }
 
         [RelayCommand(CanExecute = nameof(CopyToClipboardCanExecute))]
-        private void CopyToClipboard(string text)
+        private async Task CopyToClipboard(string text)
         {
-            // TODO: implement the service 
-            ;
+            await _clipboardService.CopyToClipboardAsync(text);
         }
         private bool CopyToClipboardCanExecute(string text) => !string.IsNullOrWhiteSpace(text);
         private async Task UpdateSdMetadata()
