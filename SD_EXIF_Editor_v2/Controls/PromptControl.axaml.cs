@@ -128,6 +128,11 @@ public partial class PromptControl : UserControl
         {
             UpdateShowMoreLessButtonVisibility();
         }
+        if (e.Property == TextBlock.TextProperty)
+        {
+            UpdateDisplayProperties();
+            UpdateShowMoreLessButtonVisibility();
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
