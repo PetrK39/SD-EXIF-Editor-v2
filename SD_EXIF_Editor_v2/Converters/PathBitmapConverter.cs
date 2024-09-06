@@ -1,6 +1,8 @@
 ﻿using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
+using SD_EXIF_Editor_v2.Utils;
 using System;
 using System.Globalization;
 
@@ -12,18 +14,20 @@ namespace SD_EXIF_Editor_v2.Converters
         {
             if (value == null) return null;
 
-            if (value is not string rawUri || !targetType.IsAssignableFrom(typeof(Bitmap)))
+            if (value is not Uri uri || !targetType.IsAssignableFrom(typeof(Bitmap)))
             {
                 throw new NotSupportedException();
             }
 
-            if (rawUri.StartsWith("avares://"))
+            if (uri.ToString().StartsWith("avares://"))
             {
-                return new Bitmap(AssetLoader.Open(new Uri(rawUri)));
+                return new Bitmap(AssetLoader.Open(uri));
             }
             else
             {
-                return new Bitmap(rawUri);
+                var file = StorageProviderUtils.GetStorageProvider().TryGetFileFromPathAsync(uri).Result;
+                using var stream = file.OpenReadAsync().Result;
+                return new Bitmap(stream);
             }
         }
 

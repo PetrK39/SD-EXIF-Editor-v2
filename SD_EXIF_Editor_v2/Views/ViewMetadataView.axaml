@@ -23,7 +23,7 @@
 				  Grid.Row="2">
 				<Image Grid.Column="0"
 					   IsVisible="{Binding IsFileLoaded}"
-					   Source="{Binding FilePath, Converter={StaticResource PathBitmapConverter}}"
+					   Source="{Binding FileUri, Converter={StaticResource PathBitmapConverter}}"
 					   Stretch="Uniform"/>
 				<Border Grid.Column="0"
 						IsVisible="{Binding !IsFileLoaded}"

@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using SD_EXIF_Editor_v2.Messages;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Models;
 using SD_EXIF_Editor_v2.Services.Interfaces;
@@ -14,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainViewModel : ObservableObject, IRecipient<WindowLoadedMessage>
     {
         [ObservableProperty]
         private bool _isPaneOpen;
@@ -47,7 +49,6 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _imageModel = new ImageModel()
                 {
-                    FilePath = "/test/path/to/image.png",
                     RawMetadata = "prompt\r\nNegative prompt:negative\r\nVersion: design",
                     IsFileLoaded = true
                 };
@@ -65,17 +66,24 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _fileService = fileService;
             _startupFileService = startupFileService;
 
-            if (!Design.IsDesignMode)
-                InitializeStartupFile();
+            WeakReferenceMessenger.Default.Register(this);
         }
 
-        private async void InitializeStartupFile()
+        public async void Receive(WindowLoadedMessage message)
+        {
+            if (message.Value)
+                await InitializeStartupFile();
+        }
+
+        private async Task InitializeStartupFile()
         {
             var filePath = await _startupFileService.GetStartupFileAsync();
 
             if (filePath is null) return;
 
-            _fileService.LoadFileIntoModel(_imageModel, filePath);
+            var uri = new Uri(filePath);
+
+            await _fileService.LoadFileIntoModelAsync(_imageModel, uri);
         }
 
         partial void OnSelectedListItemChanged(ListItemTemplate? value)
@@ -106,12 +114,12 @@ namespace SD_EXIF_Editor_v2.ViewModels
         [RelayCommand]
         private async Task OpenAsync()
         {
-            var file = await _fileService.PickFile();
+            var file = await _fileService.PickFileToLoad();
             if (file is null) return;
             // TODO: android support requires a lot of additional work for content providers, paths and stuff
-            _fileService.LoadFileIntoModel(_imageModel, file.LocalPath);
+            await _fileService.LoadFileIntoModelAsync(_imageModel, file);
         }
-        
+
         [RelayCommand(CanExecute = nameof(IsFileLoaded))]
         private void Close()
         {
@@ -119,19 +127,19 @@ namespace SD_EXIF_Editor_v2.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(IsFileLoaded))]
-        private void Save()
+        private async Task SaveAsync()
         {
-            _fileService.SaveFileFromModel(_imageModel);
+            await _fileService.SaveFileFromModelAsync(_imageModel);
         }
 
-        [RelayCommand(CanExecute =nameof(IsFileLoaded))]
-        private async Task SaveAs()
+        [RelayCommand(CanExecute = nameof(IsFileLoaded))]
+        private async Task SaveAsAsync()
         {
             var newPath = await _fileService.PickFileToSave();
 
             if (newPath is null) return;
 
-            _fileService.SaveFileAsFromModel(_imageModel, newPath.LocalPath);
+            await _fileService.SaveFileAsFromModelAsync(_imageModel, newPath);
         }
         #endregion
     }

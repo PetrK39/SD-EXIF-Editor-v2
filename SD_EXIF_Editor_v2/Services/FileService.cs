@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using SD_EXIF_Editor_v2.Utils;
 using SD_EXIF_Editor_v2.Views;
 using System;
 using System.IO;
@@ -24,39 +25,42 @@ namespace SD_EXIF_Editor_v2.Services
 
             _logger.LogTrace("FileService initialized.");
         }
-        public void LoadFileIntoModel(ImageModel imageModel, string filePath)
+        public async Task LoadFileIntoModelAsync(ImageModel imageModel, Uri fileUri)
         {
             _logger.LogTrace("Entering LoadFile method.");
-            _logger.LogDebug("Loading image from file path: {FilePath}", filePath);
+            _logger.LogDebug("Loading image from file path: {FileUri}", fileUri);
 
             try
             {
                 imageModel.IsFileLoaded = true;
-                imageModel.FilePath = filePath;
+                imageModel.FileUri = fileUri;
 
-                using (var stream = File.OpenRead(filePath))
+                var storageFile = await StorageProviderUtils.GetStorageProvider().TryGetFileFromPathAsync(fileUri);
+
+                using (var stream = await storageFile.OpenReadAsync())
                 {
                     var imageFile = ImageFile.FromStream(stream);
 
                     var prop = GetMetadataProperty(imageFile);
                     imageModel.RawMetadata = prop.Value;
                 }
-                _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
+
+                _logger.LogInformation("Image loaded successfully from file uri");
             }
             catch (Exception ex)
             {
                 imageModel.IsFileLoaded = false;
-                imageModel.FilePath = null;
+                imageModel.FileUri = null;
                 imageModel.RawMetadata = null;
 
-                _logger.LogError(ex, "Failed to load image from file path: {FilePath}.", filePath);
+                _logger.LogError(ex, "Failed to load image from file uri.");
                 throw;
             }
 
             _logger.LogTrace("Exiting LoadFile method.");
         }
 
-        public void SaveFileFromModel(ImageModel imageModel)
+        public async Task SaveFileFromModelAsync(ImageModel imageModel)
         {
             _logger.LogTrace("Entering SaveFile method.");
 
@@ -68,48 +72,75 @@ namespace SD_EXIF_Editor_v2.Services
 
             try
             {
-                var imageFile = ImageFile.FromFile(imageModel.FilePath);
+                var file = await StorageProviderUtils.GetStorageProvider().TryGetFileFromPathAsync(imageModel.FileUri!);
+
+                if (file is null)
+                {
+                    throw new FileNotFoundException("File not found", imageModel.FileUri!.LocalPath);
+                }
+
+                ImageFile? imageFile = null;
+
+                using (var streamRead = await file.OpenReadAsync())
+                {
+                    imageFile = await ImageFile.FromStreamAsync(streamRead);
+                }
 
                 var prop = GetMetadataProperty(imageFile);
                 prop.Value = imageModel.RawMetadata;
 
-                imageFile.Save(imageModel.FilePath);
-                _logger.LogInformation("Image changes saved successfully to file path: {FilePath}", imageModel.FilePath);
+                using (var streamWrite = await file.OpenWriteAsync())
+                {
+                    await imageFile.SaveAsync(streamWrite);
+                }
+
+                _logger.LogInformation("Image changes saved successfully.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to save image changes to file path: {FilePath}.", imageModel.FilePath);
+                _logger.LogError(ex, "Failed to save image changes to file.");
                 throw;
             }
 
             _logger.LogTrace("Exiting SaveFile method.");
         }
-        public void SaveFileAsFromModel(ImageModel imageModel, string newPath)
+        public async Task SaveFileAsFromModelAsync(ImageModel imageModel, IStorageFile newFile)
         {
             if (!imageModel.IsFileLoaded) return;
 
-            var oldFile = new FileInfo(imageModel.FilePath!);
+            var sp = StorageProviderUtils.GetStorageProvider();
 
-            if (!oldFile.Exists)
+            var oldFile = await sp.TryGetFileFromPathAsync(imageModel.FileUri!);
+
+            if (oldFile is null)
             {
-                throw new FileNotFoundException("File not found", oldFile.FullName);
+                throw new FileNotFoundException("File not found", imageModel.FileUri!.LocalPath);
             }
 
-            oldFile.CopyTo(newPath, true);
+            if (newFile is null)
+            {
+                throw new FileNotFoundException("No new file specified");
+            }
 
-            imageModel.FilePath = newPath;
+            using (var streamOld = await oldFile.OpenReadAsync())
+            using (var streamNew = await newFile.OpenWriteAsync())
+            {
+                await streamOld.CopyToAsync(streamNew);
+            }
 
-            SaveFileFromModel(imageModel);
+            imageModel.FileUri = newFile.Path;
+
+            await SaveFileFromModelAsync(imageModel);
         }
         public void CloseFileFromModel(ImageModel imageModel)
         {
             imageModel.IsFileLoaded = false;
-            imageModel.FilePath = null;
+            imageModel.FileUri = null;
             imageModel.RawMetadata = null;
         }
-        public async Task<Uri?> PickFile()
+        public async Task<Uri?> PickFileToLoad()
         {
-            var result = await GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions
+            var result = await StorageProviderUtils.GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 AllowMultiple = false,
                 FileTypeFilter = [FilePickerFileTypes.ImagePng],
@@ -118,15 +149,15 @@ namespace SD_EXIF_Editor_v2.Services
 
             return result.Count >= 1 ? result[0].Path : null;
         }
-        public async Task<Uri?> PickFileToSave()
+        public async Task<IStorageFile?> PickFileToSave()
         {
-            var result = await GetStorageProvider().SaveFilePickerAsync(new FilePickerSaveOptions
+            var result = await StorageProviderUtils.GetStorageProvider().SaveFilePickerAsync(new FilePickerSaveOptions
             {
                 ShowOverwritePrompt = true,
                 Title = "Save Stable Diffusion image:"
             });
 
-            return result?.Path;
+            return result;
         }
         private PNGText GetMetadataProperty(ImageFile imageFile)
         {
@@ -138,19 +169,6 @@ namespace SD_EXIF_Editor_v2.Services
                 imageFile.Properties.Add(prop);
             }
             return prop;
-        }
-        private IStorageProvider GetStorageProvider()
-        {
-            if (App.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                return desktop.MainWindow!.StorageProvider;
-            }
-            else if (App.Current.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-            {
-                return TopLevel.GetTopLevel(singleViewPlatform.MainView).StorageProvider;
-            }
-
-            throw new NotImplementedException();
         }
     }
 }

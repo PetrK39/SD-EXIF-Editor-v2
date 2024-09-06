@@ -28,7 +28,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private SDMetadata? _sdMetadata;
 
         public bool IsFileLoaded => _imageModel.IsFileLoaded;
-        public string FilePath => _imageModel.FilePath;
+        public Uri FileUri => _imageModel.FileUri;
         public string RawMetadata => _imageModel.RawMetadata;
         public string? Prompt => _sdMetadata?.Prompt;
         public string? NegativePrompt => _sdMetadata?.NegativePrompt;
@@ -52,8 +52,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _imageModel = new ImageModel()
                 {
-                    FilePath = "null",
-                    RawMetadata = "null",
+                    RawMetadata = null,
                     IsFileLoaded = true
                 };
                 _sdMetadata = new()
@@ -137,8 +136,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 case nameof(_imageModel.IsFileLoaded):
                     OnPropertyChanged(nameof(IsFileLoaded));
                     break;
-                case nameof(_imageModel.FilePath):
-                    OnPropertyChanged(nameof(FilePath));
+                case nameof(_imageModel.FileUri):
+                    OnPropertyChanged(nameof(FileUri));
                     break;
                 case nameof(_imageModel.RawMetadata):
                     OnPropertyChanged(nameof(RawMetadata));

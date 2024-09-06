@@ -27,7 +27,6 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _imageModel = new ImageModel()
                 {
-                    FilePath = "/test/path/to/image.png",
                     RawMetadata = "prompt\r\nNegative prompt:negative\r\nVersion: design",
                     IsFileLoaded = false
                 };
