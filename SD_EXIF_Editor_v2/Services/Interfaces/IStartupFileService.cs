@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.Services.Interfaces
 {
-    public interface IArgsParserService
+    public interface IStartupFileService
     {
-        public Task<FileInfo> ParseArgsAsync(string[] args);
+        public Task<string?> GetStartupFileAsync();
     }
 }
