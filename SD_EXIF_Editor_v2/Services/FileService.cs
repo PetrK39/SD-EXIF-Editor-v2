@@ -41,7 +41,7 @@ namespace SD_EXIF_Editor_v2.Services
                     var prop = GetMetadataProperty(imageFile);
                     imageModel.RawMetadata = prop.Value;
                 }
-                    _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
+                _logger.LogInformation("Image loaded successfully from file path: {FilePath}", filePath);
             }
             catch (Exception ex)
             {
@@ -83,6 +83,12 @@ namespace SD_EXIF_Editor_v2.Services
             }
 
             _logger.LogTrace("Exiting SaveFile method.");
+        }
+        public void CloseFileFromModel(ImageModel imageModel)
+        {
+            imageModel.IsFileLoaded = false;
+            imageModel.FilePath = null;
+            imageModel.RawMetadata = null;
         }
         public async Task<Uri?> PickFile()
         {

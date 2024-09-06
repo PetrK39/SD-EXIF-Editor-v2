@@ -10,5 +10,6 @@ namespace SD_EXIF_Editor_v2.Services.Interfaces
 
         void LoadFileIntoModel(ImageModel imageModel, string filePath);
         void SaveFile(ImageModel imageModel);
+        void CloseFileFromModel(ImageModel imageModel);
     }
 }

@@ -109,6 +109,12 @@ namespace SD_EXIF_Editor_v2.ViewModels
             // TODO: android support requires a lot of additional work for content providers, paths and stuff
             _fileService.LoadFileIntoModel(_imageModel, file.LocalPath);
         }
+        [RelayCommand(CanExecute = nameof(CloseCanExecute))]
+        private void Close()
+        {
+            _fileService.CloseFileFromModel(_imageModel);
+        }
+        private bool CloseCanExecute() => _imageModel.IsFileLoaded;
         #endregion
     }
 }

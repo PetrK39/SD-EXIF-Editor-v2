@@ -60,7 +60,8 @@
 							<MenuItem Header="Open"
 									  CornerRadius="12 0 0 0"
 									  Command="{Binding OpenCommand}"/>
-							<MenuItem Header="Close"/>
+							<MenuItem Header="Close"
+									  Command="{Binding CloseCommand}"/>
 							<MenuItem Header="Save">
 								<MenuItem Header="Save"/>
 								<MenuItem Header="Save as..."/>
