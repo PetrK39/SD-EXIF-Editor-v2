@@ -154,16 +154,16 @@
 							<StackPanel>
 								<ail:AdvancedImage Source="{Binding Uri}"
 												   Name="Image"
-												   MaxHeight="400"
-												   MaxWidth="400"/>
+												   MaxHeight="{OnPlatform 400, Android=200}"
+												   MaxWidth="{OnPlatform 400, Android=200}"/>
 								<ProgressBar Theme="{DynamicResource ProgressRing}"
 											 IsIndeterminate="True"
 											 IsVisible="{Binding ElementName=Image, Path=IsLoading}"
 											 HorizontalAlignment="Center"
 											 VerticalAlignment="Center"
 											 Margin="24 48"
-											 Width="100"
-											 Height="100"/>
+											 Width="{OnPlatform 100, Android=50}"
+											 Height="{OnPlatform 100, Android=50}"/>
 							</StackPanel>
 						</DataTemplate>
 					</Carousel.ItemTemplate>
@@ -187,9 +187,10 @@
 				<Border	Grid.Row="1"
 						Grid.ColumnSpan="2"
 						IsVisible="{Binding VM.IsFilteredImagesEmpty, Source={StaticResource VMProxy}}"
-						Width="400"
-						Height="200">
+						Width="{OnPlatform 400, Android=200}"
+						Height="{OnPlatform 200, Android=100}">
 					<TextBlock Text="Images hidden due to mature content settings"
+							   TextWrapping="WrapWithOverflow"
 							   HorizontalAlignment="Center"
 							   VerticalAlignment="Center"/>
 				</Border>
