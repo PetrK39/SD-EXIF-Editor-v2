@@ -27,6 +27,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
         private readonly ImageModel _imageModel;
         private readonly IFileService _fileService;
+        private readonly IStartupFileService _startupFileService;
 
         private IDisposable? _previousViewModel = null;
 
@@ -51,9 +52,10 @@ namespace SD_EXIF_Editor_v2.ViewModels
                     IsFileLoaded = true
                 };
                 _fileService = null!;
+                _startupFileService = null!;
             }
         }
-        public MainViewModel(ImageModel imageModel, IFileService fileService)
+        public MainViewModel(ImageModel imageModel, IFileService fileService, IStartupFileService startupFileService)
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
 
@@ -61,6 +63,19 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             _imageModel = imageModel;
             _fileService = fileService;
+            _startupFileService = startupFileService;
+
+            if (!Design.IsDesignMode)
+                InitializeStartupFile();
+        }
+
+        private async void InitializeStartupFile()
+        {
+            var filePath = await _startupFileService.GetStartupFileAsync();
+
+            if (filePath is null) return;
+
+            _fileService.LoadFileIntoModel(_imageModel, filePath);
         }
 
         partial void OnSelectedListItemChanged(ListItemTemplate? value)
@@ -73,8 +88,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             if (vm is not ObservableObject oo) return;
 
-            if(_previousViewModel != null) _previousViewModel.Dispose();
-            if(vm is IDisposable disposable) _previousViewModel = disposable;
+            if (_previousViewModel != null) _previousViewModel.Dispose();
+            if (vm is IDisposable disposable) _previousViewModel = disposable;
 
             CurrentPage = oo;
         }
@@ -90,7 +105,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private async Task OpenAsync()
         {
             var file = await _fileService.PickFile();
-            if(file is null) return;
+            if (file is null) return;
             // TODO: android support requires a lot of additional work for content providers, paths and stuff
             _fileService.LoadFileIntoModel(_imageModel, file.LocalPath);
         }

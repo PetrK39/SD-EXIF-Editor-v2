@@ -55,18 +55,20 @@
 					Background="#2d2d2d">
 				<DockPanel>
 					<Menu DockPanel.Dock="Top">
-						<MenuItem Header="File">
-						<MenuItem Header="Open" 
+						<MenuItem Header="File"
 								  CornerRadius="12 0 0 0">
-							<MenuItem Header="File..."
+							<MenuItem Header="Open"
+									  CornerRadius="12 0 0 0"
 									  Command="{Binding OpenCommand}"/>
-							<MenuItem Header="Directory..."/>
+							<MenuItem Header="Close"/>
+							<MenuItem Header="Save">
+								<MenuItem Header="Save"/>
+								<MenuItem Header="Save as..."/>
+							</MenuItem>
 						</MenuItem>
-						<MenuItem Header="Close"/>
-						<MenuItem Header="Save">
-							<MenuItem Header="Save"/>
-							<MenuItem Header="Save as..."/>
-						</MenuItem>
+						<MenuItem Header="Edit">
+							<MenuItem Header="Undo"/>
+							<MenuItem Header="Redo"/>
 						</MenuItem>
 						<MenuItem Header="Help">
 							<MenuItem Header="About..."/>
