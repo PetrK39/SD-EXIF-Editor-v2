@@ -19,24 +19,39 @@
 			   Background="#1e1e1e"
 			   PaneBackground="#1e1e1e">
 		<SplitView.Pane>
-			<StackPanel Orientation="Vertical"
-						Spacing="5"
-						HorizontalAlignment="Stretch"
-						VerticalAlignment="Top">
+			<DockPanel VerticalAlignment="Stretch"
+					   LastChildFill="True">
 				<Button HorizontalAlignment="Left"
+						DockPanel.Dock="Top"
 						Width="32"
 						Height="32"
 						Margin="7 10"
 						Command="{Binding TriggerPaneCommand}">
 					<PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
 				</Button>
-				<ListBox Margin="2 0 -100 0" Padding="0" ItemsSource="{Binding Items}"
+				<ListBox Margin="2 0 -100 0" 
+						 Padding="0" 
+						 ItemsSource="{Binding Items}"
 						 SelectedItem="{Binding SelectedListItem}">
 					<ListBox.Styles>
 						<Style Selector="ListBoxItem">
 							<Setter Property="Padding" Value="12 8"></Setter>
 						</Style>
+						<Style Selector="ListBoxItem:nth-last-child(1)">
+							<Setter Property="DockPanel.Dock"
+									Value="Bottom"/>
+						</Style>
+						<Style Selector="ListBoxItem">
+							<Setter Property="DockPanel.Dock"
+									Value="Top"/>
+						</Style>
 					</ListBox.Styles>
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<DockPanel LastChildFill="False" 
+									   VerticalAlignment="Stretch"/>
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
 					<ListBox.ItemTemplate>
 						<DataTemplate DataType="{x:Type models:ListItemTemplate}">
 							<StackPanel Spacing="17" Orientation="Horizontal">
@@ -47,7 +62,7 @@
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
-			</StackPanel>
+			</DockPanel>
 		</SplitView.Pane>
 
 		<SplitView.Content>

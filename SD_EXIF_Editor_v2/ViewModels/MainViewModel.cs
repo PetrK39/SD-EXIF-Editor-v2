@@ -55,6 +55,11 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 };
                 _fileService = null!;
                 _startupFileService = null!;
+
+                Items = new ObservableCollection<ListItemTemplate>(_templates);
+
+                SelectedListItem = Items.First(vm => vm.ModelType == typeof(ViewMetadataViewModel));
+
             }
         }
         public MainViewModel(ImageModel imageModel, WindowOrientationModel windowOrientationModel, IFileService fileService, IStartupFileService startupFileService)
