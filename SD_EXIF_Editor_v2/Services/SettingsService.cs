@@ -32,6 +32,16 @@ namespace SD_EXIF_Editor_v2.Services
                 Settings.Default.LogLevel = (int)value;
             }
         }
+
+        public bool IsDarkTheme
+        {
+            get => Settings.Default.IsDarkTheme;
+            set
+            {
+                Settings.Default.IsDarkTheme = value;
+                OnPropertyChanged();
+            }
+        }
         public void Save()
         {
             Settings.Default.Save();

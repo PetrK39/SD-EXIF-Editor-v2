@@ -21,6 +21,19 @@ namespace SD_EXIF_Editor_v2.ViewModels
         [ObservableProperty]
         private bool _isPaneOpen;
 
+        public bool IsDarkTheme
+        {
+            get => _settingsService.IsDarkTheme;
+            set
+            {
+                if (SetProperty(_settingsService.IsDarkTheme, value, _settingsService, (s, v) => { s.IsDarkTheme = v; }))
+                {
+                    _settingsService.Save();
+                    UpdateThemeVariant(value);
+                }
+            }
+        }
+
         [ObservableProperty]
         private ObservableObject _currentPage = new ViewMetadataViewModel();
 
@@ -31,6 +44,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private readonly WindowOrientationModel _windowOrientationModel;
         private readonly IFileService _fileService;
         private readonly IStartupFileService _startupFileService;
+        private readonly ISettingsService _settingsService;
 
         private IDisposable? _previousViewModel = null;
 
@@ -62,7 +76,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             }
         }
-        public MainViewModel(ImageModel imageModel, WindowOrientationModel windowOrientationModel, IFileService fileService, IStartupFileService startupFileService)
+        public MainViewModel(ImageModel imageModel, WindowOrientationModel windowOrientationModel, IFileService fileService, IStartupFileService startupFileService, ISettingsService settingsService)
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
 
@@ -72,9 +86,12 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _windowOrientationModel = windowOrientationModel;
             _fileService = fileService;
             _startupFileService = startupFileService;
+            _settingsService = settingsService;
 
             WeakReferenceMessenger.Default.Register<WindowLoadedMessage>(this);
             WeakReferenceMessenger.Default.Register<WindowSizeChangedMessage>(this);
+
+            UpdateThemeVariant(_settingsService.IsDarkTheme);
         }
 
         public async void Receive(WindowLoadedMessage message)
@@ -112,6 +129,11 @@ namespace SD_EXIF_Editor_v2.ViewModels
             if (vm is IDisposable disposable) _previousViewModel = disposable;
 
             CurrentPage = oo;
+        }
+
+        private void UpdateThemeVariant(bool isDarkTheme)
+        {
+            App.Current!.RequestedThemeVariant = isDarkTheme ? Avalonia.Styling.ThemeVariant.Dark : Avalonia.Styling.ThemeVariant.Light;
         }
 
         private bool IsFileLoaded => _imageModel.IsFileLoaded;
@@ -152,6 +174,12 @@ namespace SD_EXIF_Editor_v2.ViewModels
             if (newPath is null) return;
 
             await _fileService.SaveFileAsFromModelAsync(_imageModel, newPath);
+        }
+
+        [RelayCommand]
+        private void ToggleThemeVariant()
+        {
+            IsDarkTheme = !IsDarkTheme;
         }
         #endregion
     }

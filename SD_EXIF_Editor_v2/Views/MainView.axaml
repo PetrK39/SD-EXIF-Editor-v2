@@ -16,8 +16,8 @@
 			   CompactPaneLength="45"
 			   DisplayMode="CompactInline"
 			   OpenPaneLength="150"
-			   Background="#1e1e1e"
-			   PaneBackground="#1e1e1e">
+			   Background="{DynamicResource SemiColorBackground1}"
+			   PaneBackground="{DynamicResource SemiColorBackground1}">
 		<SplitView.Pane>
 			<DockPanel VerticalAlignment="Stretch"
 					   LastChildFill="True">
@@ -29,8 +29,33 @@
 						Command="{Binding TriggerPaneCommand}">
 					<PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
 				</Button>
-				<ListBox Margin="2 0 -100 0" 
-						 Padding="0" 
+
+					<ToggleSwitch Theme="{DynamicResource ButtonToggleSwitch}"
+								  Command="{Binding ToggleThemeVariantCommand}"
+								  DockPanel.Dock="Bottom"
+								  HorizontalAlignment="Stretch"
+							      Margin="0 8">
+						<ToggleSwitch.OnContent>
+							<StackPanel Orientation="Horizontal">
+								<PathIcon Data="{StaticResource Sun}"
+										  Height="14"/>
+								<TextBlock Text="Theme"
+										   Margin="16 0"
+									   VerticalAlignment="Center"/>
+							</StackPanel>
+						</ToggleSwitch.OnContent>
+						<ToggleSwitch.OffContent>
+							<StackPanel Orientation="Horizontal">
+								<PathIcon Data="{StaticResource Moon}"
+										  Height="14"/>
+								<TextBlock Text="Theme"
+										   Margin="16 0"
+									   VerticalAlignment="Center"/>
+							</StackPanel>
+						</ToggleSwitch.OffContent>
+					</ToggleSwitch>
+				<ListBox Margin="2 0 -100 0"
+						 Padding="0"
 						 ItemsSource="{Binding Items}"
 						 SelectedItem="{Binding SelectedListItem}">
 					<ListBox.Styles>
@@ -48,7 +73,7 @@
 					</ListBox.Styles>
 					<ListBox.ItemsPanel>
 						<ItemsPanelTemplate>
-							<DockPanel LastChildFill="False" 
+							<DockPanel LastChildFill="False"
 									   VerticalAlignment="Stretch"/>
 						</ItemsPanelTemplate>
 					</ListBox.ItemsPanel>
@@ -67,7 +92,7 @@
 
 		<SplitView.Content>
 			<Border CornerRadius="12 0 0 0"
-					Background="#2d2d2d">
+					Background="{DynamicResource SemiColorBackground0}">
 				<DockPanel>
 					<Menu DockPanel.Dock="Top">
 						<MenuItem Header="File"
