@@ -21,7 +21,7 @@
 			<StackPanel>
 				<DockPanel Margin="0 6">
 					<PathIcon Data="{StaticResource ExclamationTriangle}"
-							  Foreground="{StaticResource SemiColorWarning}"
+							  Foreground="{DynamicResource SemiColorWarning}"
 							  DockPanel.Dock="Left"
 							  Width="16"
 							  HorizontalAlignment="Center"
