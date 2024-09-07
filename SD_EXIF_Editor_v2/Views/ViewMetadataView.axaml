@@ -11,7 +11,6 @@
 	<Design.DataContext>
 		<vm:ViewMetadataViewModel/>
 	</Design.DataContext>
-	<ThemeVariantScope RequestedThemeVariant="Dark">
 		<DockPanel>
 			<TextBlock Text="View"
 					   DockPanel.Dock="Top"
@@ -51,7 +50,7 @@
 							  Grid.Row="{Binding !IsHorisontal, Converter={StaticResource OrientationToGridIndexConverter}}"
 							  Grid.ColumnSpan="2"
 							  Grid.RowSpan="2">
-					<Border Background="{StaticResource SemiColorBackground1}"
+					<Border Background="{DynamicResource SemiColorBackground1}"
 							CornerRadius="12"
 							Padding="12">
 						<ScrollViewer>
@@ -88,13 +87,13 @@
 												<StackPanel Orientation="Horizontal">
 													<PathIcon Data="{StaticResource Check2}"
 															  Height="10"
-															  Foreground="{StaticResource SemiColorSuccess}"/>
+															  Foreground="{DynamicResource SemiColorSuccess}"/>
 													<TextBlock Text="COPIED"
 															   VerticalAlignment="Center"
 															   Margin="10 0"
 															   FontSize="12"
 															   FontWeight="Regular"
-															   Foreground="{StaticResource SemiColorSuccess}"/>
+															   Foreground="{DynamicResource SemiColorSuccess}"/>
 												</StackPanel>
 											</c:ButtonWithTempContent.TempContent>
 										</c:ButtonWithTempContent>
@@ -148,5 +147,4 @@
 				</ScrollViewer>
 			</Grid>
 		</DockPanel>
-	</ThemeVariantScope>
 </UserControl>
