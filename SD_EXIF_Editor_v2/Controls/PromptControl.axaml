@@ -18,13 +18,13 @@
 				<c:ButtonWithTempContent Command="{Binding CopyCommand, ElementName=PromptCtrl}"
 										 CommandParameter="{Binding Prompt, ElementName=PromptCtrl}"
 										 Theme="{DynamicResource BorderlessButton}"
+										 Classes="Tertiary"
 										 DockPanel.Dock="Right"
 										 VerticalAlignment="Center"
 										 HorizontalAlignment="Right">
 					<c:ButtonWithTempContent.Content>
 						<PathIcon Data="{StaticResource Copy}"
-								  Height="14"
-								  Foreground="{StaticResource SemiGrey2}"/>
+								  Height="14"/>
 					</c:ButtonWithTempContent.Content>
 					<c:ButtonWithTempContent.TempContent>
 						<PathIcon Data="{StaticResource Check2}"
