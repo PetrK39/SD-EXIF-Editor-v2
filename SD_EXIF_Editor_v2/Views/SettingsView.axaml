@@ -23,11 +23,10 @@
 					   Classes="H6 Margin"
 					   Margin="0 10"
 					   Theme="{StaticResource TitleTextBlock}"/>
-			<ThemeVariantScope RequestedThemeVariant="Dark">
 				<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
 					  ColumnDefinitions="Auto,*,Auto"
 					  Margin="8 0"
-					  Background="{StaticResource SemiColorBackground1}">
+					  Background="{DynamicResource SemiColorBackground1}">
 					<TextBlock Text="None"
 							   FontWeight="Bold"
 							   HorizontalAlignment="Center"
@@ -118,7 +117,6 @@
 								  Grid.Column="2"
 								  OffContent="" OnContent=""/>
 				</Grid>
-			</ThemeVariantScope>
 
 			<TextBlock Text="Visuals"
 					   Classes="H6"
