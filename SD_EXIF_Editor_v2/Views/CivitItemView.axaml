@@ -6,8 +6,9 @@
 			 xmlns:vm="using:SD_EXIF_Editor_v2.ViewModels"
 			 xmlns:m="using:SD_EXIF_Editor_v2.Model"
 			 xmlns:utils="using:SD_EXIF_Editor_v2.Utils"
+			 xmlns:v="using:SD_EXIF_Editor_v2.Views"
 			 mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="150"
-             x:Class="SD_EXIF_Editor_v2.CivitItemView"
+             x:Class="SD_EXIF_Editor_v2.Views.CivitItemView"
 			 x:DataType="vm:CivitItemViewModel"
 			 Name="CivitItemViewControl"
 			 PointerPressed="UserControl_PointerPressed">
@@ -16,15 +17,17 @@
 	</Design.DataContext>
 
 	<UserControl.Styles>
-		<Style Selector="TextBlock:pointerover.InteractiveText">
-			<Setter Property="TextBlock.TextDecorations"
+		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover">
+			<Setter Property="Background"
+					Value="{DynamicResource SemiColorBackground2}"/>
+		</Style>
+		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover TextBlock.InteractiveText">
+			<Setter Property="TextDecorations"
 					Value="Underline"/>
-			<Setter Property="TextBlock.Foreground"
-					Value="{StaticResource SemiColorPrimaryPointerover}"/>
 		</Style>
 	</UserControl.Styles>
 	<UserControl.Resources>
-		<utils:CivitItemViewModelBindingProxy x:Key="VMProxy" 
+		<utils:CivitItemViewModelBindingProxy x:Key="VMProxy"
 											  VM="{Binding}"/>
 		<!-- 
 		The default carousel resources in the Semi theme have low visibility on random images.
@@ -34,84 +37,84 @@
 		 -->
 
 		<SolidColorBrush x:Key="CarouselButtonBackground"
-						 Color="{Binding Source={StaticResource SemiGrey9Color}, Converter={StaticResource ColorToColorWithTransparencyConverter}, ConverterParameter=0.2}"/>
+						 Color="{Binding Source={StaticResource SemiGrey9Color}, Converter={StaticResource ColorToColorWithTransparencyConverter}, ConverterParameter=0.6}"/>
 
 		<SolidColorBrush x:Key="CarouselButtonForeground"
-						 Color="{StaticResource SemiGrey0Color}"/>
+						 Color="{DynamicResource SemiGrey8Color}"/>
 		<SolidColorBrush x:Key="CarouselButtonPointeroverForeground"
-						 Color="{StaticResource SemiGrey2Color}"/>
+						 Color="{DynamicResource SemiGrey4Color}"/>
 		<SolidColorBrush x:Key="CarouselButtonPressedForeground"
-						 Color="{StaticResource SemiGrey4Color}"/>
+						 Color="{DynamicResource SemiGrey0Color}"/>
 
 		<SolidColorBrush x:Key="CarouselIndicatorForeground"
-						 Color="{StaticResource SemiGrey0Color}"/>
+						 Color="{DynamicResource SemiGrey8Color}"/>
 		<SolidColorBrush x:Key="CarouselIndicatorForegroundPointerover"
-						 Color="{StaticResource SemiGrey2Color}"/>
+						 Color="{DynamicResource SemiGrey4Color}"/>
 		<SolidColorBrush x:Key="CarouselIndicatorForegroundPressed"
-						 Color="{StaticResource SemiGrey4Color}"/>
+						 Color="{DynamicResource SemiGrey0Color}"/>
 		<SolidColorBrush x:Key="CarouselIndicatorForegroundSelected"
-						 Color="{StaticResource SemiGrey0Color}"/>
+						 Color="{DynamicResource SemiGrey8Color}"/>
 	</UserControl.Resources>
-	
-	<Border>
-		<Grid ColumnDefinitions="*,Auto"
-			  RowDefinitions="Auto,Auto,Auto">
-			<TextBlock Text="{Binding OriginalName}"
-					   Classes="InteractiveText"
-					   TextTrimming="CharacterEllipsis"
-					   FontSize="16"
-					   IsVisible="{Binding !IsUnknown}"
-					   Grid.Column="0"
-					   Grid.Row="0"/>
-			<TextBlock Text="{Binding PromptName}"
-					   IsVisible="{Binding IsUnknown}"
-					   TextTrimming="CharacterEllipsis"
-					   FontSize="16"
-					   Grid.Column="0"
-					   Grid.Row="0"/>
 
-			<TextBlock Text="{Binding PromptName}"
-					   Classes="Tertiary"
-					   TextTrimming="CharacterEllipsis"
-					   FontSize="12"
-					   IsVisible="{Binding !IsUnknown}"
-					   Grid.Column="0"
-					   Grid.Row="1"/>
-			<TextBlock Text="{Binding OriginalVersion}"
-					   Classes="Tertiary"
-					   TextTrimming="CharacterEllipsis"
-					   FontSize="12"
-					   IsVisible="{Binding !IsUnknown}"
-					   Grid.Column="0"
-					   Grid.Row="2"/>
+		<Border Background="Transparent">
+			<Grid ColumnDefinitions="*,Auto"
+				  RowDefinitions="Auto,Auto,Auto">
+				<TextBlock Text="{Binding OriginalName}"
+						   Classes="InteractiveText"
+						   TextTrimming="CharacterEllipsis"
+						   FontSize="16"
+						   IsVisible="{Binding !IsUnknown}"
+						   Grid.Column="0"
+						   Grid.Row="0"/>
+				<TextBlock Text="{Binding PromptName}"
+						   IsVisible="{Binding IsUnknown}"
+						   TextTrimming="CharacterEllipsis"
+						   FontSize="16"
+						   Grid.Column="0"
+						   Grid.Row="0"/>
 
-			<StackPanel Orientation="Horizontal"
-						Grid.Column="1"
-						Grid.Row="0"
-						HorizontalAlignment="Right"
-						VerticalAlignment="Center">
-				<Border Background="{StaticResource SemiLightBlue9}"
-						Padding="10 2"
-						CornerRadius="4"
-						IsVisible="{Binding !IsUnknown}">
-					<TextBlock Text="{Binding Type, Converter={StaticResource ToUpperConverter}}"
-							   Foreground="{StaticResource SemiLightBlue1}"
-							   FontSize="11"
-							   FontWeight="Bold"/>
-				</Border>
-				<Border Background="{StaticResource SemiGrey8}"
-						IsVisible="{Binding IsHaveStrength}"
-						Padding="10 2"
-						CornerRadius="4"
-						Margin="8 0 0 0">
-					<TextBlock Text="{Binding Strength}"
-							   Foreground="{StaticResource SemiGrey1}"
-							   FontSize="11"
-							   FontWeight="Bold"/>
-				</Border>
-			</StackPanel>
-		</Grid>
-	</Border>
+				<TextBlock Text="{Binding PromptName}"
+						   Classes="Tertiary"
+						   TextTrimming="CharacterEllipsis"
+						   FontSize="12"
+						   IsVisible="{Binding !IsUnknown}"
+						   Grid.Column="0"
+						   Grid.Row="1"/>
+				<TextBlock Text="{Binding OriginalVersion}"
+						   Classes="Tertiary"
+						   TextTrimming="CharacterEllipsis"
+						   FontSize="12"
+						   IsVisible="{Binding !IsUnknown}"
+						   Grid.Column="0"
+						   Grid.Row="2"/>
+
+				<StackPanel Orientation="Horizontal"
+							Grid.Column="1"
+							Grid.Row="0"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Center">
+					<Border Background="{DynamicResource SemiLightBlue1}"
+							Padding="10 2"
+							CornerRadius="4"
+							IsVisible="{Binding !IsUnknown}">
+						<TextBlock Text="{Binding Type, Converter={StaticResource ToUpperConverter}}"
+								   Foreground="{DynamicResource SemiLightBlue8}"
+								   FontSize="11"
+								   FontWeight="Bold"/>
+					</Border>
+					<Border Background="{DynamicResource SemiGrey2}"
+							IsVisible="{Binding IsHaveStrength}"
+							Padding="10 2"
+							CornerRadius="4"
+							Margin="8 0 0 0">
+						<TextBlock Text="{Binding Strength}"
+								   Foreground="{DynamicResource SemiGrey8}"
+								   FontSize="11"
+								   FontWeight="Bold"/>
+					</Border>
+				</StackPanel>
+			</Grid>
+		</Border>
 	<FlyoutBase.AttachedFlyout>
 		<Flyout Placement="BottomEdgeAlignedLeft">
 			<Grid RowDefinitions="Auto,*"
@@ -128,7 +131,7 @@
 								   Margin="6 0"/>
 					</StackPanel>
 				</Button>
-				<Button Grid.Column="1" 
+				<Button Grid.Column="1"
 						Grid.Row="0"
 						HorizontalAlignment="Right"
 						Theme="{DynamicResource BorderlessButton}"
@@ -176,10 +179,10 @@
 						</Style>
 						<Style Selector="Ellipse">
 							<Setter Property="Effect">
-								<DropShadowEffect Color="{StaticResource SemiGrey8Color}"
-												  BlurRadius="4"
-												  OffsetX="2"
-												  OffsetY="2"/>
+								<DropShadowEffect Color="White"
+												  BlurRadius="8"
+												  OffsetX="1"
+												  OffsetY="1"/>
 							</Setter>
 						</Style>
 					</Carousel.Styles>

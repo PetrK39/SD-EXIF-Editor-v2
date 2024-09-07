@@ -4,7 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using SD_EXIF_Editor_v2.ViewModels;
 
-namespace SD_EXIF_Editor_v2;
+namespace SD_EXIF_Editor_v2.Views;
 
 public partial class CivitItemView : UserControl
 {
