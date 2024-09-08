@@ -12,7 +12,7 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
         public string OriginalName { get; }
         public string OriginalVersion { get; }
         public string Type { get; }
-        public double SizeKB { get; }
+        public double? SizeKB { get; }
 
         public string PromptName { get; }
         public float? Strength { get; }

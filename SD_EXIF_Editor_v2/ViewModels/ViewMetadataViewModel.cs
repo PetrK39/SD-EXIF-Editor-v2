@@ -174,14 +174,14 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 if (_sdMetadata.Model is SDModel model)
                 {
                     _logger.LogDebug("Loading CivitItemViewModel for model: {ModelName}", model.Name);
-                    var vm = _civitItemViewModelFactory.Create(await _civitService.GetItemFromHash(model.Name, model.Hash, null));
+                    var vm = _civitItemViewModelFactory.Create(await _civitService.GetItemFromHash(model.Name, model.Hash, "checkpoint?", null));
                     CivitItemViewModels.Add(vm);
                 }
 
                 foreach (var lora in _sdMetadata.Loras)
                 {
                     _logger.LogDebug("Loading CivitItemViewModel for lora: {LoraName}", lora.Name);
-                    var vm = _civitItemViewModelFactory.Create(await _civitService.GetItemFromHash(lora.Name, lora.Hash, lora.Strength));
+                    var vm = _civitItemViewModelFactory.Create(await _civitService.GetItemFromHash(lora.Name, lora.Hash, "lora?", lora.Strength));
                     CivitItemViewModels.Add(vm);
                 }
 

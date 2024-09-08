@@ -130,8 +130,7 @@
 							VerticalAlignment="Center">
 					<Border Background="{DynamicResource SemiLightBlue1}"
 							Padding="10 2"
-							CornerRadius="4"
-							IsVisible="{Binding !IsUnknown}">
+							CornerRadius="4">
 						<TextBlock Text="{Binding Type, Converter={StaticResource ToUpperConverter}}"
 								   Foreground="{DynamicResource SemiLightBlue8}"
 								   FontSize="11"

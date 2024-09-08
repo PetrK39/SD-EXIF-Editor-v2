@@ -28,7 +28,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public string OriginalName => _civitItem.OriginalName;
         public string OriginalVersion => _civitItem.OriginalVersion;
         public string Type => _civitItem.Type;
-        public double SizeKB => _civitItem.SizeKB;
+        public double? SizeKB => _civitItem.SizeKB;
 
         public string PromptName => _civitItem.PromptName;
         public float? Strength => _civitItem.Strength;

@@ -24,7 +24,7 @@ namespace SD_EXIF_Editor_v2.Services
             _logger.LogTrace("CivitService initialized.");
         }
 
-        public async Task<CivitItem> GetItemFromHash(string origName, string origHash, float? strength = null)
+        public async Task<CivitItem> GetItemFromHash(string origName, string origHash, string fallbackType, float? strength = null)
         {
             _logger.LogTrace("Entering GetItemFromHash method.");
             _logger.LogDebug($"Requesting item with hash: {origHash}");
@@ -43,11 +43,11 @@ namespace SD_EXIF_Editor_v2.Services
                         case System.Net.HttpStatusCode.NotFound:
                             _logger.LogError($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
                             // No message here. That would happen if model wasn't uploaded to civit.ai
-                            return new CivitItem(origName, strength);
+                            return new CivitItem(origName, strength, fallbackType);
                         default:
                             _logger.LogError($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
                             await _messageService.ShowErrorMessageAsync($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
-                            return new CivitItem(origName, strength);
+                            return new CivitItem(origName, strength, fallbackType);
                     }
                 }
 
@@ -56,7 +56,7 @@ namespace SD_EXIF_Editor_v2.Services
                 if (data is null || data.id == 0)
                 {
                     _logger.LogWarning("Deserialized data is null or invalid.");
-                    return new CivitItem(origName, strength);
+                    return new CivitItem(origName, strength, fallbackType);
                 }
 
                 var civitItem = new CivitItem(origName,
@@ -77,13 +77,13 @@ namespace SD_EXIF_Editor_v2.Services
             {
                 _logger.LogError($"HttpRequestException while retrieving data from the API: {ex.Message}", ex);
                 await _messageService.ShowErrorMessageAsync($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
-                return new CivitItem(origName, strength);
+                return new CivitItem(origName, strength, fallbackType);
             }
             catch (JsonException ex)
             {
                 _logger.LogError($"JsonException while deserializing the API response: {ex.Message}", ex);
                 await _messageService.ShowErrorMessageAsync($"Failed to deserialize the API response\r\n{ex.Message}");
-                return new CivitItem(origName, strength);
+                return new CivitItem(origName, strength, fallbackType);
             }
         }
 
