@@ -23,11 +23,13 @@
 					   LastChildFill="True">
 				<Button HorizontalAlignment="Left"
 						DockPanel.Dock="Top"
+						Classes="Tertiary"
 						Width="32"
 						Height="32"
-						Margin="7 10"
+						Margin="6 10"
+						Padding="8"
 						Command="{Binding TriggerPaneCommand}">
-					<PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+					<PathIcon Data="{StaticResource List}"/>
 				</Button>
 
 					<ToggleSwitch Theme="{DynamicResource ButtonToggleSwitch}"
