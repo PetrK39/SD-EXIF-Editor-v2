@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SD_EXIF_Editor_v2.Memento;
 using SD_EXIF_Editor_v2.Messages;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Models;
@@ -48,6 +49,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
         private IDisposable? _previousViewModel = null;
 
+        private ImageModelCaretaker? _caretaker;
+
         public ObservableCollection<ListItemTemplate> Items { get; }
 
         private readonly List<ListItemTemplate> _templates =
@@ -88,10 +91,47 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _startupFileService = startupFileService;
             _settingsService = settingsService;
 
+            _imageModel.PropertyChanged += imageModel_PropertyChanged;
+
             WeakReferenceMessenger.Default.Register<WindowLoadedMessage>(this);
             WeakReferenceMessenger.Default.Register<WindowSizeChangedMessage>(this);
 
             UpdateThemeVariant(_settingsService.IsDarkTheme);
+        }
+
+        private void imageModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_imageModel.FileUri))
+            {
+                _caretaker = null;
+            }
+            else if (e.PropertyName == nameof(_imageModel.RawMetadata))
+            {
+                if (_caretaker is not null) return;
+
+                _caretaker = new(_imageModel);
+                _caretaker.PropertyChanged += caretaker_PropertyChanged;
+            }
+        }
+
+        private void caretaker_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_caretaker is null) return;
+
+            switch (e.PropertyName)
+            {
+                case nameof(_caretaker.CanUndo):
+                    UndoCommand.NotifyCanExecuteChanged();
+                    return;
+                case nameof(_caretaker.CanRedo):
+                    RedoCommand.NotifyCanExecuteChanged();
+                    return;
+                case nameof(_caretaker.HasChanged):
+                    WeakReferenceMessenger.Default.Send(new ImageModelChangedMessage(_caretaker!.HasChanged));
+                    return;
+                default:
+                    break;
+            }
         }
 
         public async void Receive(WindowLoadedMessage message)
@@ -160,11 +200,12 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _fileService.CloseFileFromModel(_imageModel);
         }
 
-        [RelayCommand(CanExecute = nameof(IsFileLoaded))]
+        [RelayCommand(CanExecute = nameof(CanSave))]
         private async Task SaveAsync()
         {
             await _fileService.SaveFileFromModelAsync(_imageModel);
         }
+        private bool CanSave() => IsFileLoaded && (_caretaker?.HasChanged ?? false);
 
         [RelayCommand(CanExecute = nameof(IsFileLoaded))]
         private async Task SaveAsAsync()
@@ -181,6 +222,13 @@ namespace SD_EXIF_Editor_v2.ViewModels
         {
             IsDarkTheme = !IsDarkTheme;
         }
+
+        [RelayCommand(CanExecute = nameof(CanUndo))]
+        private void Undo() => _caretaker?.Undo();
+        private bool CanUndo() => _caretaker?.CanUndo ?? false;
+        [RelayCommand(CanExecute = nameof(CanRedo))]
+        private void Redo() => _caretaker?.Redo();
+        private bool CanRedo() => _caretaker?.CanRedo ?? false;
         #endregion
     }
 }

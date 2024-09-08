@@ -112,8 +112,10 @@
 							</MenuItem>
 						</MenuItem>
 						<MenuItem Header="Edit">
-							<MenuItem Header="Undo"/>
-							<MenuItem Header="Redo"/>
+							<MenuItem Header="Undo"
+									  Command="{Binding UndoCommand}"/>
+							<MenuItem Header="Redo"
+									  Command="{Binding RedoCommand}"/>
 						</MenuItem>
 						<MenuItem Header="Help">
 							<MenuItem Header="About..."/>
