@@ -132,20 +132,24 @@
 						</MenuItem>
 						<MenuItem Header="_Edit">
 							<MenuItem Header="_Undo"
-									  Command="{Binding UndoCommand}">
+									  Command="{Binding UndoCommand}"
+									  InputGesture="Ctrl+Z">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource ArrowCounterclockwise}"/>
 								</MenuItem.Icon>
 							</MenuItem>
 							<MenuItem Header="_Redo"
-									  Command="{Binding RedoCommand}">
+									  Command="{Binding RedoCommand}"
+									  InputGesture="Ctrl+Y">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource ArrowClockwise}"/>
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
 						<MenuItem Header="_Help">
-							<MenuItem Header="_About...">
+							<MenuItem Header="_About..."
+									  Command="{Binding OpenAboutCommand}"
+									  InputGesture="F1">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource QuestionCircle}"/>
 								</MenuItem.Icon>
