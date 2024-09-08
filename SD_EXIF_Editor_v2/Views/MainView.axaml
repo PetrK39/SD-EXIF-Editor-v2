@@ -97,52 +97,55 @@
 					Background="{DynamicResource SemiColorBackground0}">
 				<DockPanel>
 					<Menu DockPanel.Dock="Top">
-						<MenuItem Header="File"
+						<MenuItem Header="_File"
 								  CornerRadius="12 0 0 0">
-							<MenuItem Header="Open"
+							<MenuItem Header="_Open"
 									  CornerRadius="12 0 0 0"
-									  Command="{Binding OpenCommand}">
+									  Command="{Binding OpenCommand}"
+									  InputGesture="Ctrl+O">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource Folder}"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Header="Close"
+							<MenuItem Header="_Close"
 									  Command="{Binding CloseCommand}">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource FolderX}"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Header="Save">
-								<MenuItem Header="Save"
-										  Command="{Binding SaveCommand}">
+							<MenuItem Header="_Save">
+								<MenuItem Header="_Save"
+										  Command="{Binding SaveCommand}"
+										  InputGesture="Ctrl+S">
 									<MenuItem.Icon>
 										<PathIcon Data="{StaticResource Floppy}"/>
 									</MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Save as..."
-										  Command="{Binding SaveAsCommand}">
+								<MenuItem Header="Save _as..."
+										  Command="{Binding SaveAsCommand}"
+										  InputGesture="Ctrl+Alt+S">
 									<MenuItem.Icon>
 										<PathIcon Data="{StaticResource Floppy}"/>
 									</MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
 						</MenuItem>
-						<MenuItem Header="Edit">
-							<MenuItem Header="Undo"
+						<MenuItem Header="_Edit">
+							<MenuItem Header="_Undo"
 									  Command="{Binding UndoCommand}">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource ArrowCounterclockwise}"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Header="Redo"
+							<MenuItem Header="_Redo"
 									  Command="{Binding RedoCommand}">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource ArrowClockwise}"/>
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
-						<MenuItem Header="Help">
-							<MenuItem Header="About...">
+						<MenuItem Header="_Help">
+							<MenuItem Header="_About...">
 								<MenuItem.Icon>
 									<PathIcon Data="{StaticResource QuestionCircle}"/>
 								</MenuItem.Icon>

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
@@ -8,6 +9,7 @@ using SD_EXIF_Editor_v2.Messages;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Models;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using SD_EXIF_Editor_v2.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -229,6 +231,18 @@ namespace SD_EXIF_Editor_v2.ViewModels
         [RelayCommand(CanExecute = nameof(CanRedo))]
         private void Redo() => _caretaker?.Redo();
         private bool CanRedo() => _caretaker?.CanRedo ?? false;
+
+        [RelayCommand]
+        private void Exit()
+        {
+            Environment.Exit(0);
+        }
+
+        [RelayCommand]
+        private void OpenAbout()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
