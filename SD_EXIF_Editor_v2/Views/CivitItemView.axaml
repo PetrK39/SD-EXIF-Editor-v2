@@ -32,28 +32,63 @@
 		<!-- 
 		The default carousel resources in the Semi theme have low visibility on random images.
         Therefore, local resources are defined to customize the appearance of the carousel buttons. 
-		Yet, it seems impossible to add shadow effect to PathIcon which is being RenderTranslated
-		So we're going with just ugly transparent background
 		 -->
+		<ControlTheme x:Key="CarouselButton" TargetType="Button">
+			<Setter Property="Button.Cursor" Value="Hand" />
+			<Setter Property="Button.Foreground" Value="{DynamicResource CarouselButtonForeground}" />
+			<Setter Property="Button.Template">
+				<ControlTemplate TargetType="Button">
+					<Border Background="LightGray"
+							CornerRadius="12"
+							Padding="4">
+						<PathIcon
+							Width="24"
+							Height="24"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							Data="{DynamicResource CarouselButtonGlyph}"
+							Foreground="{TemplateBinding Foreground}" />
+					</Border>
+				</ControlTemplate>
+			</Setter>
+			<Style Selector="^:pointerover /template/ PathIcon">
+				<Setter Property="Foreground" Value="{DynamicResource CarouselButtonPointeroverForeground}" />
+			</Style>
+			<Style Selector="^:pointerover /template/ PathIcon">
+				<Setter Property="Foreground" Value="{DynamicResource CarouselButtonPressedForeground}" />
+			</Style>
+		</ControlTheme>
 
-		<SolidColorBrush x:Key="CarouselButtonBackground"
-						 Color="{Binding Source={StaticResource SemiGrey9Color}, Converter={StaticResource ColorToColorWithTransparencyConverter}, ConverterParameter=0.6}"/>
-
-		<SolidColorBrush x:Key="CarouselButtonForeground"
-						 Color="{DynamicResource SemiGrey8Color}"/>
-		<SolidColorBrush x:Key="CarouselButtonPointeroverForeground"
-						 Color="{DynamicResource SemiGrey4Color}"/>
-		<SolidColorBrush x:Key="CarouselButtonPressedForeground"
-						 Color="{DynamicResource SemiGrey0Color}"/>
-
-		<SolidColorBrush x:Key="CarouselIndicatorForeground"
-						 Color="{DynamicResource SemiGrey8Color}"/>
-		<SolidColorBrush x:Key="CarouselIndicatorForegroundPointerover"
-						 Color="{DynamicResource SemiGrey4Color}"/>
-		<SolidColorBrush x:Key="CarouselIndicatorForegroundPressed"
-						 Color="{DynamicResource SemiGrey0Color}"/>
-		<SolidColorBrush x:Key="CarouselIndicatorForegroundSelected"
-						 Color="{DynamicResource SemiGrey8Color}"/>
+		<ControlTheme x:Key="CarouselIndicatorDotListBoxItem" TargetType="ListBoxItem">
+			<!--  Use fit in different color themes, Use Foreground to normal, Background to hover, BorderBrush to Selected  -->
+			<Setter Property="ListBoxItem.Cursor" Value="Hand" />
+			<Setter Property="ListBoxItem.Foreground" Value="{DynamicResource CarouselIndicatorForeground}" />
+			<Setter Property="ListBoxItem.Template">
+				<ControlTemplate TargetType="ListBoxItem">
+					<Panel>
+						<Border Padding="4" Background="LightGray"
+								CornerRadius="8">
+							<Ellipse
+								Name="Container"
+								Width="{DynamicResource CarouselIndicatorWidth}"
+								Height="{DynamicResource CarouselIndicatorHeight}"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center"
+								Fill="{TemplateBinding Foreground}"/>
+						</Border>
+					</Panel>
+				</ControlTemplate>
+			</Setter>
+			<Style Selector="^:pointerover /template/ Ellipse#Container">
+				<Setter Property="Fill" Value="{DynamicResource CarouselIndicatorPointeroverForeground}" />
+			</Style>
+			<Style Selector="^:pressed /template/ Ellipse#Container">
+				<Setter Property="Fill" Value="{DynamicResource CarouselIndicatorPressedForeground}" />
+			</Style>
+			<Style Selector="^:selected /template/ Ellipse#Container">
+				<Setter Property="Fill" Value="{DynamicResource CarouselIndicatorSelectedForeground}" />
+			</Style>
+		</ControlTheme>
 	</UserControl.Resources>
 
 		<Border Background="Transparent">
@@ -171,18 +206,12 @@
 						</DataTemplate>
 					</Carousel.ItemTemplate>
 					<Carousel.Styles>
-						<Style Selector="Grid PathIcon">
-							<Setter Property="Grid.Background"
-									Value="{StaticResource CarouselButtonBackground}"/>
-							<Setter Property="PathIcon.Padding"
-									Value="16"/>
-						</Style>
 						<Style Selector="Ellipse">
 							<Setter Property="Effect">
-								<DropShadowEffect Color="White"
-												  BlurRadius="8"
-												  OffsetX="1"
-												  OffsetY="1"/>
+								<DropShadowEffect Color="Gray"
+												  BlurRadius="12"
+												  OffsetX="0"
+												  OffsetY="0"/>
 							</Setter>
 						</Style>
 					</Carousel.Styles>
