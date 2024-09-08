@@ -1,4 +1,5 @@
-﻿using SD_EXIF_Editor_v2.Model;
+﻿using CommunityToolkit.Mvvm.Input;
+using SD_EXIF_Editor_v2.Model;
 using System.Collections.Generic;
 
 namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
@@ -22,6 +23,6 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
         public IEnumerable<CivitItemImage> FilteredImages { get; }
         public bool IsFilteredImagesEmpty { get; }
 
-        public void OpenUri(string uri);
+        public IAsyncRelayCommand<string> OpenUrlCommand { get; }
     }
 }

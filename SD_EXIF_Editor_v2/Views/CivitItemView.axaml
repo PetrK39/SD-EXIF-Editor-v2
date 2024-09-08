@@ -123,7 +123,7 @@
 						Grid.Row="0"
 						HorizontalAlignment="Left"
 					    Theme="{DynamicResource BorderlessButton}"
-					    Command="{Binding OpenUriCommand}"
+					    Command="{Binding OpenUrlCommand}"
 						CommandParameter="{Binding SiteUri}">
 					<StackPanel Orientation="Horizontal">
 						<PathIcon Data="{StaticResource BoxArrowUpRight}"/>
@@ -135,7 +135,7 @@
 						Grid.Row="0"
 						HorizontalAlignment="Right"
 						Theme="{DynamicResource BorderlessButton}"
-						Command="{Binding OpenUriCommand}"
+						Command="{Binding OpenUrlCommand}"
 						CommandParameter="{Binding DownloadUri}">
 					<StackPanel Orientation="Horizontal">
 						<PathIcon Data="{StaticResource Download}"/>

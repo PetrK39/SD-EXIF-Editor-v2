@@ -10,6 +10,8 @@ using System;
 using System.Collections;
 using System.Linq;
 using Avalonia.Controls;
+using SD_EXIF_Editor_v2.Services;
+using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
@@ -17,6 +19,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
     {
         private CivitItem _civitItem;
         private readonly ISettingsService _settingsService;
+        private readonly IUrlOpenerService _urlOpenerService;
         private readonly ILogger<CivitItemViewModel> _logger;
 
         public bool IsUnknown => _civitItem.IsUnknown;
@@ -46,9 +49,10 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 _civitItem = new("promptName", -1.23f, "originalName", "originalVersion", "type", 123, [], "/download/uri", "site/uri");
             }
         }
-        public CivitItemViewModel(ISettingsService settingsService, ILogger<CivitItemViewModel> logger)
+        public CivitItemViewModel(ISettingsService settingsService, IUrlOpenerService urlOpenerService, ILogger<CivitItemViewModel> logger)
         {
             _settingsService = settingsService;
+            _urlOpenerService = urlOpenerService;
             _logger = logger;
 
 
@@ -65,18 +69,14 @@ namespace SD_EXIF_Editor_v2.ViewModels
         }
 
         [RelayCommand]
-        public void OpenUri(string uri)
+        public async Task OpenUrlAsync(string uri)
         {
             _logger.LogTrace("Entering OpenUri method.");
             _logger.LogDebug($"Opening URI: {uri}");
 
             try
             {
-                var sInfo = new System.Diagnostics.ProcessStartInfo(uri)
-                {
-                    UseShellExecute = true,
-                };
-                System.Diagnostics.Process.Start(sInfo);
+                await _urlOpenerService.OpenUrlAsync(uri);
                 _logger.LogInformation($"Successfully opened URI: {uri}");
             }
             catch (Exception ex)

@@ -39,6 +39,7 @@ namespace SD_EXIF_Editor_v2
                 services.AddTransient<IMetadataParserService, MetadataParserService>();
                 services.AddTransient<IFileService, FileService>();
                 services.AddTransient<IClipboardService, ClipboardService>();
+                services.AddTransient<IUrlOpenerService, UrlOpenerService>();
 
                 services.AddTransient<ICivitItemViewModelFactory, CivitItemViewModelFactory>();
 
