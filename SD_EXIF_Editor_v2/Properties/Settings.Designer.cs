@@ -70,5 +70,17 @@ namespace SD_EXIF_Editor_v2.Properties {
                 this["IsDarkTheme"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int MaximumLines {
+            get {
+                return ((int)(this["MaximumLines"]));
+            }
+            set {
+                this["MaximumLines"] = value;
+            }
+        }
     }
 }

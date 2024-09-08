@@ -104,20 +104,23 @@
 										<c:ResourcesUsedControl DockPanel.Dock="Top"
 																Margin="0 4"
 																ItemsSource="{Binding CivitItemViewModels}"
-																IsCivitServiceBusy="{Binding IsCivitBusy}"/>
+																IsCivitServiceBusy="{Binding IsCivitBusy}"
+																MaximumLines="{Binding MaximumLines}"/>
 										<Separator DockPanel.Dock="Top"/>
 										<c:PromptControl DockPanel.Dock="Top"
 														 Title="Prompt"
 														 Prompt="{Binding Prompt}"
 														 CopyCommand="{Binding CopyToClipboardCommand}"
 														 Margin="0 4"
-														 DisplayPlaceholder="{Binding ShouldDisplayPlaceholders}"/>
+														 DisplayPlaceholder="{Binding ShouldDisplayPlaceholders}"
+														 MaximumLines="{Binding MaximumLines}"/>
 										<c:PromptControl DockPanel.Dock="Top"
 														 Title="Negative prompt"
 														 Prompt="{Binding NegativePrompt}"
 														 CopyCommand="{Binding CopyToClipboardCommand}"
 														 Margin="0 4"
-														 DisplayPlaceholder="{Binding ShouldDisplayPlaceholders}"/>
+														 DisplayPlaceholder="{Binding ShouldDisplayPlaceholders}"
+														 MaximumLines="{Binding MaximumLines}"/>
 										<Separator DockPanel.Dock="Top">
 											<Separator.IsVisible>
 												<MultiBinding Converter="{x:Static BoolConverters.Or}">

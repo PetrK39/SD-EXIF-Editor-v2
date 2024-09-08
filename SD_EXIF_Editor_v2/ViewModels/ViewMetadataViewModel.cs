@@ -44,6 +44,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; init; }
 
         public bool ShouldDisplayPlaceholders => _settingsService.DisplayPlaceholders;
+        public int MaximumLines => _settingsService.MaximumLines;
 
         public bool IsHorisontal => _windowOrientationModel.IsHorizontal;
 
@@ -119,6 +120,10 @@ namespace SD_EXIF_Editor_v2.ViewModels
             if (e.PropertyName == nameof(_settingsService.DisplayPlaceholders))
             {
                 OnPropertyChanged(nameof(ShouldDisplayPlaceholders));
+            }
+            else if (e.PropertyName == nameof(_settingsService.MaximumLines))
+            {
+                OnPropertyChanged(nameof(_settingsService.MaximumLines));
             }
         }
 

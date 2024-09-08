@@ -19,6 +19,7 @@
 			<c:BoolToFloatConverter x:Key="BoolToFloatConverter"/>
 			<c:OrientationToGridIndexConverter x:Key="OrientationToGridIndexConverter"/>
 			<c:OrientationToGridSpanConverter x:Key="OrientationToGridSpanConverter"/>
+			<c:IntToDisplayStringConverter x:Key="IntToDisplayStringConverter"/>
 		</ResourceDictionary>
 	</Application.Resources>
 

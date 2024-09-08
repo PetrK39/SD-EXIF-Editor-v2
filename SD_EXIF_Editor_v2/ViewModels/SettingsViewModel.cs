@@ -50,6 +50,16 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 _logger.LogInformation("Log level changed to: {Value}", value);
             }
         }
+        public int MaximumLines
+        {
+            get => _settingsService.MaximumLines;
+            set
+            {
+                _settingsService.MaximumLines = value;
+                OnPropertyChanged();
+                _settingsService.Save();
+            }
+        }
 
         public Array LogLevels => Enum.GetValues(typeof(LogLevels));
 

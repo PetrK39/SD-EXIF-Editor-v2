@@ -42,6 +42,16 @@ namespace SD_EXIF_Editor_v2.Services
                 OnPropertyChanged();
             }
         }
+
+        public int MaximumLines
+        {
+            get => Settings.Default.MaximumLines;
+            set
+            {
+                Settings.Default.MaximumLines = value;
+                OnPropertyChanged();
+            }
+        }
         public void Save()
         {
             Settings.Default.Save();

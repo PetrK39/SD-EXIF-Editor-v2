@@ -20,6 +20,7 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
         public ObservableCollection<ICivitItemViewModel> CivitItemViewModels { get; }
 
         public bool ShouldDisplayPlaceholders { get; }
+        public int MaximumLines { get; }
 
         public IAsyncRelayCommand<string> CopyToClipboardCommand { get; }
     }
