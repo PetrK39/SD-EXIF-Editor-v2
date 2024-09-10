@@ -60,6 +60,60 @@ namespace SD_EXIF_Editor_v2.ViewModels
                 _settingsService.Save();
             }
         }
+        public bool ShouldKeepSize
+        {
+            get => _settingsService.ShouldKeepSize;
+            set
+            {
+                _settingsService.ShouldKeepSize = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ShouldKeepPos
+        {
+            get => _settingsService.ShouldKeepPos;
+            set
+            {
+                _settingsService.ShouldKeepPos = value;
+                OnPropertyChanged();
+            }
+        }
+        public double WindowWidth
+        {
+            get => _settingsService.WindowWidth;
+            set
+            {
+                _settingsService.WindowWidth = value;
+                OnPropertyChanged();
+            }
+        }
+        public double WindowHeight
+        {
+            get => _settingsService.WindowHeight;
+            set
+            {
+                _settingsService.WindowHeight = value;
+                OnPropertyChanged();
+            }
+        }
+        public int WindowTop
+        {
+            get => _settingsService.WindowTop;
+            set
+            {
+                _settingsService.WindowTop = value;
+                OnPropertyChanged();
+            }
+        }
+        public int WindowLeft
+        {
+            get => _settingsService.WindowLeft;
+            set
+            {
+                _settingsService.WindowLeft = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Array LogLevels => Enum.GetValues(typeof(LogLevels));
 

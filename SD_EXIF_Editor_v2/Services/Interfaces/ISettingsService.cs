@@ -10,6 +10,13 @@ namespace SD_EXIF_Editor_v2.Services.Interfaces
         public LogLevels LogLevel { get; set; }
         public bool IsDarkTheme { get; set; }
         public int MaximumLines { get; set; }
+        public bool ShouldKeepSize { get; set; }
+        public bool ShouldKeepPos { get; set; }
+        public double WindowWidth {  get; set; }
+        public double WindowHeight { get; set; }
+        public int WindowLeft { get; set; }
+        public int WindowTop { get; set; }
+
         public void Save();
     }
 

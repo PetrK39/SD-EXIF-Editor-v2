@@ -23,14 +23,10 @@ namespace SD_EXIF_Editor_v2
     public partial class App : Application
     {
         private IHost _host;
+        public IHost Host => _host;
         public override void Initialize()
         {
-            AvaloniaXamlLoader.Load(this);
-        }
-
-        public override void OnFrameworkInitializationCompleted()
-        {
-            _host = Host.CreateDefaultBuilder()
+            _host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
             .ConfigureServices((services) =>
             {
                 // Services
@@ -56,9 +52,9 @@ namespace SD_EXIF_Editor_v2
                 // ViewModels
                 services.AddSingleton<MainViewModel>();
                 services.AddTransient<ICivitItemViewModel, CivitItemViewModel>();
-                services.AddTransient<ViewMetadataViewModel>();
-                services.AddTransient<EditMetadataViewModel>();
-                services.AddTransient<SettingsViewModel>();
+                services.AddTransient<IViewMetadataViewModel, ViewMetadataViewModel>();
+                services.AddTransient<IEditMetadataViewModel, EditMetadataViewModel>();
+                services.AddTransient<ISettingsViewModel, SettingsViewModel>();
 
                 // Views
                 services.AddSingleton<MainWindow>();
@@ -78,6 +74,12 @@ namespace SD_EXIF_Editor_v2
 
             _host.Start();
 
+
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        public override void OnFrameworkInitializationCompleted()
+        {
             var ss = _host.Services.GetRequiredService<ISettingsService>();
             NLogConfigurator.UpdateLogLevel(ss.LogLevel);
 
@@ -87,7 +89,7 @@ namespace SD_EXIF_Editor_v2
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow(vm);
+                desktop.MainWindow = new MainWindow(vm, ss);
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {

@@ -4,12 +4,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using SD_EXIF_Editor_v2.Memento;
 using SD_EXIF_Editor_v2.Messages;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Models;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.Utils;
+using SD_EXIF_Editor_v2.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -80,7 +82,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
                 Items = new ObservableCollection<ListItemTemplate>(_templates);
 
-                SelectedListItem = Items.First(vm => vm.ModelType == typeof(ViewMetadataViewModel));
+                SelectedListItem = Items.First(vm => vm.ModelType == typeof(IViewMetadataViewModel));
 
             }
         }
@@ -171,7 +173,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             var vm = Design.IsDesignMode
                 ? Activator.CreateInstance(value.ModelType)
-                : Ioc.Default.GetService(value.ModelType);
+                : Ioc.Default.GetService(value.ModelType.GetInterfaces().Single(i => i.Name.EndsWith("ViewModel")));
 
             if (vm is not ObservableObject oo) return;
 

@@ -6,7 +6,7 @@
 			 xmlns:interfaces="using:SD_EXIF_Editor_v2.ViewModels.Interfaces"
 			 xmlns:c="using:SD_EXIF_Editor_v2.Controls"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SD_EXIF_Editor_v2.ViewMetadataView"
+             x:Class="SD_EXIF_Editor_v2.Views.ViewMetadataView"
 			 x:DataType="vm:ViewMetadataViewModel">
 	<Design.DataContext>
 		<vm:ViewMetadataViewModel/>

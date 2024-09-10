@@ -52,6 +52,62 @@ namespace SD_EXIF_Editor_v2.Services
                 OnPropertyChanged();
             }
         }
+
+        public bool ShouldKeepSize
+        {
+            get => Settings.Default.ShouldKeepSize;
+            set
+            {
+                Settings.Default.ShouldKeepSize = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ShouldKeepPos
+        {
+            get => Settings.Default.ShouldKeepPos;
+            set
+            {
+                Settings.Default.ShouldKeepPos = value;
+                OnPropertyChanged();
+            }
+        }
+        public double WindowWidth
+        {
+            get => Settings.Default.WindowWidth;
+            set
+            {
+                Settings.Default.WindowWidth = value;
+                OnPropertyChanged();
+            }
+        }
+        public double WindowHeight
+        {
+            get => Settings.Default.WindowHeight;
+            set
+            {
+                Settings.Default.WindowHeight = value;
+                OnPropertyChanged();
+            }
+        }
+        public int WindowLeft
+        {
+            get => Settings.Default.WindowLeft;
+            set
+            {
+                Settings.Default.WindowLeft = value;
+                OnPropertyChanged();
+            }
+        }
+        public int WindowTop
+        {
+            get => Settings.Default.WindowTop;
+            set
+            {
+                Settings.Default.WindowTop = value;
+                OnPropertyChanged();
+            }
+        }
+
         public void Save()
         {
             Settings.Default.Save();
