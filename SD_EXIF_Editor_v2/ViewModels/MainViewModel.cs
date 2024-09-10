@@ -19,7 +19,10 @@ using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {
-    public partial class MainViewModel : ObservableObject, IRecipient<WindowLoadedMessage>, IRecipient<WindowSizeChangedMessage>
+    public partial class MainViewModel : ObservableObject, 
+        IRecipient<WindowLoadedMessage>, 
+        IRecipient<WindowSizeChangedMessage>,
+        IRecipient<DragDropOpenFileMessage>
     {
         [ObservableProperty]
         private bool _isPaneOpen;
@@ -97,6 +100,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             WeakReferenceMessenger.Default.Register<WindowLoadedMessage>(this);
             WeakReferenceMessenger.Default.Register<WindowSizeChangedMessage>(this);
+            WeakReferenceMessenger.Default.Register<DragDropOpenFileMessage>(this);
 
             UpdateThemeVariant(_settingsService.IsDarkTheme);
         }
@@ -144,6 +148,10 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public void Receive(WindowSizeChangedMessage message)
         {
             _windowOrientationModel.IsHorizontal = message.Value;
+        }
+        public async void Receive(DragDropOpenFileMessage message)
+        {
+            await _fileService.LoadFileIntoModelAsync(_imageModel, message.Value);
         }
 
         private async Task InitializeStartupFile()
