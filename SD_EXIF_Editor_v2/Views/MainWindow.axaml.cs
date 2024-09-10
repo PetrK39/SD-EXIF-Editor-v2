@@ -14,12 +14,14 @@ namespace SD_EXIF_Editor_v2.Views
     {
         private const string _title = "SD EXIF Editor";
 
+        private readonly MainViewModel _mainViewModel;
         private readonly ISettingsService _settingsService;
 
         private bool _isRestoringSizePos = true;
         public MainWindow(MainViewModel vm, ISettingsService settingsService)
         {
             DataContext = vm;
+            _mainViewModel = vm;
             _settingsService = settingsService;
             InitializeComponent();
 
@@ -28,7 +30,49 @@ namespace SD_EXIF_Editor_v2.Views
             SizeChanged += MainWindow_SizeChanged;
             PositionChanged += MainWindow_PositionChanged;
             Closing += MainWindow_Closing;
+            KeyDown += MainWindow_KeyDown;
         }
+
+        private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (IsTextBoxFocused()) return;
+
+            e.Handled = true;
+
+            if (e.Key == Key.O && e.KeyModifiers == KeyModifiers.Control)
+            {
+                _mainViewModel.OpenCommand.Execute(null);
+            }
+            else if (e.Key == Key.S && e.KeyModifiers == KeyModifiers.Control)
+            {
+                _mainViewModel.SaveCommand.Execute(null);
+            }
+            else if (e.Key == Key.S && e.KeyModifiers.HasFlag(KeyModifiers.Control) && e.KeyModifiers.HasFlag(KeyModifiers.Alt))
+            {
+                _mainViewModel.SaveAsCommand.Execute(null);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                _mainViewModel.ExitCommand.Execute(null);
+            }
+            else if (e.Key == Key.Z && e.KeyModifiers == KeyModifiers.Control)
+            {
+                _mainViewModel.UndoCommand.Execute(null);
+            }
+            else if (e.Key == Key.Y && e.KeyModifiers == KeyModifiers.Control)
+            {
+                _mainViewModel.RedoCommand.Execute(null);
+            }
+            else if (e.Key == Key.F1)
+            {
+                _mainViewModel.OpenAboutCommand.Execute(null);
+            }
+            else
+            {
+                e.Handled = false;
+            }
+        }
+        private bool IsTextBoxFocused() => FocusManager?.GetFocusedElement() is TextBox;
 
         private void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
         {
@@ -46,23 +90,6 @@ namespace SD_EXIF_Editor_v2.Views
         private void MainWindow_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             WeakReferenceMessenger.Default.Send(new WindowLoadedMessage(true));
-
-            if (Content is MainView mainView && mainView.DataContext is MainViewModel mainViewModel)
-            {
-                KeyBindings.Clear();
-
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.OpenCommand, Gesture = KeyGesture.Parse("Ctrl+O") });
-
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.SaveCommand, Gesture = KeyGesture.Parse("Ctrl+S") });
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.SaveAsCommand, Gesture = KeyGesture.Parse("Ctrl+Alt+S") });
-
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.ExitCommand, Gesture = KeyGesture.Parse("Escape") });
-
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.UndoCommand, Gesture = KeyGesture.Parse("Ctrl+Z") });
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.RedoCommand, Gesture = KeyGesture.Parse("Ctrl+Y") });
-
-                KeyBindings.Add(new KeyBinding { Command = mainViewModel.OpenAboutCommand, Gesture = KeyGesture.Parse("F1") });
-            }
 
             _isRestoringSizePos = true;
 
