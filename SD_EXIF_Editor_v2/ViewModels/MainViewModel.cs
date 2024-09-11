@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SD_EXIF_Editor_v2.ViewModels
 {

@@ -127,11 +127,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             }
         }
 
-        [RelayCommand(CanExecute = nameof(CopyToClipboardCanExecute))]
-        private async Task CopyToClipboard(string text)
-        {
-            await _clipboardService.CopyToClipboardAsync(text);
-        }
+        public IAsyncRelayCommand<string> CopyToClipboardCommand => _clipboardService.CopyToClipboardCommand;
         private bool CopyToClipboardCanExecute(string text) => !string.IsNullOrWhiteSpace(text);
         private async Task UpdateSdMetadata()
         {

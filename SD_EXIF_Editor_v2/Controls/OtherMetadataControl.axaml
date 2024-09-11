@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:b="using:SD_EXIF_Editor_v2.Behaviors"
+			 xmlns:s="using:SD_EXIF_Editor_v2.Services"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 Name="OtherMetadataCtrl"
              x:Class="SD_EXIF_Editor_v2.Controls.OtherMetadataControl">
@@ -25,11 +27,35 @@
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="{Binding Converter={StaticResource KeyValuePairConverter}, ConverterParameter=Key}"
-									   Classes="Secondary"/>
+									   Classes="Secondary">
+								<TextBlock.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Copy"
+												  Command="{x:Static s:ClipboardService.CopyToClipboardCommandStatic}"
+												  CommandParameter="{Binding Converter={StaticResource KeyValuePairConverter}, ConverterParameter=Value}">
+											<MenuItem.Icon>
+												<PathIcon Data="{StaticResource Clipboard}"/>
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</TextBlock.ContextMenu>
+							</TextBlock>
 							<SelectableTextBlock Text="{Binding Converter={StaticResource KeyValuePairConverter}, ConverterParameter=Value}"
 												 Grid.Column="1"
 												 HorizontalAlignment="Right"
-												 TextWrapping="WrapWithOverflow"/>
+												 TextWrapping="WrapWithOverflow">
+								<SelectableTextBlock.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Copy"
+												  Command="{x:Static s:ClipboardService.CopyToClipboardCommandStatic}"
+												  CommandParameter="{Binding Converter={StaticResource KeyValuePairConverter}, ConverterParameter=Value}">
+											<MenuItem.Icon>
+												<PathIcon Data="{StaticResource Clipboard}"/>
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</SelectableTextBlock.ContextMenu>
+							</SelectableTextBlock>
 						</Grid>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>

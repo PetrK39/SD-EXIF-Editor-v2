@@ -10,7 +10,7 @@
 			 x:DataType="vm:ViewMetadataViewModel">
 	<Design.DataContext>
 		<vm:ViewMetadataViewModel/>
-	</Design.DataContext>
+	</Design.DataContext>	
 		<DockPanel>
 			<TextBlock Text="View"
 					   DockPanel.Dock="Top"
