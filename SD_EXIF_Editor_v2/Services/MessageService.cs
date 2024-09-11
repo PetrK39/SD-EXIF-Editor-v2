@@ -18,7 +18,7 @@ namespace SD_EXIF_Editor_v2.Services
             _logger = logger;
             _logger.LogTrace("Message Service initialized.");
 
-            _notificationManager = new(AvaloniaUtils.GetTopLevel())
+            _notificationManager = new(AvaloniaUtils.TopLevel)
             {
                 Position = NotificationPosition.BottomRight,
                 MaxItems = 3

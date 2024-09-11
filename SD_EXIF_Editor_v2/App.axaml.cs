@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -89,11 +90,17 @@ namespace SD_EXIF_Editor_v2
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow(vm, ss);
+                var mw = new MainWindow(vm, ss);
+                desktop.MainWindow = mw;
+
+                AvaloniaUtils.TopLevel = mw;
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
-                singleViewPlatform.MainView = new MainView { DataContext = vm };
+                var mv = new MainView { DataContext = vm };
+                singleViewPlatform.MainView = mv;
+
+                AvaloniaUtils.TopLevel = TopLevel.GetTopLevel(mv);
             }
 
             base.OnFrameworkInitializationCompleted();

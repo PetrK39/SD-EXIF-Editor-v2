@@ -8,27 +8,18 @@ namespace SD_EXIF_Editor_v2.Utils
 {
     public static class AvaloniaUtils
     {
-        public static IStorageProvider GetStorageProvider()
+        public static TopLevel? TopLevel { get; set; }
+        public static IStorageProvider? GetStorageProvider()
         {
-            return GetTopLevel().StorageProvider;
-        }
-        public static IClipboard GetClipboard()
-        {
-            return GetTopLevel().Clipboard ?? throw new NotImplementedException("No clipboard for current application lifetime");
-        }
+            if (TopLevel is null) throw new ArgumentNullException(nameof(TopLevel));
 
-        public static TopLevel GetTopLevel()
+            return TopLevel.StorageProvider;
+        }
+        public static IClipboard? GetClipboard()
         {
-            if (App.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                return desktop.MainWindow!;
-            }
-            else if (App.Current.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-            {
-                return TopLevel.GetTopLevel(singleViewPlatform.MainView)!;
-            }
+            if (TopLevel is null) throw new ArgumentNullException(nameof(TopLevel));
 
-            throw new NotImplementedException();
+            return TopLevel.Clipboard ?? throw new NotImplementedException("No clipboard for current application lifetime");
         }
     }
 }
