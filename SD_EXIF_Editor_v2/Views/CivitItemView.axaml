@@ -20,6 +20,8 @@
 		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover">
 			<Setter Property="Background"
 					Value="{DynamicResource SemiColorBackground2}"/>
+			<Setter Property="Cursor"
+					Value="Hand"/>
 		</Style>
 		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover TextBlock.InteractiveText">
 			<Setter Property="TextDecorations"
