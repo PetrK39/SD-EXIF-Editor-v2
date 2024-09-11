@@ -8,5 +8,6 @@ namespace SD_EXIF_Editor_v2.Services.Interfaces
         public void ShowErrorNotification(string title, string message);
         public Task ShowInfoMessageAsync(string message);
         public Task<bool> ShowConfirmationMessageAsync(string message);
+        public Task ShowAboutDialogAsync();
     }
 }

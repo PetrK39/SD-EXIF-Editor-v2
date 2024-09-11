@@ -9,6 +9,7 @@ using SD_EXIF_Editor_v2.Memento;
 using SD_EXIF_Editor_v2.Messages;
 using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Models;
+using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
 using SD_EXIF_Editor_v2.Utils;
 using SD_EXIF_Editor_v2.ViewModels.Interfaces;
@@ -54,6 +55,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private readonly IFileService _fileService;
         private readonly IStartupFileService _startupFileService;
         private readonly ISettingsService _settingsService;
+        private readonly IMessageService _messageService;
 
         private IDisposable? _previousViewModel = null;
 
@@ -87,7 +89,11 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             }
         }
-        public MainViewModel(ImageModel imageModel, WindowOrientationModel windowOrientationModel, IFileService fileService, IStartupFileService startupFileService, ISettingsService settingsService)
+        public MainViewModel(ImageModel imageModel, WindowOrientationModel windowOrientationModel, 
+            IFileService fileService, 
+            IStartupFileService startupFileService, 
+            ISettingsService settingsService,
+            IMessageService messageService)
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
 
@@ -98,6 +104,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _fileService = fileService;
             _startupFileService = startupFileService;
             _settingsService = settingsService;
+            _messageService = messageService;
 
             _imageModel.PropertyChanged += imageModel_PropertyChanged;
 
@@ -250,9 +257,9 @@ namespace SD_EXIF_Editor_v2.ViewModels
         }
 
         [RelayCommand]
-        private void OpenAbout()
+        private async Task OpenAbout()
         {
-            throw new NotImplementedException();
+            await _messageService.ShowAboutDialogAsync();
         }
         #endregion
     }

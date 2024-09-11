@@ -68,5 +68,10 @@ namespace SD_EXIF_Editor_v2.Services
             _logger.LogTrace("Exiting ShowConfirmationMessage method.");
             return result;
         }
+
+        public async Task ShowAboutDialogAsync()
+        {
+            await MessageBoxManager.GetMessageBoxStandard("SD Exif About", "Not implemented yet", ButtonEnum.Ok).ShowAsync();
+        }
     }
 }
