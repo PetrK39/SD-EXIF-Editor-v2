@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Avalonia.Controls.Notifications;
+using Microsoft.Extensions.Logging;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using SD_EXIF_Editor_v2.Utils;
+using System;
 using System.Threading.Tasks;
 
 namespace SD_EXIF_Editor_v2.Services
@@ -9,12 +12,22 @@ namespace SD_EXIF_Editor_v2.Services
     public class MessageService : IMessageService
     {
         private readonly ILogger<MessageService> _logger;
+        private readonly WindowNotificationManager _notificationManager;
         public MessageService(ILogger<MessageService> logger)
         {
             _logger = logger;
             _logger.LogTrace("Message Service initialized.");
-        }
 
+            _notificationManager = new(AvaloniaUtils.GetTopLevel())
+            {
+                Position = NotificationPosition.BottomRight,
+                MaxItems = 3
+            };
+        }
+        public void ShowErrorNotification(string title, string message)
+        {
+            _notificationManager.Show(new Notification(title, message, NotificationType.Error, TimeSpan.FromSeconds(10)));
+        }
         public async Task ShowErrorMessageAsync(string message)
         {
             _logger.LogTrace("Entering ShowErrorMessage method.");

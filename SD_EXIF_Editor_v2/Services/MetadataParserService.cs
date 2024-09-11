@@ -199,7 +199,7 @@ namespace SD_EXIF_Editor_v2.Services
             {
                 var errorCodesJoined = string.Join(", ", errorCodes);
                 _logger.LogWarning($"Encountered errors during parsing: {errorCodesJoined}");
-                await _messageService.ShowInfoMessageAsync(
+                _messageService.ShowErrorNotification("Parsing Error",
                     $"An error occurred while parsing data (Code: {errorCodesJoined})\r\n" +
                     "Consider sending your raw metadata to project's github issues\r\n" +
                     "But only if you're not the one who broke it");

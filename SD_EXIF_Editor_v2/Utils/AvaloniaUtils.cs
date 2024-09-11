@@ -17,7 +17,7 @@ namespace SD_EXIF_Editor_v2.Utils
             return GetTopLevel().Clipboard ?? throw new NotImplementedException("No clipboard for current application lifetime");
         }
 
-        private static TopLevel GetTopLevel()
+        public static TopLevel GetTopLevel()
         {
             if (App.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {

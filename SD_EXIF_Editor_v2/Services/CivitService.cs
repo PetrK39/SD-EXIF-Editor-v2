@@ -46,7 +46,7 @@ namespace SD_EXIF_Editor_v2.Services
                             return new CivitItem(origName, strength, fallbackType);
                         default:
                             _logger.LogError($"Failed to retrieve data from the API. Status Code: {response.StatusCode}, Content: {content}");
-                            await _messageService.ShowErrorMessageAsync($"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
+                            _messageService.ShowErrorNotification("Parsing error", $"Failed to retrieve data from the API ({response.StatusCode})\r\n{content}");
                             return new CivitItem(origName, strength, fallbackType);
                     }
                 }
@@ -76,13 +76,13 @@ namespace SD_EXIF_Editor_v2.Services
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"HttpRequestException while retrieving data from the API: {ex.Message}", ex);
-                await _messageService.ShowErrorMessageAsync($"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
+                _messageService.ShowErrorNotification("Parsing error", $"Failed to retrieve data from the API ({ex.StatusCode})\r\n{ex.Message}");
                 return new CivitItem(origName, strength, fallbackType);
             }
             catch (JsonException ex)
             {
                 _logger.LogError($"JsonException while deserializing the API response: {ex.Message}", ex);
-                await _messageService.ShowErrorMessageAsync($"Failed to deserialize the API response\r\n{ex.Message}");
+                _messageService.ShowErrorNotification("Parsing error", $"Failed to deserialize the API response\r\n{ex.Message}");
                 return new CivitItem(origName, strength, fallbackType);
             }
         }
