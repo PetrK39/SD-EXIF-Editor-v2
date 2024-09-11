@@ -67,6 +67,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _settingsService.ShouldKeepSize = value;
                 OnPropertyChanged();
+                _settingsService.Save();
             }
         }
         public bool ShouldKeepPos
@@ -76,6 +77,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             {
                 _settingsService.ShouldKeepPos = value;
                 OnPropertyChanged();
+                _settingsService.Save();
             }
         }
         public double WindowWidth
