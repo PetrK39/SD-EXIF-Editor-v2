@@ -14,9 +14,7 @@
 			<c:NSFWLevelsToBoolConverter x:Key="NSFWLevelsToBoolConverter"/>
 			<c:PathBitmapConverter x:Key="PathBitmapConverter"/>
 			<c:ToUpperConverter x:Key="ToUpperConverter"/>
-			<c:ColorToColorWithTransparencyConverter x:Key="ColorToColorWithTransparencyConverter"/>
 			<c:KeyValuePairConverter x:Key="KeyValuePairConverter"/>
-			<c:BoolToFloatConverter x:Key="BoolToFloatConverter"/>
 			<c:OrientationToGridIndexConverter x:Key="OrientationToGridIndexConverter"/>
 			<c:OrientationToGridSpanConverter x:Key="OrientationToGridSpanConverter"/>
 			<c:IntToDisplayStringConverter x:Key="IntToDisplayStringConverter"/>
