@@ -15,7 +15,7 @@ namespace SD_EXIF_Editor_v2.Converters
                 {
                     "Key" => kvp.Key,
                     "Value" => kvp.Value,
-                    _ => null,
+                    _ => value,
                 };
             }
             return value;
