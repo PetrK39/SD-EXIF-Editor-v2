@@ -10,10 +10,12 @@ namespace SD_EXIF_Editor_v2.Converters
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            var enumValue = (NSFWLevels)value;
-            var enumParam = (NSFWLevels)parameter;
+            if(value is NSFWLevels enumValue && parameter is NSFWLevels flag)
+            {
+                return enumValue.HasFlag(flag);
+            }
 
-            return enumValue.HasFlag(enumParam);
+            return value;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
