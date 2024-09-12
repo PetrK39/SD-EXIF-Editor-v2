@@ -12,7 +12,6 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<c:NSFWLevelsToBoolConverter x:Key="NSFWLevelsToBoolConverter"/>
-			<c:PathBitmapConverter x:Key="PathBitmapConverter"/>
 			<c:ToUpperConverter x:Key="ToUpperConverter"/>
 			<c:KeyValuePairConverter x:Key="KeyValuePairConverter"/>
 			<c:OrientationToGridIndexConverter x:Key="OrientationToGridIndexConverter"/>
