@@ -11,19 +11,20 @@
              x:Class="SD_EXIF_Editor_v2.Views.CivitItemView"
 			 x:DataType="vm:CivitItemViewModel"
 			 Name="CivitItemViewControl"
-			 PointerPressed="UserControl_PointerPressed">
+			 PointerPressed="UserControl_PointerPressed"
+			 Classes.isUnknown="{Binding IsUnknown}">
 	<Design.DataContext>
 		<vm:CivitItemViewModel/>
 	</Design.DataContext>
 
 	<UserControl.Styles>
-		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover">
+		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover:not(.isUnknown)">
 			<Setter Property="Background"
 					Value="{DynamicResource SemiColorBackground2}"/>
 			<Setter Property="Cursor"
 					Value="Hand"/>
 		</Style>
-		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover TextBlock.InteractiveText">
+		<Style Selector="v|CivitItemView#CivitItemViewControl:pointerover:not(.isUnknown) TextBlock.InteractiveText">
 			<Setter Property="TextDecorations"
 					Value="Underline"/>
 		</Style>
