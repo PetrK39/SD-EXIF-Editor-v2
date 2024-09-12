@@ -17,7 +17,7 @@ namespace SD_EXIF_Editor_v2.Factories
         public ICivitItemViewModel Create(CivitItem civitItem)
         {
             var vm = serviceProvider.GetRequiredService<ICivitItemViewModel>();
-            if (vm is not CivitItemViewModel civitVM) return vm;
+            if (vm is not CivitItemViewModel civitVM) throw new InvalidCastException();
             civitVM.Initialize(civitItem);
             return civitVM;
         }
