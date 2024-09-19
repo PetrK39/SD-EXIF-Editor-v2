@@ -26,7 +26,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
     public partial class MainViewModel : ObservableObject, 
         IRecipient<WindowLoadedMessage>, 
         IRecipient<WindowSizeChangedMessage>,
-        IRecipient<DragDropOpenFileMessage>
+        IRecipient<DragDropOpenFileMessage>,
+        IRecipient<ClosingConfirmationMessage>
     {
         [ObservableProperty]
         private bool _isPaneOpen;
@@ -111,6 +112,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             WeakReferenceMessenger.Default.Register<WindowLoadedMessage>(this);
             WeakReferenceMessenger.Default.Register<WindowSizeChangedMessage>(this);
             WeakReferenceMessenger.Default.Register<DragDropOpenFileMessage>(this);
+            WeakReferenceMessenger.Default.Register<ClosingConfirmationMessage>(this);
 
             UpdateThemeVariant(_settingsService.IsDarkTheme);
         }
@@ -162,6 +164,30 @@ namespace SD_EXIF_Editor_v2.ViewModels
         public async void Receive(DragDropOpenFileMessage message)
         {
             await _fileService.LoadFileIntoModelAsync(_imageModel, message.Value);
+        }
+        public async void Receive(ClosingConfirmationMessage message)
+        {
+            if(_caretaker?.HasChanged is false)
+            {
+                message.ResponseCompletionSource.SetResult(true);
+                return;
+            }
+
+            var result = await _messageService.ShowExitConfirmationDialogAsync();
+
+            switch (result)
+            {
+                case true:
+                    await _fileService.SaveFileFromModelAsync(_imageModel);
+                    message.ResponseCompletionSource.SetResult(true);
+                    break;
+                case false:
+                    message.ResponseCompletionSource.SetResult(true);
+                    break;
+                default:
+                    message.ResponseCompletionSource.SetResult(false);
+                    break;
+            }
         }
 
         private async Task InitializeStartupFile()

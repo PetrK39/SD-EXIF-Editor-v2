@@ -73,5 +73,17 @@ namespace SD_EXIF_Editor_v2.Services
         {
             await MessageBoxManager.GetMessageBoxStandard("SD Exif About", "Not implemented yet", ButtonEnum.Ok).ShowAsync();
         }
+
+        public async Task<bool?> ShowExitConfirmationDialogAsync()
+        {
+            var result = await MessageBoxManager.GetMessageBoxStandard("You have unsaved changes!", "Do you want to save changes now?", ButtonEnum.YesNoCancel).ShowAsync();
+
+            return result switch
+            {
+                ButtonResult.Yes => true,
+                ButtonResult.No => false,
+                _ => null,
+            };
+        }
     }
 }

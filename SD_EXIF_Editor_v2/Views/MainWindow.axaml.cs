@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using SD_EXIF_Editor_v2.Messages;
 using SD_EXIF_Editor_v2.Services.Interfaces;
@@ -18,6 +19,7 @@ namespace SD_EXIF_Editor_v2.Views
         private readonly ISettingsService _settingsService;
 
         private bool _isRestoringSizePos = true;
+        private bool _isClosing = false;
         public MainWindow(MainViewModel vm, ISettingsService settingsService)
         {
             DataContext = vm;
@@ -77,6 +79,20 @@ namespace SD_EXIF_Editor_v2.Views
         private void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
         {
             _settingsService.Save();
+
+            if (_isClosing) return;
+
+            e.Cancel = true;
+            if (IsTextBoxFocused()) FocusManager?.ClearFocus(); // To make sure Edit TextBox updated binding
+            var message = WeakReferenceMessenger.Default.Send(new ClosingConfirmationMessage());
+            message.ResponseCompletionSource.Task.ContinueWith(async result =>
+            {
+                if(await result)
+                {
+                    _isClosing = true;
+                    Dispatcher.UIThread.Invoke(() => Close());
+                }
+            });
         }
 
         private void MainWindow_PositionChanged(object? sender, PixelPointEventArgs e)
