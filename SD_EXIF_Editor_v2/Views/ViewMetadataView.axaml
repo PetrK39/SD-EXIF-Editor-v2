@@ -22,12 +22,12 @@
 			<Grid ColumnDefinitions="1*,1*"
 				  RowDefinitions="2*,3*"
 				  Grid.Row="2">
-				<ail:AdvancedImage Grid.Column="0"
+				<Image Grid.Column="0"
 								   Grid.Row="0"
 								   Grid.ColumnSpan="{Binding IsHorisontal, Converter={StaticResource OrientationToGridSpanConverter}}"
 								   Grid.RowSpan="{Binding !IsHorisontal, Converter={StaticResource OrientationToGridSpanConverter}}"
 								   IsVisible="{Binding IsFileLoaded}"
-								   Source="{Binding FileUri}"
+								   Source="{Binding Image}"
 								   Stretch="Uniform"
 								   Margin="12"/>
 				<Border Grid.Column="0"

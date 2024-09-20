@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ namespace SD_EXIF_Editor_v2.ViewModels.Interfaces
     public interface IViewMetadataViewModel
     {
         public bool IsFileLoaded { get; }
-        public Uri FileUri { get; }
+        public Bitmap? Image { get; }
 
         public string RawMetadata { get; }
 

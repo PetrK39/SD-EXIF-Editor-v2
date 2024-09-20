@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using SD_EXIF_Editor_v2.Model;
 using SD_EXIF_Editor_v2.Models;
 using SD_EXIF_Editor_v2.Services;
 using SD_EXIF_Editor_v2.Services.Interfaces;
+using SD_EXIF_Editor_v2.Utils;
 using SD_EXIF_Editor_v2.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,7 +33,9 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private SDMetadata? _sdMetadata;
 
         public bool IsFileLoaded => _imageModel.IsFileLoaded;
-        public Uri FileUri => _imageModel.FileUri;
+
+        private Bitmap? _image = null;
+        public Bitmap? Image { get => _image; private set { SetProperty(ref _image, value); } }
         public string RawMetadata => _imageModel.RawMetadata;
         public string? Prompt => _sdMetadata?.Prompt;
         public string? NegativePrompt => _sdMetadata?.NegativePrompt;
@@ -143,6 +147,31 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             await LoadItemsCivitItemViewModels();
         }
+        private async Task UpdateImage()
+        {
+            if (_imageModel.FileUri is null)
+            {
+                Image = null;
+                return;
+            }
+
+            var sp = AvaloniaUtils.GetStorageProvider();
+            if (sp is null)
+            {
+                Image = null;
+                return;
+            }
+
+            var file = await sp.TryGetFileFromPathAsync(_imageModel.FileUri);
+            if (file is null)
+            {
+                Image = null;
+                return;
+            }
+
+            using var stream = await file.OpenReadAsync();
+            Image = new Bitmap(stream);
+        }
         private async void imageModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             _logger.LogTrace("image_PropertyChanged event triggered.");
@@ -153,7 +182,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
                     OnPropertyChanged(nameof(IsFileLoaded));
                     break;
                 case nameof(_imageModel.FileUri):
-                    OnPropertyChanged(nameof(FileUri));
+                    await UpdateImage();
                     break;
                 case nameof(_imageModel.RawMetadata):
                     OnPropertyChanged(nameof(RawMetadata));
