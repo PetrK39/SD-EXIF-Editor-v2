@@ -57,6 +57,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
         private readonly IStartupFileService _startupFileService;
         private readonly ISettingsService _settingsService;
         private readonly IMessageService _messageService;
+        private readonly IServiceProvider _serviceProvider;
 
         private IDisposable? _previousViewModel = null;
 
@@ -94,7 +95,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
             IFileService fileService, 
             IStartupFileService startupFileService, 
             ISettingsService settingsService,
-            IMessageService messageService)
+            IMessageService messageService,
+            IServiceProvider serviceProvider)
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
 
@@ -106,6 +108,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _startupFileService = startupFileService;
             _settingsService = settingsService;
             _messageService = messageService;
+            _serviceProvider = serviceProvider;
 
             _imageModel.PropertyChanged += imageModel_PropertyChanged;
 
@@ -115,6 +118,8 @@ namespace SD_EXIF_Editor_v2.ViewModels
             WeakReferenceMessenger.Default.Register<ClosingConfirmationMessage>(this);
 
             UpdateThemeVariant(_settingsService.IsDarkTheme);
+
+            OnSelectedListItemChanged(SelectedListItem);
         }
 
         private void imageModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -207,7 +212,7 @@ namespace SD_EXIF_Editor_v2.ViewModels
 
             var vm = Design.IsDesignMode
                 ? Activator.CreateInstance(value.ModelType)
-                : Ioc.Default.GetService(value.ModelType.GetInterfaces().Single(i => i.Name.EndsWith("ViewModel")));
+                : _serviceProvider?.GetService(value.ModelType.GetInterfaces().Single(i => i.Name.EndsWith("ViewModel")));
 
             if (vm is not ObservableObject oo) return;
 

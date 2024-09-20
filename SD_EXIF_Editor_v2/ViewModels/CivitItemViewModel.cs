@@ -55,8 +55,17 @@ namespace SD_EXIF_Editor_v2.ViewModels
             _urlOpenerService = urlOpenerService;
             _logger = logger;
 
+            _settingsService.PropertyChanged += settingsService_PropertyChanged; // TODO: check if subsciption happens multiple times
 
             _logger.LogTrace("CivitItemViewModel initialized.");
+        }
+
+        private void settingsService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(_settingsService.NSFWLevel))
+            {
+                OnPropertyChanged(nameof(FilteredImages));
+            }
         }
 
         public void Initialize(CivitItem civitItem)
