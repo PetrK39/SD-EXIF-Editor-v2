@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SD_EXIF_Editor_v2.ViewModels"
+			 xmlns:interfaces="using:SD_EXIF_Editor_v2.ViewModels.Interfaces"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SD_EXIF_Editor_v2.Views.EditMetadataView"
+			 x:DataType="vm:EditMetadataViewModel">
+	<Design.DataContext>
+		<vm:EditMetadataViewModel/>
+	</Design.DataContext>
+	<DockPanel Background="Transparent">
+		<TextBlock Text="Edit"
+				   DockPanel.Dock="Top"
+				   Classes="H5"
+				   Margin="0 12"
+				   Theme="{StaticResource TitleTextBlock}"/>
+		<Separator DockPanel.Dock="Top"/>
+		<ScrollViewer DockPanel.Dock="Top">
+			<StackPanel>
+				<DockPanel Margin="0 6">
+					<PathIcon Data="{StaticResource ExclamationTriangle}"
+							  Foreground="{DynamicResource SemiColorWarning}"
+							  DockPanel.Dock="Left"
+							  Width="16"
+							  HorizontalAlignment="Center"
+							  VerticalAlignment="Center"/>
+					<TextBlock Text="Warning: Incorrect edits may break metadata parsing. Proceed with caution."
+							   TextWrapping="WrapWithOverflow"
+							   Margin="6 0"
+							   DockPanel.Dock="Left"
+							   VerticalAlignment="Center"
+							   Classes="Warning"/>
+				</DockPanel>
+				<Grid>
+					<TextBox Text="{Binding RawMetadata, UpdateSourceTrigger=LostFocus}"
+							 IsEnabled="{Binding IsFileLoaded}"
+							 HorizontalAlignment="Stretch"
+							 Classes="TextArea"
+							 TextWrapping="Wrap"
+							 AcceptsReturn="True"
+							 AcceptsTab="False"/>
+					<TextBlock Text="No image loaded"
+							   Margin="0 6"
+							   FontSize="16"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center"
+							   IsVisible="{Binding !IsFileLoaded}"/>
+				</Grid>
+				<Button Content="Clear"
+						Classes="Large Danger"
+						Margin="12 6"
+						HorizontalAlignment="Left"
+						Command="{Binding ClearCommand}"
+						Theme="{DynamicResource OutlineButton}"/>
+			</StackPanel>
+		</ScrollViewer>
+	</DockPanel>
+</UserControl>

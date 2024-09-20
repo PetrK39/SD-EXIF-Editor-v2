@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SD_EXIF_Editor_v2.Controls.ResourcesUsedControl"
+			 Name="ResourcesUsedCtrl">
+	<HeaderedContentControl>
+		<HeaderedContentControl.Header>
+			<TextBlock Text="Resources used"
+					   FontWeight="Bold"
+					   FontSize="18"/>
+		</HeaderedContentControl.Header>
+		<StackPanel Margin="0 6">
+			<ProgressBar Classes.hideAnimation="{Binding !IsCivitServiceBusy, ElementName=ResourcesUsedCtrl}"
+						 Classes.showAnimation="{Binding IsCivitServiceBusy, ElementName=ResourcesUsedCtrl}"
+						 MinHeight="0"
+						 Height="4"
+						 IsIndeterminate="True"
+						 Name="BusyProgressBar"
+						 Margin="0 4">
+				<ProgressBar.Styles>
+					<Style Selector="ProgressBar.hideAnimation">
+						<Style.Animations>
+							<Animation Duration="0:0:0.5"
+									   FillMode="Forward">
+								<KeyFrame Cue="0%">
+									<Setter Property="Height" Value="4"/>
+									<Setter Property="Opacity" Value="1"/>
+								</KeyFrame>
+								<KeyFrame Cue="10%">
+									<Setter Property="Height" Value="4"/>
+									<Setter Property="Opacity" Value="0"/>
+								</KeyFrame>
+								<KeyFrame Cue="100%">
+									<Setter Property="Height" Value="-1"/>
+									<Setter Property="Opacity" Value="0"/>
+								</KeyFrame>
+							</Animation>
+						</Style.Animations>
+					</Style>
+					<Style Selector="ProgressBar.showAnimation">
+						<Style.Animations>
+							<Animation Duration="0:0:0"
+									   FillMode="Forward">
+								<KeyFrame Cue="0%">
+									<Setter Property="Height" Value="0"/>
+									<Setter Property="Opacity" Value="0"/>
+								</KeyFrame>
+								<KeyFrame Cue="100%">
+									<Setter Property="Height" Value="4"/>
+									<Setter Property="Opacity" Value="1"/>
+								</KeyFrame>
+							</Animation>
+						</Style.Animations>
+					</Style>
+				</ProgressBar.Styles>
+			</ProgressBar>
+			<ItemsControl ItemsSource="{Binding TruncatedItemsSource, ElementName=ResourcesUsedCtrl}"
+						  IsVisible="{Binding !ShouldDisplayPlaceholder, ElementName=ResourcesUsedCtrl}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Spacing="8"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+			<TextBlock Text="No data available"
+					   Classes="Secondary"
+					   FontStyle="Italic"
+					   IsVisible="{Binding ShouldDisplayPlaceholder, ElementName=ResourcesUsedCtrl}"/>
+			<Button Click="ShowMoreLessButton_Click"
+						IsVisible="{Binding ShouldDisplayShowMoreLessButton, ElementName=ResourcesUsedCtrl}"
+						Classes="Small"
+						Name="ShowMoreLessButton"
+						HorizontalAlignment="Left"
+						Padding="-2 0"
+						FontWeight="Normal"
+						Theme="{DynamicResource BorderlessButton}"/>
+		</StackPanel>
+	</HeaderedContentControl>
+</UserControl>

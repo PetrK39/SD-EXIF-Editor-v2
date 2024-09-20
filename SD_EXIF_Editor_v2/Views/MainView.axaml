@@ -1,0 +1,189 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SD_EXIF_Editor_v2.ViewModels"
+			 xmlns:models="using:SD_EXIF_Editor_v2.Models"
+			 xmlns:converters="using:SD_EXIF_Editor_v2.Converters"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="SD_EXIF_Editor_v2.Views.MainView"
+             x:DataType="vm:MainViewModel">
+	<Design.DataContext>
+		<vm:MainViewModel />
+	</Design.DataContext>
+
+	<SplitView IsPaneOpen="{Binding IsPaneOpen}"
+			   CompactPaneLength="45"
+			   DisplayMode="CompactInline"
+			   OpenPaneLength="150"
+			   Background="{DynamicResource SemiColorBackground1}"
+			   PaneBackground="{DynamicResource SemiColorBackground1}">
+		<SplitView.Pane>
+			<DockPanel VerticalAlignment="Stretch"
+					   LastChildFill="True">
+				<Button HorizontalAlignment="Left"
+						DockPanel.Dock="Top"
+						Classes="Tertiary"
+						Width="32"
+						Height="32"
+						Margin="6 10"
+						Padding="8"
+						Command="{Binding TriggerPaneCommand}">
+					<PathIcon Data="{StaticResource List}"/>
+				</Button>
+
+				<ToggleSwitch Theme="{DynamicResource ButtonToggleSwitch}"
+							  Command="{Binding ToggleThemeVariantCommand}"
+							  DockPanel.Dock="Bottom"
+							  HorizontalAlignment="Stretch"
+							  Margin="0 8">
+					<ToggleSwitch.OnContent>
+						<StackPanel Orientation="Horizontal">
+							<PathIcon Data="{StaticResource Sun}"
+									  Height="14"/>
+							<TextBlock Text="Theme"
+									   Margin="16 0"
+								   VerticalAlignment="Center"/>
+						</StackPanel>
+					</ToggleSwitch.OnContent>
+					<ToggleSwitch.OffContent>
+						<StackPanel Orientation="Horizontal">
+							<PathIcon Data="{StaticResource Moon}"
+									  Height="14"/>
+							<TextBlock Text="Theme"
+									   Margin="16 0"
+								   VerticalAlignment="Center"/>
+						</StackPanel>
+					</ToggleSwitch.OffContent>
+				</ToggleSwitch>
+				<ListBox Margin="2 0 -100 0"
+						 Padding="0"
+						 ItemsSource="{Binding Items}"
+						 SelectedItem="{Binding SelectedListItem}">
+					<ListBox.Styles>
+						<Style Selector="ListBoxItem">
+							<Setter Property="Padding" Value="12 8"></Setter>
+						</Style>
+						<Style Selector="ListBoxItem:nth-last-child(1)">
+							<Setter Property="DockPanel.Dock"
+									Value="Bottom"/>
+						</Style>
+						<Style Selector="ListBoxItem">
+							<Setter Property="DockPanel.Dock"
+									Value="Top"/>
+						</Style>
+					</ListBox.Styles>
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<DockPanel LastChildFill="False"
+									   VerticalAlignment="Stretch"/>
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
+					<ListBox.ItemTemplate>
+						<DataTemplate DataType="{x:Type models:ListItemTemplate}">
+							<StackPanel Spacing="17" Orientation="Horizontal">
+								<PathIcon Data="{Binding IconKey, Converter={x:Static converters:TypeConverters.IconConverter}}"
+										  Width="14" />
+								<TextBlock Text="{Binding Label}" />
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</DockPanel>
+		</SplitView.Pane>
+
+		<SplitView.Content>
+			<Border CornerRadius="12 0 0 0"
+					Background="{DynamicResource SemiColorBackground0}"
+					DragDrop.AllowDrop="True"
+					Name="BorderDragDrop">
+				<DockPanel>
+					<Menu DockPanel.Dock="Top">
+						<MenuItem Header="_File"
+								  CornerRadius="12 0 0 0">
+							<MenuItem Header="_Open"
+									  CornerRadius="12 0 0 0"
+									  Command="{Binding OpenCommand}"
+									  InputGesture="Ctrl+O">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource Folder}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="_Close"
+									  Command="{Binding CloseCommand}">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource FolderX}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="_Save">
+								<MenuItem Header="_Save"
+										  Command="{Binding SaveCommand}"
+										  InputGesture="Ctrl+S">
+									<MenuItem.Icon>
+										<PathIcon Data="{StaticResource Floppy}"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Save _as..."
+										  Command="{Binding SaveAsCommand}"
+										  InputGesture="Ctrl+Alt+S">
+									<MenuItem.Icon>
+										<PathIcon Data="{StaticResource Floppy}"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="_Edit">
+							<MenuItem Header="_Undo"
+									  Command="{Binding UndoCommand}"
+									  InputGesture="Ctrl+Z">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource ArrowCounterclockwise}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="_Redo"
+									  Command="{Binding RedoCommand}"
+									  InputGesture="Ctrl+Y">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource ArrowClockwise}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="_Help">
+							<MenuItem Header="_About..."
+									  Command="{Binding OpenAboutCommand}"
+									  InputGesture="F1">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource QuestionCircle}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+
+					</Menu>
+					<Grid>
+						<TransitioningContentControl Content="{Binding CurrentPage}"
+													 Padding="10"/>
+						<Border Background="{DynamicResource SemiGrey0}"
+								Opacity="0.8"
+								Name="DragDropDisplay"
+								IsVisible="False">
+							<StackPanel HorizontalAlignment="Center"
+										VerticalAlignment="Center">
+								<PathIcon Data="{StaticResource PlusSquareDotted}"
+										  Height="80"
+										  HorizontalAlignment="Center"
+										  VerticalAlignment="Center"
+										  Opacity="2"/>
+								<TextBlock Text="Drop a file to open it"
+										   HorizontalAlignment="Center"
+										   VerticalAlignment="Center"
+										   FontSize="22"
+										   Opacity="2"
+										   Margin="24"/>
+							</StackPanel>
+						</Border>
+					</Grid>
+				</DockPanel>
+			</Border>
+		</SplitView.Content>
+	</SplitView>
+</UserControl>
